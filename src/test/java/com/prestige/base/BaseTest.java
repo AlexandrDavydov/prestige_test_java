@@ -1,6 +1,8 @@
 package com.prestige.base;
 
 import com.microsoft.playwright.*;
+import com.prestige.models.TestData;
+import com.prestige.tests.UiTestFragments;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,38 +18,37 @@ public abstract class BaseTest {
     protected static Browser browser;
     protected BrowserContext context;
     protected Page page;
+    protected APIRequestContext request;
+    protected TestData testData;
+    protected UiTestFragments uiTestFragments;
 
     @BeforeAll
     static void setUpPlaywright() {
-        log.info("🚀 Запуск Playwright...");
         playwright = Playwright.create();
-
         boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"));
-
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
                 .setHeadless(isHeadless)
                 .setArgs(java.util.List.of("--disable-blink-features=AutomationControlled"))
         );
-        log.info("✅ Браузер запущен (headless: {})", isHeadless);
     }
 
     @BeforeEach
     void setUpContext() {
-        log.info("📄 Создание нового контекста для теста...");
         context = browser.newContext(new Browser.NewContextOptions()
                 .setViewportSize(1024, 768)
                 .setLocale("ru-RU")
                 .setBaseURL(System.getProperty("base.url", "http://127.0.0.1:5000"))
         );
         page = context.newPage();
-        log.info("✅ Страница создана");
+        testData = new TestData();
+        uiTestFragments = new UiTestFragments(page);
     }
 
     @AfterEach
     void tearDownContext() {
+        testData.deleteTestData();
         if (context != null) {
             context.close();
-            log.info("📄 Контекст закрыт");
         }
     }
 
@@ -55,11 +56,9 @@ public abstract class BaseTest {
     static void tearDownPlaywright() {
         if (browser != null) {
             browser.close();
-            log.info("🚀 Браузер закрыт");
         }
         if (playwright != null) {
             playwright.close();
-            log.info("✅ Playwright остановлен");
         }
     }
 }

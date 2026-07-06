@@ -1,5 +1,6 @@
 package com.prestige.tests;
 
+import com.microsoft.playwright.Page;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Student;
 import com.prestige.models.User;
@@ -7,27 +8,11 @@ import com.prestige.pages.AddStudentPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.pages.LoginPage;
 import com.prestige.pages.StudentsPage;
-import com.prestige.utils.StudentFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
-class StudentTest extends BaseTest {
-    Student studentData;
-
-    @Test
-    @DisplayName("Admin can create a student")
-    void adminCanCreateStudent() {
-        login();
-        createStudent(studentData);
-        checkStudentExists(studentData);
-    }
-
-    @BeforeEach
-    void beforeTest() {
-        studentData = StudentFactory.createRandomStudent();
-        testData.addStudent(studentData);
+public class UiTestFragments extends BaseTest {
+    private final Page page;
+    public UiTestFragments(Page page) {
+        this.page = page;
     }
 
     public void login() {
