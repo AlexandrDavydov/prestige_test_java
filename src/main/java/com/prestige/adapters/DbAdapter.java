@@ -1,10 +1,8 @@
 package com.prestige.adapters;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.prestige.models.Student;
+
+import java.sql.*;
 
 public class DbAdapter implements AutoCloseable {
     private final Connection connection;
@@ -18,6 +16,28 @@ public class DbAdapter implements AutoCloseable {
             System.out.println("Подключение к SQLite установлено");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException("Не удалось подключиться к SQLite", e);
+        }
+    }
+
+    public void addStudent(Student student) {
+        String sql = "INSERT INTO students (last_name, first_name, middle_name, contacts, birthday, lessons_count, additional_info) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, student.getLastName());
+            stmt.setString(2, student.getFirstName());
+            stmt.setString(3, student.getMiddleName());
+            stmt.setString(4, student.getContacts());
+            stmt.setString(5, student.getBirthday());
+            stmt.setInt(6, student.getLessonsCount());
+            stmt.setString(7, student.getAdditionalInfo());
+
+            int insertedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Добавлено записей в SQLite: " + insertedRows);
+
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при добавлении студента", e);
         }
     }
 
@@ -65,39 +85,6 @@ public class DbAdapter implements AutoCloseable {
             return false;
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при проверке существования студента", e);
-        }
-    }
-
-    /**
-     * Очищает все тестовые данные (студенты, созданные за последние N минут)
-     * В SQLite нет INTERVAL, используем datetime
-     */
-    public void cleanupTestData(int minutes) {
-        String sql = "DELETE FROM students WHERE created_at > datetime('now', '-' || ? || ' minutes')";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, minutes);
-            int deletedRows = stmt.executeUpdate();
-            connection.commit();
-            System.out.println("Очищено тестовых записей из SQLite: " + deletedRows);
-        } catch (SQLException e) {
-            rollback();
-            throw new RuntimeException("Ошибка при очистке тестовых данных", e);
-        }
-    }
-
-    /**
-     * Получает количество студентов в БД
-     */
-    public int getStudentsCount() {
-        String sql = "SELECT COUNT(*) FROM students";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при подсчете студентов", e);
         }
     }
 

@@ -40,18 +40,12 @@ public class AddStudentPage extends BasePage {
         super(page);
     }
 
-    /**
-     * Перейти на страницу добавления ученика
-     */
     public AddStudentPage navigateTo() {
         page.navigate("/add_student");
         waitForPageLoad();
         return this;
     }
 
-    /**
-     * Проверить, что страница загружена
-     */
     @Override
     public boolean isPageLoaded() {
         return page.isVisible(pageTitle) &&
@@ -60,18 +54,10 @@ public class AddStudentPage extends BasePage {
                 page.isVisible(firstNameInput);
     }
 
-    /**
-     * Получить заголовок страницы
-     */
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }
 
-    // ============ ЗАПОЛНЕНИЕ ФОРМЫ ============
-
-    /**
-     * Заполнить форму данными ученика
-     */
     public AddStudentPage fillStudentForm(Student student) {
         if (student.getLastName() != null) {
             fillLastName(student.getLastName());
@@ -95,9 +81,6 @@ public class AddStudentPage extends BasePage {
         return this;
     }
 
-    /**
-     * Заполнить форму с автоматической капитализацией
-     */
     public AddStudentPage fillStudentFormWithCapitalization(Student student) {
         fillLastNameWithCapitalize(student.getLastName());
         fillFirstNameWithCapitalize(student.getFirstName());
@@ -109,79 +92,50 @@ public class AddStudentPage extends BasePage {
         return this;
     }
 
-    /**
-     * Заполнить только обязательные поля
-     */
     public AddStudentPage fillRequiredFields(Student student) {
         fillLastName(student.getLastName());
         fillFirstName(student.getFirstName());
         return this;
     }
 
-    // ============ МЕТОДЫ ДЛЯ ОТДЕЛЬНЫХ ПОЛЕЙ ============
-
-    /**
-     * Заполнить фамилию
-     */
     public AddStudentPage fillLastName(String lastName) {
         page.fill(lastNameInput, lastName);
         return this;
     }
 
-    /**
-     * Заполнить фамилию с капитализацией
-     */
     public AddStudentPage fillLastNameWithCapitalize(String lastName) {
         page.fill(lastNameInput, lastName);
         page.evaluate("document.querySelector('input[name=\"last_name\"]').dispatchEvent(new Event('input'))");
         return this;
     }
 
-    /**
-     * Заполнить имя
-     */
     public AddStudentPage fillFirstName(String firstName) {
         page.fill(firstNameInput, firstName);
         return this;
     }
 
-    /**
-     * Заполнить имя с капитализацией
-     */
     public AddStudentPage fillFirstNameWithCapitalize(String firstName) {
         page.fill(firstNameInput, firstName);
         page.evaluate("document.querySelector('input[name=\"first_name\"]').dispatchEvent(new Event('input'))");
         return this;
     }
 
-    /**
-     * Заполнить отчество
-     */
     public AddStudentPage fillMiddleName(String middleName) {
         page.fill(middleNameInput, middleName);
         return this;
     }
 
-    /**
-     * Заполнить отчество с капитализацией
-     */
     public AddStudentPage fillMiddleNameWithCapitalize(String middleName) {
         page.fill(middleNameInput, middleName);
         page.evaluate("document.querySelector('input[name=\"middle_name\"]').dispatchEvent(new Event('input'))");
         return this;
     }
 
-    /**
-     * Заполнить контакты
-     */
     public AddStudentPage fillContacts(String contacts) {
         page.fill(contactsInput, contacts);
         return this;
     }
 
-    /**
-     * Заполнить день рождения
-     */
 //    public AddStudentPage fillBirthday(String birthday) {
 //        page.fill(birthdayInput, birthday);
 //        return this;
@@ -193,79 +147,47 @@ public class AddStudentPage extends BasePage {
         return this;
     }
 
-    /**
-     * Заполнить день рождения (LocalDate)
-     */
     public AddStudentPage fillBirthday(LocalDate birthday) {
         String dateStr = birthday.format(DateTimeFormatter.ISO_LOCAL_DATE);
         page.fill(birthdayInput, dateStr);
         return this;
     }
 
-    /**
-     * Заполнить день рождения (год, месяц, день)
-     */
     public AddStudentPage fillBirthday(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
         return fillBirthday(date);
     }
 
-    /**
-     * Заполнить количество занятий
-     */
     public AddStudentPage fillLessonsCount(int count) {
         page.fill(lessonsCountInput, String.valueOf(count));
         return this;
     }
 
-    /**
-     * Заполнить дополнительную информацию
-     */
     public AddStudentPage fillAdditionalInfo(String info) {
         page.fill(additionalInfoInput, info);
         return this;
     }
 
-    // ============ ПОЛУЧЕНИЕ ДАННЫХ ИЗ ФОРМЫ ============
-
-    /**
-     * Получить значение поля "Фамилия"
-     */
     public String getLastName() {
         return page.inputValue(lastNameInput);
     }
 
-    /**
-     * Получить значение поля "Имя"
-     */
     public String getFirstName() {
         return page.inputValue(firstNameInput);
     }
 
-    /**
-     * Получить значение поля "Отчество"
-     */
     public String getMiddleName() {
         return page.inputValue(middleNameInput);
     }
 
-    /**
-     * Получить значение поля "Контакты"
-     */
     public String getContacts() {
         return page.inputValue(contactsInput);
     }
 
-    /**
-     * Получить значение поля "День рождения"
-     */
     public String getBirthday() {
         return page.inputValue(birthdayInput);
     }
 
-    /**
-     * Получить значение поля "Кол-во занятий"
-     */
     public int getLessonsCount() {
         String value = page.inputValue(lessonsCountInput);
         try {
@@ -275,16 +197,10 @@ public class AddStudentPage extends BasePage {
         }
     }
 
-    /**
-     * Получить значение поля "Доп. информация"
-     */
     public String getAdditionalInfo() {
         return page.inputValue(additionalInfoInput);
     }
 
-    /**
-     * Получить все данные из формы в виде объекта Student
-     */
     public Student getStudentFromForm() {
         Student student = Student.builder().build();
         student.setLastName(getLastName());
@@ -297,38 +213,24 @@ public class AddStudentPage extends BasePage {
         return student;
     }
 
-    // ============ ДЕЙСТВИЯ С ФОРМОЙ ============
-
-    /**
-     * Сохранить ученика и перейти на страницу учеников
-     */
     public StudentsPage clickSave() {
         page.click(saveButton);
         waitForPageLoad();
         return new StudentsPage(page);
     }
 
-    /**
-     * Сохранить ученика (остаться на странице, если есть ошибки)
-     */
     public AddStudentPage clickSaveAndStay() {
         page.click(saveButton);
         waitForPageLoad();
         return this;
     }
 
-    /**
-     * Отменить добавление и вернуться на страницу учеников
-     */
     public StudentsPage clickCancel() {
         page.click(cancelButton);
         waitForPageLoad();
         return new StudentsPage(page);
     }
 
-    /**
-     * Очистить все поля формы
-     */
     public AddStudentPage clearAllFields() {
         page.fill(lastNameInput, "");
         page.fill(firstNameInput, "");
@@ -340,26 +242,17 @@ public class AddStudentPage extends BasePage {
         return this;
     }
 
-    /**
-     * Очистить конкретное поле
-     */
     public AddStudentPage clearField(String fieldName) {
         String selector = getFieldSelector(fieldName);
         page.fill(selector, "");
         return this;
     }
 
-    /**
-     * Отправить форму с данными ученика
-     */
     public StudentsPage submitStudent(Student student) {
         fillStudentForm(student);
         return clickSave();
     }
 
-    /**
-     * Отправить форму с данными ученика и проверить успешное добавление
-     */
     public StudentsPage submitStudentAndVerify(Student student) {
         fillStudentForm(student);
         StudentsPage studentsPage = clickSave();
@@ -375,11 +268,6 @@ public class AddStudentPage extends BasePage {
         return studentsPage;
     }
 
-    // ============ ВАЛИДАЦИИ ============
-
-    /**
-     * Проверить, что все поля доступны
-     */
     public boolean areAllFieldsVisible() {
         return page.isVisible(lastNameInput) &&
                 page.isVisible(firstNameInput) &&

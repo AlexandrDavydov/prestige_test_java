@@ -6,7 +6,7 @@ import com.prestige.models.Student;
 import com.prestige.models.User;
 import com.prestige.pages.AddStudentPage;
 import com.prestige.pages.DashboardPage;
-import com.prestige.pages.LoginPage;
+import com.prestige.pages.PlaywrightLoginPage;
 import com.prestige.pages.StudentsPage;
 
 public class UiTestFragments extends BaseTest {
@@ -17,9 +17,9 @@ public class UiTestFragments extends BaseTest {
 
     public void login() {
         User admin = User.admin();
-        LoginPage loginPage = new LoginPage(page)
+        PlaywrightLoginPage playwrightLoginPage = new PlaywrightLoginPage(page)
                 .navigateTo();
-        loginPage
+        playwrightLoginPage
                 .typeUsername(admin.getUsername())
                 .typePassword(admin.getPassword())
                 .clickLoginAndGoToDashboard();

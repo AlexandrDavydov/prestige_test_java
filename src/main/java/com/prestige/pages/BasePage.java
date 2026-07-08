@@ -31,79 +31,47 @@ public abstract class BasePage {
         this.page = page;
     }
 
-    /**
-     * Проверить, загружена ли страница
-     */
     public abstract boolean isPageLoaded();
 
-    /**
-     * Дождаться загрузки страницы
-     */
     public void waitForPageLoad() {
         page.waitForLoadState(LoadState.NETWORKIDLE);
     }
 
-    // ============ НАВИГАЦИЯ ============
-
-    /**
-     * Перейти на главную страницу
-     */
     public DashboardPage goToDashboard() {
         clickNavLink("Главная");
         return new DashboardPage(page);
     }
 
-    /**
-     * Перейти на страницу занятий
-     */
     public LessonsPage goToLessons() {
         clickNavLink("Занятия");
         return new LessonsPage(page);
     }
 
-    /**
-     * Перейти на страницу учеников
-     */
     public StudentsPage goToStudents() {
         clickNavLink("Ученики");
         return new StudentsPage(page);
     }
 
-    /**
-     * Перейти на страницу тренеров
-     */
     public CoachesPage goToCoaches() {
         clickNavLink("Тренеры");
         return new CoachesPage(page);
     }
 
-    /**
-     * Перейти на страницу абонементов
-     */
 //    public CardsPage goToCards() {
 //        clickNavLink("Абонементы");
 //        return new CardsPage(page);
 //    }
 
-    /**
-     * Перейти на страницу шаблонов занятий
-     */
 //    public LessonTemplatesPage goToLessonTemplates() {
 //        clickNavLink("Шаблоны занятий");
 //        return new LessonTemplatesPage(page);
 //    }
 
-    /**
-     * Перейти на страницу отчетов
-     */
 //    public ReportsPage goToReports() {
 //        clickNavLink("Отчеты");
 //        return new ReportsPage(page);
 //    }
 
-    /**
-     * Кликнуть по ссылке навигации по тексту
-     */
     protected void clickNavLink(String linkText) {
         Locator link = page.locator(navLinks).filter(new Locator.FilterOptions()
                 .setHasText(linkText));
@@ -133,10 +101,10 @@ public abstract class BasePage {
     /**
      * Выйти из системы
      */
-    public LoginPage logout() {
+    public PlaywrightLoginPage logout() {
         page.click(logoutLink);
         waitForPageLoad();
-        return new LoginPage(page);
+        return new PlaywrightLoginPage(page);
     }
 
     /**

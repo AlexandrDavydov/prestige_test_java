@@ -42,40 +42,25 @@ public class StudentsPage extends BasePage {
         return this;
     }
 
-    /**
-     * Проверить, что страница загружена
-     */
     @Override
     public boolean isPageLoaded() {
         return page.isVisible(pageTitle) &&
                 page.textContent(pageTitle).contains("Ученики");
     }
 
-    /**
-     * Получить заголовок страницы
-     */
     public String getPageTitle() {
         return page.textContent(pageTitle);
     }
 
-    /**
-     * Кликнуть на кнопку "Добавить ученика"
-     */
     public AddStudentPage clickAddStudent() {
         page.click(addStudentLink);
         return new AddStudentPage(page);
     }
 
-    /**
-     * Получить количество учеников в таблице
-     */
     public int getStudentsCount() {
         return page.locator(tableRows).count();
     }
 
-    /**
-     * Получить всех учеников из таблицы
-     */
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
         Locator rows = page.locator(tableRows);
@@ -89,9 +74,6 @@ public class StudentsPage extends BasePage {
         return students;
     }
 
-    /**
-     * Найти ученика по полному имени
-     */
     public Student getStudentByFullName(String fullName) {
         Locator rows = page.locator(tableRows);
 
@@ -107,9 +89,6 @@ public class StudentsPage extends BasePage {
         return null;
     }
 
-    /**
-     * Найти строку ученика по полному имени
-     */
     private Locator findStudentRow(String fullName) {
         Locator rows = page.locator(tableRows);
 
@@ -137,17 +116,14 @@ public class StudentsPage extends BasePage {
 //        throw new RuntimeException("Ученик не найден: " + fullName);
 //    }
 //
-//    /**
-//     * Найти ученика и кликнуть на кнопку "Редактировать"
-//     */
-//    public EditStudentPage clickEditStudent(String fullName) {
-//        Locator row = findStudentRow(fullName);
-//        if (row != null) {
-//            row.locator(editButton).click();
-//            return new EditStudentPage(page);
-//        }
-//        throw new RuntimeException("Ученик не найден: " + fullName);
-//    }
+    public EditStudentPage clickEditStudent(String fullName) {
+        Locator row = findStudentRow(fullName);
+        if (row != null) {
+            row.locator(editButton).click();
+            return new EditStudentPage(page);
+        }
+        throw new RuntimeException("Ученик не найден: " + fullName);
+    }
 
     /**
      * Найти ученика и удалить его
