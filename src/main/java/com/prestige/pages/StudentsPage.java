@@ -125,9 +125,6 @@ public class StudentsPage extends BasePage {
         throw new RuntimeException("Ученик не найден: " + fullName);
     }
 
-    /**
-     * Найти ученика и удалить его
-     */
     public StudentsPage deleteStudent(String fullName) {
         Locator row = findStudentRow(fullName);
         if (row != null) {
@@ -147,16 +144,14 @@ public class StudentsPage extends BasePage {
         throw new RuntimeException("Ученик не найден: " + fullName);
     }
 
-    /**
-     * Проверить, существует ли ученик в таблице
-     */
     public boolean isStudentExists(String fullName) {
         return findStudentRow(fullName) != null;
     }
 
-    /**
-     * Проверить, существует ли ученик с указанными данными
-     */
+    public boolean checkStudentExists(String fullName, boolean exists) {
+        return findStudentRow(fullName) != null;
+    }
+
     public boolean isStudentExists(Student student) {
         String fullName = student.getFullName();
         Student found = getStudentByFullName(fullName);

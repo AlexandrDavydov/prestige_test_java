@@ -3,22 +3,23 @@ package com.prestige.tests;
 import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Student;
-import com.prestige.pages.*;
+import com.prestige.pages.DashboardPage;
+import com.prestige.pages.StudentsPage;
 import com.prestige.utils.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class EditStudentTest extends BaseTest {
+class DeletetudentTest extends BaseTest {
     Student createdStudentData;
     Student editStudentData;
 
     @Test
     public void run() {
         uiTestFragments.login();
-        editStudent(createdStudentData, editStudentData);
-        uiTestFragments.checkStudentExists(editStudentData, true);
+        deleteStudent(createdStudentData);
+        uiTestFragments.checkStudentExists(editStudentData, false);
     }
 
     @BeforeEach
@@ -30,13 +31,10 @@ class EditStudentTest extends BaseTest {
         testData.addStudent(editStudentData);
     }
 
-    public void editStudent(Student studentForEditData, Student newStudentData) {
+    public void deleteStudent(Student studentData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         StudentsPage studentsPage = dashboardPage.goToStudents();
         studentsPage.waitForPageLoad();
-        EditStudentPage editStudentPage = studentsPage.clickEditStudent(studentForEditData.getFullName());
-        editStudentPage.waitForPageLoad();
-        editStudentPage.fillStudentForm(newStudentData);
-        editStudentPage.clickSubmit();
+        studentsPage.deleteStudent(studentData.getFullName());
     }
 }

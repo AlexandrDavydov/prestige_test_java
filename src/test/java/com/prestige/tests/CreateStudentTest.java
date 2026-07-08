@@ -17,7 +17,7 @@ class CreateStudentTest extends BaseTest {
     public void run() {
         uiTestFragments.login();
         createStudent(studentData);
-        uiTestFragments.checkStudentExists(studentData);
+        uiTestFragments.checkStudentExists(studentData, true);
     }
 
     @BeforeEach
