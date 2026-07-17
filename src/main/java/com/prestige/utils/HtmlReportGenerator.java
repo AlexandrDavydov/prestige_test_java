@@ -32,7 +32,7 @@ public class HtmlReportGenerator {
         html.append("</style>\n</head>\n<body>\n");
 
         html.append("<h1>Test Suite Overview</h1>");
-        html.append("<p>Generated on: ").append(java.time.LocalDateTime.now()).append("</p>");
+        html.append("<p>Generated on: ").append(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))).append("</p>");
 
         // Начало таблицы
         html.append("<table>\n");

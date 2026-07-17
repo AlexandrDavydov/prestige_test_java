@@ -56,6 +56,21 @@ public class DbAdapter implements AutoCloseable {
         }
     }
 
+    public void deleteCoachByFullName(String lastName, String firstName, String middleName) {
+        String sql = "DELETE FROM coaches WHERE last_name = ? AND first_name = ? AND middle_name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, lastName);
+            stmt.setString(2, firstName);
+            stmt.setString(3, middleName);
+            int deletedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Тренер удален из SQLite.");
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при удалении тренера", e);
+        }
+    }
+
     public Long findStudentId(String lastName, String firstName, String middleName) {
         String sql = "SELECT id FROM students WHERE last_name = ? AND first_name = ? AND middle_name = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

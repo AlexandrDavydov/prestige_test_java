@@ -70,10 +70,10 @@ public class CoachesPage extends BasePage {
     /**
      * Кликнуть на кнопку "Добавить тренера"
      */
-//    public AddCoachPage clickAddCoach() {
-//        page.click(addCoachButton);
-//        return new AddCoachPage(page);
-//    }
+    public AddCoachPage clickAddCoach() {
+        page.click(addCoachButton);
+        return new AddCoachPage(page);
+    }
 
     /**
      * Проверить, видна ли кнопка добавления
