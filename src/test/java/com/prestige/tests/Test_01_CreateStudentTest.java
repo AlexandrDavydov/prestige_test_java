@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CreateStudentTest extends BaseTest {
+class Test_01_CreateStudentTest extends BaseTest {
     Student studentData;
 
     @Test

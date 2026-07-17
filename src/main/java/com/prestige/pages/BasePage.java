@@ -33,8 +33,9 @@ public abstract class BasePage {
 
     public abstract boolean isPageLoaded();
 
-    public void waitForPageLoad() {
+    public EditStudentPage waitForPageLoad() {
         page.waitForLoadState(LoadState.NETWORKIDLE);
+        return null;
     }
 
     public DashboardPage goToDashboard() {
