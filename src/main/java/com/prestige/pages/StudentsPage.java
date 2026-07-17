@@ -130,15 +130,7 @@ public class StudentsPage extends BasePage {
         if (row != null) {
             // Кликаем на кнопку удаления
             row.locator(deleteButton).click();
-
-            // Подтверждаем удаление в диалоговом окне
-            page.onDialog(dialog -> {
-                System.out.println("Диалог: " + dialog.message());
-                dialog.accept();
-            });
-
-            // Ждем обновления таблицы
-            waitForPageLoad();
+            confirmDeleteModal();
             return this;
         }
         throw new RuntimeException("Ученик не найден: " + fullName);

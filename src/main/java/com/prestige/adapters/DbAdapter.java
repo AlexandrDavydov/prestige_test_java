@@ -1,5 +1,6 @@
 package com.prestige.adapters;
 
+import com.prestige.models.Coach;
 import com.prestige.models.Student;
 
 import java.sql.*;
@@ -53,6 +54,29 @@ public class DbAdapter implements AutoCloseable {
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении студента", e);
+        }
+    }
+
+    public void addCoach(Coach coach) {
+        String sql = "INSERT INTO coaches (last_name, first_name, middle_name, contacts, birthday, lessons_count, lessons_paid, student_payment, additional_info) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, coach.getLastName());
+            stmt.setString(2, coach.getFirstName());
+            stmt.setString(3, coach.getMiddleName());
+            stmt.setString(4, coach.getContacts());
+            stmt.setString(5, coach.getBirthday());
+            stmt.setInt(6, coach.getLessonsCount());
+            stmt.setInt(7, coach.getLessonsPaid());
+            stmt.setDouble(8, coach.getStudentPayment());
+            stmt.setString(9, coach.getAdditionalInfo());
+
+            int insertedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Добавлено записей в SQLite: " + insertedRows);
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при добавлении тренера", e);
         }
     }
 

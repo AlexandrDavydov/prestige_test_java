@@ -268,7 +268,9 @@ public abstract class BasePage {
      * Подтвердить удаление через кнопку "Да"
      */
     public void confirmDeleteModal() {
-        page.click(deleteConfirmButton);
+        page.onDialog(dialog -> {
+            dialog.accept();
+        });
         waitForPageLoad();
     }
 
