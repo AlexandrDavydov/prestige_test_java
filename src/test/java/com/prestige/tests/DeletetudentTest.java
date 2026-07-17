@@ -16,7 +16,7 @@ class DeletetudentTest extends BaseTest {
     Student editStudentData;
 
     @Test
-    public void run() {
+    public void test_03_DeleteStudent() {
         uiTestFragments.login();
         deleteStudent(createdStudentData);
         uiTestFragments.checkStudentExists(editStudentData, false);

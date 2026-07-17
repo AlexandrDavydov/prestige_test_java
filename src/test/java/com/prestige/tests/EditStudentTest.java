@@ -15,7 +15,7 @@ class EditStudentTest extends BaseTest {
     Student editStudentData;
 
     @Test
-    public void run() {
+    public void test_02_EditStudent() {
         uiTestFragments.login();
         editStudent(createdStudentData, editStudentData);
         uiTestFragments.checkStudentExists(editStudentData, true);
