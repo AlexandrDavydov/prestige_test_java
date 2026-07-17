@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public class TestData {
     private final ArrayList<Student> students = new ArrayList<>();
     private final ArrayList<Coach> coaches = new ArrayList<>();
+    private final ArrayList<Card> cards = new ArrayList<>();
+
     private final DbAdapter dbAdapter = new DbAdapter();
 
     public TestData() {
@@ -18,6 +20,10 @@ public class TestData {
 
     public void addStudent(Student student) {
         this.students.add(student);
+    }
+
+    public void addCard(Card card) {
+        this.cards.add(card);
     }
 
     public void addCoach(Coach coach) {

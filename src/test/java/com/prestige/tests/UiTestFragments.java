@@ -2,9 +2,11 @@ package com.prestige.tests;
 
 import com.microsoft.playwright.Page;
 import com.prestige.base.BaseTest;
+import com.prestige.models.Card;
 import com.prestige.models.Coach;
 import com.prestige.models.Student;
 import com.prestige.models.User;
+import com.prestige.pages.CardsPage;
 import com.prestige.pages.CoachesPage;
 import com.prestige.pages.PlaywrightLoginPage;
 import com.prestige.pages.StudentsPage;
@@ -35,5 +37,10 @@ public class UiTestFragments extends BaseTest {
     public void checkCoachExists(Coach coachData, boolean exists) {
         CoachesPage coachesPage =  new CoachesPage(page);
         assertEquals(coachesPage.isCoachExists(coachData.getFullName()), exists);
+    }
+
+    public void checkCardExists(Card cardData, boolean exists) {
+        CardsPage cardsPage =  new CardsPage(page);
+        assertEquals(cardsPage.isCardExists(cardData), exists);
     }
 }

@@ -10,5 +10,6 @@ import java.util.ArrayList;
 public class TestDescription {
     String testId;
     String testName;
+    @Builder.Default
     ArrayList<String> testSteps = new ArrayList<>();
 }

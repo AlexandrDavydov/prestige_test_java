@@ -58,10 +58,10 @@ public abstract class BasePage {
         return new CoachesPage(page);
     }
 
-//    public CardsPage goToCards() {
-//        clickNavLink("Абонементы");
-//        return new CardsPage(page);
-//    }
+    public CardsPage goToCards() {
+        clickNavLink("Абонементы");
+        return new CardsPage(page);
+    }
 
 //    public LessonTemplatesPage goToLessonTemplates() {
 //        clickNavLink("Шаблоны занятий");
