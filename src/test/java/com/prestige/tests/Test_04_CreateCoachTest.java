@@ -14,14 +14,13 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.COACH;
 import static com.prestige.tests.TestGroups.LOCK_COACH;
-
+@ResourceLock(LOCK_COACH)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_04_CreateCoachTest extends BaseTest {
     Coach coachData;
 
     @Test
     @Tag(COACH)
-    @ResourceLock(LOCK_COACH)
     public void test_04_CreateCoach() {
         uiTestFragments.login();
         createCoachWithUi(coachData);

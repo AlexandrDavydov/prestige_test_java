@@ -15,7 +15,7 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
-
+@ResourceLock(LOCK_STUDENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_02_EditStudentTest extends BaseTest {
     Student createdStudentData;
@@ -23,7 +23,6 @@ class Test_02_EditStudentTest extends BaseTest {
 
     @Test
     @Tag(STUDENT)
-    @ResourceLock(LOCK_STUDENT)
     public void test_02_EditStudent() {
         uiTestFragments.login();
         editStudent(createdStudentData, editStudentData);
