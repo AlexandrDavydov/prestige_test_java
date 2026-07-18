@@ -33,7 +33,7 @@ class Test_06_DeleteCoachTest extends BaseTest {
     void beforeTest() {
         createdCoachData = CoachFactory.createRandomCoach();
         editCoachData = CoachFactory.createRandomCoach();
-        new DbAdapter().addCoach(createdCoachData);
+        createdCoachData.setId(new DbAdapter().addCoach(createdCoachData));
         testData.addCoach(createdCoachData);
         testData.addCoach(editCoachData);
     }

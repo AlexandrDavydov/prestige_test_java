@@ -118,7 +118,7 @@ public class CardsPage extends BasePage {
         String lessonsCountStr = row.locator(cardLessonsCount).textContent().trim();
         String duration = row.locator(cardDuration).textContent().trim();
 
-        double price = parseDouble(priceStr);
+        int price = parseInteger(priceStr);
         int lessonsCount = parseInteger(lessonsCountStr);
 
         Card card = new Card();

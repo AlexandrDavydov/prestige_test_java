@@ -21,10 +21,11 @@ public class DbAdapter implements AutoCloseable {
         }
     }
 
-    public void addStudent(Student student) {
+    public int addStudent(Student student) {
+        int id;
         String sql = "INSERT INTO students (last_name, first_name, middle_name, contacts, birthday, lessons_count, additional_info) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, student.getLastName());
             stmt.setString(2, student.getFirstName());
             stmt.setString(3, student.getMiddleName());
@@ -37,10 +38,14 @@ public class DbAdapter implements AutoCloseable {
             connection.commit();
             System.out.println("Добавлено записей в SQLite: " + insertedRows);
 
+            id = getLastInsertedId();
+            System.out.println("Присвоен ID студенту: " + id);
+
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при добавлении студента", e);
         }
+        return id;
     }
 
     public void deleteStudentByFullName(String lastName, String firstName, String middleName) {
@@ -51,17 +56,17 @@ public class DbAdapter implements AutoCloseable {
             stmt.setString(3, middleName);
             int deletedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Удалено записей из SQLite: " + deletedRows);
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении студента", e);
         }
     }
 
-    public void addCoach(Coach coach) {
+    public int addCoach(Coach coach) {
+        int id;
         String sql = "INSERT INTO coaches (last_name, first_name, middle_name, contacts, birthday, lessons_count, lessons_paid, student_payment, additional_info) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, coach.getLastName());
             stmt.setString(2, coach.getFirstName());
             stmt.setString(3, coach.getMiddleName());
@@ -74,11 +79,12 @@ public class DbAdapter implements AutoCloseable {
 
             int insertedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Добавлено записей в SQLite: " + insertedRows);
+            id = getLastInsertedId();
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при добавлении тренера", e);
         }
+        return id;
     }
 
     public void deleteCoachByFullName(String lastName, String firstName, String middleName) {
@@ -96,10 +102,11 @@ public class DbAdapter implements AutoCloseable {
         }
     }
 
-    public void addCard(Card card) {
+    public int addCard(Card card) {
+        int id;
         String sql = "INSERT INTO cards (name, price, lessons_count, duration, color, status, creation_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, card.getName());
             stmt.setDouble(2, card.getPrice());
             stmt.setInt(3, card.getLessonsCount());
@@ -111,10 +118,15 @@ public class DbAdapter implements AutoCloseable {
             int insertedRows = stmt.executeUpdate();
             connection.commit();
             System.out.println("Добавлено записей в SQLite: " + insertedRows);
+
+            id = getLastInsertedId();
+            card.setId(id);
+            System.out.println("Присвоен ID карте: " + id);
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при добавлении абонемента", e);
         }
+        return id;
     }
 
     public void deleteCardByName(String name) {
@@ -159,6 +171,19 @@ public class DbAdapter implements AutoCloseable {
             return false;
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при проверке существования студента", e);
+        }
+    }
+
+    private int getLastInsertedId() {
+        String sql = "SELECT last_insert_rowid()";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            throw new RuntimeException("Не удалось получить последний ID");
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при получении последнего ID", e);
         }
     }
 

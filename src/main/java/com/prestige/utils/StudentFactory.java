@@ -13,8 +13,6 @@ public class StudentFactory {
 
     public static Student createRandomStudent() {
         String[] fio = RussianDataFactory.generateFullName().split(" ");
-
-
         return Student.builder()
                 .lastName(fio[0])
                 .firstName(fio[1])

@@ -13,10 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lesson {
-    private Long id;
+    private int id;
     private String date;
     private String lessonName;
-    private Long coachId;
+    private int coachId;
     private String coachName;
     private String status;
     @Builder.Default

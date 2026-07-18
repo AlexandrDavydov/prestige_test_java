@@ -32,7 +32,7 @@ class Test_03_DeleteStudentTest extends BaseTest {
     void beforeTest() {
         createdStudentData = StudentFactory.createRandomStudent();
         editStudentData = StudentFactory.createRandomStudent();
-        new DbAdapter().addStudent(createdStudentData);
+        createdStudentData.setId(new DbAdapter().addStudent(createdStudentData));
         testData.addStudent(createdStudentData);
         testData.addStudent(editStudentData);
     }

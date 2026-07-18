@@ -29,7 +29,7 @@ public class TestData {
     public void addCoach(Coach coach) {
         this.coaches.add(coach);
     }
-
+//TODO If entity has id delete it by id
     public void deleteTestData(){
         for (Student student : students) {
             dbAdapter.deleteStudentByFullName(

@@ -45,7 +45,7 @@ public class CardFactory {
 
     public static Card createCardWithCustomData(
             String name,
-            double price,
+            int price,
             int lessonsCount,
             String duration,
             String color,

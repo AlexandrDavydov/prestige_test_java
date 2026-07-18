@@ -209,8 +209,8 @@ public class CoachesPage extends BasePage {
         // Парсим числа
         int lessonsCount = parseInteger(lessonsCountStr);
         int lessonsPaid = parseInteger(lessonsPaidStr);
-        double studentPayment = parseDouble(studentPaymentStr);
-        double debt = parseDouble(debtStr);
+        int studentPayment = parseInteger(studentPaymentStr);
+        int debt = parseInteger(debtStr);
 
         Coach coach = new Coach();
         coach.setLastName(lastName);

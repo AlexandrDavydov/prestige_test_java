@@ -23,7 +23,7 @@ class Test_07_CreateCardTest extends BaseTest {
 
     @Test
     @Tag(CARD)
-    public void test_07_CardStudent() {
+    public void test_07_CreateCard() {
         uiTestFragments.login();
         createCardWithUi(cardData);
         uiTestFragments.checkCardExists(cardData, true);

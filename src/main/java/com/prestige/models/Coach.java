@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Coach {
-    private Long id;
+    private int id;
     private String lastName;
     private String firstName;
     private String middleName;
@@ -18,9 +18,9 @@ public class Coach {
     private String birthday;
     private int lessonsCount;
     private int lessonsPaid;
-    private double studentPayment;
+    private int studentPayment;
     private String additionalInfo;
-    private double debt;
+    private int debt;
 
     public String getFullName() {
         if (middleName != null && !middleName.isEmpty()) {

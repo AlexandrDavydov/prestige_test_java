@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder()
 
 public class Student {
-    private Long id;
+    private int id;
     private String lastName;
     private String firstName;
     private String middleName;

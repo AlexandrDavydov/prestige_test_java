@@ -62,12 +62,12 @@ public class EditCardPage extends BasePage {
         return this;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         String value = page.inputValue(priceInput);
         try {
-            return Double.parseDouble(value);
+            return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return 0.0;
+            return 0;
         }
     }
 

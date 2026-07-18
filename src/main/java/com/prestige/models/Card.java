@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Card {
-    private Long id;
+    private int id;
     private String name;
-    private double price;
+    private int price;
     private int lessonsCount;
     private String duration;
     private String color;

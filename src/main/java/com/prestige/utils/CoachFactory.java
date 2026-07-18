@@ -47,7 +47,7 @@ public class CoachFactory {
             String birthday,
             int lessonsCount,
             int lessonsPaid,
-            double studentPayment) {
+            int studentPayment) {
         Coach coach = new Coach();
         coach.setLastName(lastName);
         coach.setFirstName(firstName);

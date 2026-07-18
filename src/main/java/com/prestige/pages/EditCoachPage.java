@@ -246,12 +246,12 @@ public class EditCoachPage extends BasePage {
     /**
      * Получить значение поля "Оплата за одного ученика"
      */
-    public double getStudentPayment() {
+    public int getStudentPayment() {
         String value = page.inputValue(studentPaymentInput);
         try {
-            return Double.parseDouble(value);
+            return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return 0.0;
+            return 0;
         }
     }
 

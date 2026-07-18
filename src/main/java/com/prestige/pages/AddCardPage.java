@@ -73,17 +73,17 @@ public class AddCardPage extends BasePage {
         return page.textContent(colorValue);
     }
 
-    public AddCardPage fillPrice(double price) {
+    public AddCardPage fillPrice(int price) {
         page.fill(priceInput, String.valueOf(price));
         return this;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         String value = page.inputValue(priceInput);
         try {
-            return Double.parseDouble(value);
+            return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return 0.0;
+            return 0;
         }
     }
 

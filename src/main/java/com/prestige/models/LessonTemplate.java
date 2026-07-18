@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LessonTemplate {
-    private Long id;
+    private int id;
     private String templateName;
-    private String description;
+    private int coachId;
 }

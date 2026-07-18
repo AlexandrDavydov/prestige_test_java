@@ -177,7 +177,7 @@ public class LessonsPage extends BasePage {
 
             if (value != null && !value.isEmpty()) {
                 LessonTemplate template = new LessonTemplate();
-                template.setId(Long.parseLong(value));
+                template.setId(Integer.parseInt(value));
                 template.setTemplateName(name);
                 templates.add(template);
             }

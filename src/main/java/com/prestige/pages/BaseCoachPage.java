@@ -107,12 +107,12 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
         return (T) this;
     }
 
-    public double getStudentPayment() {
+    public int getStudentPayment() {
         String value = page.inputValue(studentPaymentInput);
         try {
-            return Double.parseDouble(value);
+            return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return 0.0;
+            return 0;
         }
     }
 

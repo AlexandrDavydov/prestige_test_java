@@ -34,7 +34,7 @@ class Test_08_EditCardTest extends BaseTest {
     void beforeTest() {
         createdCardData = CardFactory.createRandomCard();
         editCardData = CardFactory.createRandomCard();
-        new DbAdapter().addCard(createdCardData);
+        createdCardData.setId(new DbAdapter().addCard(createdCardData));
         testData.addCard(createdCardData);
         testData.addCard(editCardData);
     }
