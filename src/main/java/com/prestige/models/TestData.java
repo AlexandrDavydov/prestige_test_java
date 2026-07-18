@@ -43,5 +43,8 @@ public class TestData {
                     coach.getFirstName(),
                     coach.getMiddleName());
         }
+        for (Card card : cards) {
+            dbAdapter.deleteCardByName(card.getName());
+        }
     }
 }

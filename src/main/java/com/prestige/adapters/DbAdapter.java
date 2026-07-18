@@ -1,5 +1,6 @@
 package com.prestige.adapters;
 
+import com.prestige.models.Card;
 import com.prestige.models.Coach;
 import com.prestige.models.Student;
 
@@ -92,6 +93,40 @@ public class DbAdapter implements AutoCloseable {
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении тренера", e);
+        }
+    }
+
+    public void addCard(Card card) {
+        String sql = "INSERT INTO cards (name, price, lessons_count, duration, color, status, creation_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, card.getName());
+            stmt.setDouble(2, card.getPrice());
+            stmt.setInt(3, card.getLessonsCount());
+            stmt.setString(4, card.getDuration());
+            stmt.setString(5, card.getColor());
+            stmt.setString(6, card.getStatus());
+            stmt.setString(7, card.getCreationDate());
+
+            int insertedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Добавлено записей в SQLite: " + insertedRows);
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при добавлении абонемента", e);
+        }
+    }
+
+    public void deleteCardByName(String name) {
+        String sql = "DELETE FROM cards WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            int deletedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Абонемент удален из SQLite.");
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при удалении абонемента", e);
         }
     }
 
