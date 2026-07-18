@@ -18,7 +18,6 @@ public class UiTestFragments extends BaseTest {
     public UiTestFragments(Page page) {
         this.page = page;
     }
-
     public void login() {
         User admin = User.admin();
         PlaywrightLoginPage playwrightLoginPage = new PlaywrightLoginPage(page)
@@ -41,6 +40,7 @@ public class UiTestFragments extends BaseTest {
 
     public void checkCardExists(Card cardData, boolean exists) {
         CardsPage cardsPage =  new CardsPage(page);
+        cardsPage.waitForPageLoad();
         assertEquals(cardsPage.isCardExists(cardData), exists);
     }
 }

@@ -3,11 +3,16 @@ package com.prestige.tests;
 import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Coach;
-import com.prestige.pages.*;
+import com.prestige.pages.CoachesPage;
+import com.prestige.pages.DashboardPage;
+import com.prestige.pages.EditCoachPage;
 import com.prestige.utils.CoachFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
+import static com.prestige.tests.TestGroups.COACH;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_05_EditCoachTest extends BaseTest {
@@ -15,6 +20,7 @@ class Test_05_EditCoachTest extends BaseTest {
     Coach editCoachData;
 
     @Test
+    @Tag(COACH)
     public void test_05_EditCoach() {
         uiTestFragments.login();
         editCoach(createdCoachData, editCoachData);

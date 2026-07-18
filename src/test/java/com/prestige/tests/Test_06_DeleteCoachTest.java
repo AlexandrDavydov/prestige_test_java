@@ -7,8 +7,11 @@ import com.prestige.pages.CoachesPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.utils.CoachFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
+import static com.prestige.tests.TestGroups.COACH;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_06_DeleteCoachTest extends BaseTest {
@@ -16,6 +19,7 @@ class Test_06_DeleteCoachTest extends BaseTest {
     Coach editCoachData;
 
     @Test
+    @Tag(COACH)
     public void test_06_DeleteCoach() {
         uiTestFragments.login();
         deleteCoach(createdCoachData);
