@@ -9,8 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LessonTemplate {
+public class Card {
     private Long id;
-    private String templateName;
-    private String description;
+    private String name;
+    private double price;
+    private int lessonsCount;
+    private String duration;
+    private String color;
+    private String status;
+    private String creationDate;
 }

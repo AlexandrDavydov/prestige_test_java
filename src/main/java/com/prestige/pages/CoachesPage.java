@@ -70,10 +70,10 @@ public class CoachesPage extends BasePage {
     /**
      * Кликнуть на кнопку "Добавить тренера"
      */
-//    public AddCoachPage clickAddCoach() {
-//        page.click(addCoachButton);
-//        return new AddCoachPage(page);
-//    }
+    public AddCoachPage clickAddCoach() {
+        page.click(addCoachButton);
+        return new AddCoachPage(page);
+    }
 
     /**
      * Проверить, видна ли кнопка добавления
@@ -307,57 +307,12 @@ public class CoachesPage extends BasePage {
     public CoachesPage deleteCoach(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {
-            // Кликаем на кнопку удаления
             row.locator(deleteButton).click();
-
-            // Подтверждаем удаление в модальном окне
             confirmDeleteModal();
-
-            waitForPageLoad();
             return this;
         }
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
-
-    /**
-     * Удалить тренера с проверкой модального окна
-     */
-    public CoachesPage deleteCoachWithModal(String fullName) {
-        Locator row = findCoachRow(fullName);
-        if (row != null) {
-            // Получаем URL удаления
-            String deleteUrl = row.locator(deleteButton).getAttribute("data-url");
-
-            // Открываем модальное окно
-            row.locator(deleteButton).click();
-
-            // Проверяем, что модальное окно открылось
-            assert isDeleteModalVisible() : "Модальное окно не открылось";
-
-            // Подтверждаем удаление
-            confirmDeleteModal();
-
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Тренер не найден: " + fullName);
-    }
-
-    /**
-     * Удалить тренера по индексу
-     */
-    public CoachesPage deleteCoachAtIndex(int index) {
-        Locator rows = page.locator(tableRows);
-        if (index < rows.count()) {
-            rows.nth(index).locator(deleteButton).click();
-            confirmDeleteModal();
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Тренер с индексом " + index + " не найден");
-    }
-
-    // ============ ПОЛУЧЕНИЕ ДАННЫХ О ТРЕНЕРЕ ============
 
     /**
      * Получить количество проведенных занятий тренера

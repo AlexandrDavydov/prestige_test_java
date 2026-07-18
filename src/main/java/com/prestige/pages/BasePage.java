@@ -33,8 +33,9 @@ public abstract class BasePage {
 
     public abstract boolean isPageLoaded();
 
-    public void waitForPageLoad() {
+    public EditStudentPage waitForPageLoad() {
         page.waitForLoadState(LoadState.NETWORKIDLE);
+        return null;
     }
 
     public DashboardPage goToDashboard() {
@@ -57,10 +58,10 @@ public abstract class BasePage {
         return new CoachesPage(page);
     }
 
-//    public CardsPage goToCards() {
-//        clickNavLink("Абонементы");
-//        return new CardsPage(page);
-//    }
+    public CardsPage goToCards() {
+        clickNavLink("Абонементы");
+        return new CardsPage(page);
+    }
 
 //    public LessonTemplatesPage goToLessonTemplates() {
 //        clickNavLink("Шаблоны занятий");
@@ -267,7 +268,9 @@ public abstract class BasePage {
      * Подтвердить удаление через кнопку "Да"
      */
     public void confirmDeleteModal() {
-        page.click(deleteConfirmButton);
+        page.onDialog(dialog -> {
+            dialog.accept();
+        });
         waitForPageLoad();
     }
 

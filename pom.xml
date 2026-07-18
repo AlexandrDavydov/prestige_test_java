@@ -80,6 +80,11 @@
             <version>3.44.1.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>3.27.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -106,8 +111,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
-                    <parallel>methods</parallel>
-                    <threadCount>4</threadCount>
+                    <parallel>none</parallel>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>

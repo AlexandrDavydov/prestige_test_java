@@ -14,8 +14,8 @@ public abstract class BaseTest {
 
     private static final Logger log = LoggerFactory.getLogger(BaseTest.class);
 
-    protected static Playwright playwright;
-    protected static Browser browser;
+    protected Playwright playwright;
+    protected Browser browser;
     protected BrowserContext context;
     protected Page page;
     protected APIRequestContext request;
@@ -23,7 +23,7 @@ public abstract class BaseTest {
     protected UiTestFragments uiTestFragments;
 
     @BeforeAll
-    static void setUpPlaywright() {
+    void setUpPlaywright() {
         playwright = Playwright.create();
         boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"));
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
@@ -53,7 +53,7 @@ public abstract class BaseTest {
     }
 
     @AfterAll
-    static void tearDownPlaywright() {
+    void tearDownPlaywright() {
         if (browser != null) {
             browser.close();
         }
