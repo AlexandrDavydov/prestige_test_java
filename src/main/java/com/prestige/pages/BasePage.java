@@ -31,7 +31,6 @@ public abstract class BasePage {
         this.page = page;
     }
 
-    public abstract boolean isPageLoaded();
 
     public EditStudentPage waitForPageLoad() {
         page.waitForLoadState(LoadState.NETWORKIDLE);
@@ -63,10 +62,10 @@ public abstract class BasePage {
         return new CardsPage(page);
     }
 
-//    public LessonTemplatesPage goToLessonTemplates() {
-//        clickNavLink("Шаблоны занятий");
-//        return new LessonTemplatesPage(page);
-//    }
+    public LessonTemplatesPage goToLessonTemplates() {
+        clickNavLink("Шаблоны занятий");
+        return new LessonTemplatesPage(page);
+    }
 
 //    public ReportsPage goToReports() {
 //        clickNavLink("Отчеты");

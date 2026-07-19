@@ -37,12 +37,6 @@ public class CardsPage extends BasePage {
         return this;
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Абонементы");
-    }
-
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }

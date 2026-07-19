@@ -33,14 +33,6 @@ public class AddCardPage extends BasePage {
         return this;
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Добавить Абонемент") &&
-                page.isVisible(nameInput) &&
-                page.isVisible(priceInput);
-    }
-
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }

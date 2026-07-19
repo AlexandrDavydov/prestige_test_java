@@ -32,14 +32,6 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Добавить ученика") &&
-                page.isVisible(lastNameInput) &&
-                page.isVisible(firstNameInput);
-    }
-
     public AddStudentPage fillStudentForm(Student student) {
         if (student.getLastName() != null) {
             fillLastName(student.getLastName());

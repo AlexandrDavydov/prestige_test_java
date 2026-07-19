@@ -18,17 +18,6 @@ public class EditStudentPage extends BaseStudentPage<EditStudentPage> {
         this.cancelButton = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("❌ Отмена"));
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        try {
-            page.waitForSelector("h1:has-text('Редактировать ученика')",
-                    new Page.WaitForSelectorOptions().setTimeout(5000));
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public EditStudentPage waitForPageLoad() {
         page.waitForSelector("h1:has-text('Редактировать ученика')");
         return this;

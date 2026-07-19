@@ -70,15 +70,6 @@ public class LessonsPage extends BasePage {
     }
 
     /**
-     * Проверить, что страница загружена
-     */
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Занятия");
-    }
-
-    /**
      * Получить заголовок страницы
      */
     public String getPageHeader() {

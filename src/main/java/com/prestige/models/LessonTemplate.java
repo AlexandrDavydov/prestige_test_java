@@ -13,4 +13,5 @@ public class LessonTemplate {
     private int id;
     private String templateName;
     private int coachId;
+    private  String studentsIds;
 }

@@ -50,15 +50,6 @@ public class CoachesPage extends BasePage {
     }
 
     /**
-     * Проверить, что страница загружена
-     */
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Тренеры");
-    }
-
-    /**
      * Получить заголовок страницы
      */
     public String getPageHeader() {

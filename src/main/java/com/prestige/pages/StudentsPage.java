@@ -42,12 +42,6 @@ public class StudentsPage extends BasePage {
         return this;
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Ученики");
-    }
-
     public String getPageTitle() {
         return page.textContent(pageTitle);
     }

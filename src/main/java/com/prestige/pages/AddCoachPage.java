@@ -25,14 +25,6 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         return this;
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Добавить тренера") &&
-                page.isVisible(lastNameInput) &&
-                page.isVisible(firstNameInput);
-    }
-
     public AddCoachPage fillCoachForm(Coach coach) {
         if (coach.getLastName() != null) {
             fillLastName(coach.getLastName());

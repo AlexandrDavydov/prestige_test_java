@@ -36,16 +36,6 @@ public class EditCoachPage extends BasePage {
     }
 
     /**
-     * Проверить, что страница загружена
-     */
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Редактировать тренера") &&
-                page.isVisible(lastNameInput);
-    }
-
-    /**
      * Получить заголовок страницы
      */
     public String getPageHeader() {
@@ -568,18 +558,5 @@ public class EditCoachPage extends BasePage {
                 "Не найдено сообщение об успешном обновлении";
 
         return new CoachesPage(page);
-    }
-
-    /**
-     * Отменить редактирование и проверить возврат на страницу тренеров
-     */
-    public CoachesPage cancelAndVerify() {
-        clickCancel();
-
-        // Проверяем, что мы на странице тренеров
-        CoachesPage coachesPage = new CoachesPage(page);
-        assert coachesPage.isPageLoaded() : "Страница тренеров не загружена";
-
-        return coachesPage;
     }
 }

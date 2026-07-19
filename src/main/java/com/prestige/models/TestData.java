@@ -8,6 +8,7 @@ public class TestData {
     private final ArrayList<Student> students = new ArrayList<>();
     private final ArrayList<Coach> coaches = new ArrayList<>();
     private final ArrayList<Card> cards = new ArrayList<>();
+    private final ArrayList<LessonTemplate> lessonTemplates = new ArrayList<>();
 
     private final DbAdapter dbAdapter = new DbAdapter();
 
@@ -22,6 +23,10 @@ public class TestData {
         this.students.add(student);
     }
 
+    public void addLessonTemplate(LessonTemplate lessonTemplate) {
+        this.lessonTemplates.add(lessonTemplate);
+    }
+
     public void addCard(Card card) {
         this.cards.add(card);
     }
@@ -29,6 +34,7 @@ public class TestData {
     public void addCoach(Coach coach) {
         this.coaches.add(coach);
     }
+
 //TODO If entity has id delete it by id
     public void deleteTestData(){
         for (Student student : students) {
@@ -46,5 +52,12 @@ public class TestData {
         for (Card card : cards) {
             dbAdapter.deleteCardByName(card.getName());
         }
+
+        for (LessonTemplate lessonTemplate : lessonTemplates) {
+            dbAdapter.deleteCoachById(lessonTemplate.getCoachId());
+            dbAdapter.deleteStudents(lessonTemplate.getStudentsIds());
+            dbAdapter.deleteLessonTemplateByName(lessonTemplate.getTemplateName());
+        }
     }
+
 }

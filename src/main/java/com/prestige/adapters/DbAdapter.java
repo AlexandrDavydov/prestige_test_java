@@ -15,9 +15,22 @@ public class DbAdapter implements AutoCloseable {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(DB_URL);
             connection.setAutoCommit(false);
-            System.out.println("Подключение к SQLite установлено");
+            //System.out.println("Подключение к SQLite установлено");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException("Не удалось подключиться к SQLite", e);
+        }
+    }
+
+    public void deleteLessonTemplateByName(String templateName) {
+        String sql = "DELETE FROM lesson_templates WHERE template_name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, templateName);
+            int deletedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Шаблон удален из SQLite.");
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при удалении шаблона занятия", e);
         }
     }
 
@@ -36,16 +49,35 @@ public class DbAdapter implements AutoCloseable {
 
             int insertedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Добавлено записей в SQLite: " + insertedRows);
+            //System.out.println("Добавлено записей в SQLite: " + insertedRows);
 
             id = getLastInsertedId();
-            System.out.println("Присвоен ID студенту: " + id);
+            //System.out.println("Присвоен ID студенту: " + id);
 
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при добавлении студента", e);
         }
         return id;
+    }
+
+    public void deleteStudentById(int studentId) {
+        String sql = "DELETE FROM students WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, studentId);
+            stmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при удалении студента по ID", e);
+        }
+    }
+
+    public void deleteStudents(String studentIds) {
+        String[] ids = studentIds.split(",");
+        for (String id : ids) {
+            deleteStudentById(Integer.parseInt(id.trim()));
+        }
     }
 
     public void deleteStudentByFullName(String lastName, String firstName, String middleName) {
@@ -85,6 +117,19 @@ public class DbAdapter implements AutoCloseable {
             throw new RuntimeException("Ошибка при добавлении тренера", e);
         }
         return id;
+    }
+
+    public void deleteCoachById(int coachId) {
+        String sql = "DELETE FROM coaches WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, coachId);
+            int deletedRows = stmt.executeUpdate();
+            connection.commit();
+            System.out.println("Тренер удален из SQLite по ID: " + coachId);
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при удалении тренера по ID", e);
+        }
     }
 
     public void deleteCoachByFullName(String lastName, String firstName, String middleName) {

@@ -42,16 +42,6 @@ public class DashboardPage extends BasePage {
     }
 
     /**
-     * Проверить, что страница загружена
-     */
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Главная") &&
-                page.isVisible(birthdayWidget);
-    }
-
-    /**
      * Получить заголовок страницы
      */
     public String getPageHeader() {

@@ -24,13 +24,6 @@ public class EditCardPage extends BasePage {
         super(page);
     }
 
-    @Override
-    public boolean isPageLoaded() {
-        return page.isVisible(pageTitle) &&
-                page.textContent(pageTitle).contains("Редактировать Абонемент") &&
-                page.isVisible(nameInput);
-    }
-
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }
@@ -226,13 +219,6 @@ public class EditCardPage extends BasePage {
         assert hasSuccessMessage("Абонемент успешно обновлен") :
                 "Не найдено сообщение об успешном обновлении";
         return new CardsPage(page);
-    }
-
-    public CardsPage cancelAndVerify() {
-        clickCancel();
-        CardsPage cardsPage = new CardsPage(page);
-        assert cardsPage.isPageLoaded() : "Страница абонементов не загружена";
-        return cardsPage;
     }
 
     public boolean isUrlCorrect() {

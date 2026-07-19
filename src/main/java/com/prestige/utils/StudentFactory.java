@@ -20,6 +20,7 @@ public class StudentFactory {
                 .contacts(faker.phoneNumber().phoneNumber())
                 .birthday(getFormattedBirthday(faker.date().birthday(6, 50)))
                 .lessonsCount((int) (Math.random() * 20) + 1)
+                .additionalInfo("доп. инфо "+faker.random().nextInt(10))
                 .build();
     }
 
