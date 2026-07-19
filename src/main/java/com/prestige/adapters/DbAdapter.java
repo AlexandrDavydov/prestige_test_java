@@ -2,6 +2,7 @@ package com.prestige.adapters;
 
 import com.prestige.models.Card;
 import com.prestige.models.Coach;
+import com.prestige.models.LessonTemplate;
 import com.prestige.models.Student;
 
 import java.sql.*;
@@ -18,6 +19,25 @@ public class DbAdapter implements AutoCloseable {
             //System.out.println("Подключение к SQLite установлено");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException("Не удалось подключиться к SQLite", e);
+        }
+    }
+
+    public int addLessonTemplate(LessonTemplate lessonTemplate) {
+        String sql = "INSERT INTO lesson_templates (template_name, coach_id, student_ids) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, lessonTemplate.getTemplateName());
+            stmt.setInt(2, lessonTemplate.getCoachId());
+            stmt.setString(3, lessonTemplate.getStudentsIds());
+
+            int insertedRows = stmt.executeUpdate();
+            connection.commit();
+
+            int id = getLastInsertedId();
+            lessonTemplate.setId(id);
+            return id;
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при добавлении шаблона занятия", e);
         }
     }
 
