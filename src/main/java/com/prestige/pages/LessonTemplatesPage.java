@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.prestige.models.LessonTemplate;
 
 public class LessonTemplatesPage extends BasePage {
 
@@ -45,6 +46,10 @@ public class LessonTemplatesPage extends BasePage {
             return titles.nth(index).textContent().trim();
         }
         return null;
+    }
+
+    public boolean isLessonTemplateExists(LessonTemplate lessonTemplate) {
+        return isTemplateExists(lessonTemplate.getTemplateName());
     }
 
     public boolean isTemplateExists(String templateName) {

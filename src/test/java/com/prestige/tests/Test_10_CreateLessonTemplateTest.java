@@ -24,7 +24,7 @@ class Test_10_CreateLessonTemplateTest extends BaseTest {
     public void test_10_CreateLessonTemplate() {
         uiTestFragments.login();
         createLessonTemplateWithUi(lessonTemplateData);
-        //uiTestFragments.checkStudentExists(studentData, true);
+        uiTestFragments.checkLessonTemplateExists(lessonTemplateData, true);
     }
 
     @BeforeEach

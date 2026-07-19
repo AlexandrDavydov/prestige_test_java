@@ -2,14 +2,8 @@ package com.prestige.tests;
 
 import com.microsoft.playwright.Page;
 import com.prestige.base.BaseTest;
-import com.prestige.models.Card;
-import com.prestige.models.Coach;
-import com.prestige.models.Student;
-import com.prestige.models.User;
-import com.prestige.pages.CardsPage;
-import com.prestige.pages.CoachesPage;
-import com.prestige.pages.PlaywrightLoginPage;
-import com.prestige.pages.StudentsPage;
+import com.prestige.models.*;
+import com.prestige.pages.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,6 +25,11 @@ public class UiTestFragments extends BaseTest {
     public void checkStudentExists(Student studentData, boolean exists) {
         StudentsPage studentsPage =  new StudentsPage(page);
         assertEquals(studentsPage.isStudentExists(studentData.getFullName()), exists);
+    }
+
+    public void checkLessonTemplateExists(LessonTemplate lessonTemplate, boolean exists) {
+        LessonTemplatesPage lessonTemplatesPage =  new LessonTemplatesPage(page);
+        assertEquals(lessonTemplatesPage.isLessonTemplateExists(lessonTemplate), exists);
     }
 
     public void checkCoachExists(Coach coachData, boolean exists) {
