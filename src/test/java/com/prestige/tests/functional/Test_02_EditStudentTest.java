@@ -1,9 +1,10 @@
-package com.prestige.tests;
+package com.prestige.tests.functional;
 
 import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Student;
 import com.prestige.pages.DashboardPage;
+import com.prestige.pages.EditStudentPage;
 import com.prestige.pages.StudentsPage;
 import com.prestige.utils.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,16 +17,16 @@ import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
 @ResourceLock(LOCK_STUDENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class Test_03_DeleteStudentTest extends BaseTest {
+class Test_02_EditStudentTest extends BaseTest {
     Student createdStudentData;
     Student editStudentData;
 
     @Test
     @Tag(STUDENT)
-    public void test_03_DeleteStudent() {
+    public void test_02_EditStudent() {
         uiTestFragments.login();
-        deleteStudent(createdStudentData);
-        uiTestFragments.checkStudentExists(editStudentData, false);
+        editStudent(createdStudentData, editStudentData);
+        uiTestFragments.checkStudentExists(editStudentData, true);
     }
 
     @BeforeEach
@@ -37,10 +38,13 @@ class Test_03_DeleteStudentTest extends BaseTest {
         testData.addStudent(editStudentData);
     }
 
-    public void deleteStudent(Student studentData) {
+    public void editStudent(Student studentForEditData, Student newStudentData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         StudentsPage studentsPage = dashboardPage.goToStudents();
         studentsPage.waitForPageLoad();
-        studentsPage.deleteStudent(studentData.getFullName());
+        EditStudentPage editStudentPage = studentsPage.clickEditStudent(studentForEditData.getFullName());
+        editStudentPage.waitForPageLoad();
+        editStudentPage.fillStudentForm(newStudentData);
+        editStudentPage.clickSubmit();
     }
 }

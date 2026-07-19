@@ -1,8 +1,8 @@
-package com.prestige.tests;
+package com.prestige.tests.functional;
 
-import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Card;
+import com.prestige.pages.AddCardPage;
 import com.prestige.pages.CardsPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.utils.CardFactory;
@@ -15,33 +15,32 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.CARD;
 import static com.prestige.tests.TestGroups.LOCK_CARD;
 
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ResourceLock(LOCK_CARD)
-class Test_09_DeleteCardTest extends BaseTest {
-    Card createdCardData;
-    Card editCardData;
+class Test_07_CreateCardTest extends BaseTest {
+    Card cardData;
 
     @Test
     @Tag(CARD)
-    public void test_09_DeleteCard() {
+    public void test_07_CreateCard() {
         uiTestFragments.login();
-        deleteCard(createdCardData);
-        uiTestFragments.checkCardExists(editCardData, false);
+        createCardWithUi(cardData);
+        uiTestFragments.checkCardExists(cardData, true);
     }
 
     @BeforeEach
     void beforeTest() {
-        createdCardData = CardFactory.createRandomCard();
-        editCardData = CardFactory.createRandomCard();
-        createdCardData.setId(new DbAdapter().addCard(createdCardData));
-        testData.addCard(createdCardData);
-        testData.addCard(editCardData);
+        cardData = CardFactory.createRandomCard();
+        testData.addCard(cardData);
     }
 
-    public void deleteCard(Card cardData) {
+    public void createCardWithUi(Card cardData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CardsPage cardsPage = dashboardPage.goToCards();
         cardsPage.waitForPageLoad();
-        cardsPage.deleteCard(cardData.getName());
+        AddCardPage addCardPage = cardsPage.clickAddCard();
+        addCardPage.waitForPageLoad();
+        addCardPage.submitCard(cardData);
     }
 }

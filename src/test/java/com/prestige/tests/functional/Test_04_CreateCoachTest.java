@@ -1,8 +1,8 @@
-package com.prestige.tests;
+package com.prestige.tests.functional;
 
-import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Coach;
+import com.prestige.pages.AddCoachPage;
 import com.prestige.pages.CoachesPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.utils.CoachFactory;
@@ -14,34 +14,31 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.COACH;
 import static com.prestige.tests.TestGroups.LOCK_COACH;
-
 @ResourceLock(LOCK_COACH)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class Test_06_DeleteCoachTest extends BaseTest {
-    Coach createdCoachData;
-    Coach editCoachData;
+class Test_04_CreateCoachTest extends BaseTest {
+    Coach coachData;
 
     @Test
     @Tag(COACH)
-    public void test_06_DeleteCoach() {
+    public void test_04_CreateCoach() {
         uiTestFragments.login();
-        deleteCoach(createdCoachData);
-        uiTestFragments.checkCoachExists(editCoachData, false);
+        createCoachWithUi(coachData);
+        uiTestFragments.checkCoachExists(coachData, true);
     }
 
     @BeforeEach
     void beforeTest() {
-        createdCoachData = CoachFactory.createRandomCoach();
-        editCoachData = CoachFactory.createRandomCoach();
-        createdCoachData.setId(new DbAdapter().addCoach(createdCoachData));
-        testData.addCoach(createdCoachData);
-        testData.addCoach(editCoachData);
+        coachData = CoachFactory.createRandomCoach();
+        testData.addCoach(coachData);
     }
 
-    public void deleteCoach(Coach coachData) {
+    public void createCoachWithUi(Coach coachData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CoachesPage coachesPage = dashboardPage.goToCoaches();
         coachesPage.waitForPageLoad();
-        coachesPage.deleteCoach(coachData.getFullName());
+        AddCoachPage addCoachPage = coachesPage.clickAddCoach();
+        addCoachPage.waitForPageLoad();
+        addCoachPage.submitCoach(coachData);
     }
 }

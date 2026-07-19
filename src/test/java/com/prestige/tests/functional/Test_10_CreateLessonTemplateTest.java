@@ -1,11 +1,9 @@
-package com.prestige.tests;
+package com.prestige.tests.functional;
 
 import com.prestige.base.BaseTest;
 import com.prestige.models.LessonTemplate;
-import com.prestige.models.Student;
 import com.prestige.pages.*;
 import com.prestige.utils.LessonTemplateFactory;
-import com.prestige.utils.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

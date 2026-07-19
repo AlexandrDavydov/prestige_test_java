@@ -1,8 +1,8 @@
-package com.prestige.tests;
+package com.prestige.tests.functional;
 
+import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Coach;
-import com.prestige.pages.AddCoachPage;
 import com.prestige.pages.CoachesPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.utils.CoachFactory;
@@ -14,31 +14,34 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.COACH;
 import static com.prestige.tests.TestGroups.LOCK_COACH;
+
 @ResourceLock(LOCK_COACH)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class Test_04_CreateCoachTest extends BaseTest {
-    Coach coachData;
+class Test_06_DeleteCoachTest extends BaseTest {
+    Coach createdCoachData;
+    Coach editCoachData;
 
     @Test
     @Tag(COACH)
-    public void test_04_CreateCoach() {
+    public void test_06_DeleteCoach() {
         uiTestFragments.login();
-        createCoachWithUi(coachData);
-        uiTestFragments.checkCoachExists(coachData, true);
+        deleteCoach(createdCoachData);
+        uiTestFragments.checkCoachExists(editCoachData, false);
     }
 
     @BeforeEach
     void beforeTest() {
-        coachData = CoachFactory.createRandomCoach();
-        testData.addCoach(coachData);
+        createdCoachData = CoachFactory.createRandomCoach();
+        editCoachData = CoachFactory.createRandomCoach();
+        createdCoachData.setId(new DbAdapter().addCoach(createdCoachData));
+        testData.addCoach(createdCoachData);
+        testData.addCoach(editCoachData);
     }
 
-    public void createCoachWithUi(Coach coachData) {
+    public void deleteCoach(Coach coachData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CoachesPage coachesPage = dashboardPage.goToCoaches();
         coachesPage.waitForPageLoad();
-        AddCoachPage addCoachPage = coachesPage.clickAddCoach();
-        addCoachPage.waitForPageLoad();
-        addCoachPage.submitCoach(coachData);
+        coachesPage.deleteCoach(coachData.getFullName());
     }
 }

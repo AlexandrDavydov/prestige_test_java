@@ -1,4 +1,4 @@
-package com.prestige.tests;
+package com.prestige.tests.functional;
 
 import com.prestige.base.BaseTest;
 import com.prestige.models.Student;
