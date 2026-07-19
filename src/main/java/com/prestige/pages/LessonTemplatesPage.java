@@ -49,7 +49,26 @@ public class LessonTemplatesPage extends BasePage {
     }
 
     public boolean isLessonTemplateExists(LessonTemplate lessonTemplate) {
-        return isTemplateExists(lessonTemplate.getTemplateName());
+        int rowIndex = findTemplateRowIndex(lessonTemplate.getTemplateName());
+        if (rowIndex == -1) return false;
+
+        String titleText = page.locator("table tr").nth(rowIndex).textContent().trim();
+
+        boolean coachInTitle = true;
+        if (lessonTemplate.getCoachId() > 0) {
+            coachInTitle = titleText.contains(lessonTemplate.getTemplateName());
+        }
+
+        boolean studentsInRow = true;
+        if (lessonTemplate.getStudentsIds() != null && !lessonTemplate.getStudentsIds().isEmpty()) {
+            Locator dataRow = page.locator("table tr").nth(rowIndex + 1);
+            String dataText = dataRow.textContent().trim();
+            int expectedCount = lessonTemplate.getStudentsIds().split(",").length;
+            int actualCount = dataText.split("\\d+\\.").length - 1;
+            studentsInRow = !dataText.isEmpty() && actualCount == expectedCount;
+        }
+
+        return coachInTitle && studentsInRow;
     }
 
     public boolean isTemplateExists(String templateName) {

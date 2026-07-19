@@ -27,7 +27,7 @@ class Test_10_CreateLessonTemplateTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        lessonTemplateData = LessonTemplateFactory.createRandomTemplate();
+        lessonTemplateData = LessonTemplateFactory.createRandomLessonTemplate();
         testData.addLessonTemplate(lessonTemplateData);
     }
 
@@ -38,5 +38,6 @@ class Test_10_CreateLessonTemplateTest extends BaseTest {
         AddLessonTemplatePage addLessonTemplatePage = lessonTemplatePage.clickAddLessonTemplate();
         addLessonTemplatePage.waitForPageLoad();
         addLessonTemplatePage.fillForm(lessonTemplateData);
+        addLessonTemplatePage.submitForm();
     }
 }

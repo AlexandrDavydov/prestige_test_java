@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class LessonTemplateFactory {
     private static final Faker faker = new Faker(new Locale("ru", "RU"));
 
-    public static LessonTemplate createRandomTemplate() {
+    public static LessonTemplate createRandomLessonTemplate() {
         String templateName = TestingUtils.capitalizeFirst(faker.lorem().characters(10));
         return LessonTemplate.builder()
                 .templateName(templateName)

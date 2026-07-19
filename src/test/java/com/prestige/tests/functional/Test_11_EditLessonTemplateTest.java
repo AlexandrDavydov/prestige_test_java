@@ -5,6 +5,7 @@ import com.prestige.base.BaseTest;
 import com.prestige.models.LessonTemplate;
 import com.prestige.pages.AddLessonTemplatePage;
 import com.prestige.pages.DashboardPage;
+import com.prestige.pages.EditLessonTemplatePage;
 import com.prestige.pages.LessonTemplatesPage;
 import com.prestige.utils.LessonTemplateFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,29 +20,33 @@ import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
 @ResourceLock(LOCK_LESSON_TEMPLATE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_11_EditLessonTemplateTest extends BaseTest {
-    LessonTemplate lessonTemplateData;
+    LessonTemplate createdLessonTemplateData;
+    LessonTemplate LessonTemplateDataForEdit;
 
     @Test
     @Tag(LESSON_TEMPLATE)
-    public void test_10_CreateLessonTemplate() {
+    public void test_11_EditLessonTemplate() {
         uiTestFragments.login();
-        createLessonTemplateWithUi(lessonTemplateData);
-        uiTestFragments.checkLessonTemplateExists(lessonTemplateData, true);
+        editLessonTemplateWithUi(createdLessonTemplateData, LessonTemplateDataForEdit);
+        uiTestFragments.checkLessonTemplateExists(LessonTemplateDataForEdit, true);
     }
 
     @BeforeEach
     void beforeTest() {
-        lessonTemplateData = LessonTemplateFactory.createRandomTemplate();
-        lessonTemplateData.setId(new DbAdapter().addLessonTemplate(lessonTemplateData));
-        testData.addLessonTemplate(lessonTemplateData);
+        createdLessonTemplateData = LessonTemplateFactory.createRandomLessonTemplate();
+        LessonTemplateDataForEdit = LessonTemplateFactory.createRandomLessonTemplate();
+        createdLessonTemplateData.setId(new DbAdapter().addLessonTemplate(createdLessonTemplateData));
+        testData.addLessonTemplate(createdLessonTemplateData);
+        testData.addLessonTemplate(LessonTemplateDataForEdit);
     }
 
-    public void createLessonTemplateWithUi(LessonTemplate lessonTemplateData) {
+    public void editLessonTemplateWithUi(LessonTemplate lessonTemplateData, LessonTemplate lessonTemplateDataForEdit) {
         DashboardPage dashboardPage = new DashboardPage(page);
         LessonTemplatesPage lessonTemplatePage = dashboardPage.goToLessonTemplates();
         lessonTemplatePage.waitForPageLoad();
-        AddLessonTemplatePage addLessonTemplatePage = lessonTemplatePage.clickAddLessonTemplate();
-        addLessonTemplatePage.waitForPageLoad();
-        addLessonTemplatePage.fillForm(lessonTemplateData);
+        EditLessonTemplatePage editLessonTemplatePage = lessonTemplatePage.clickEditTemplate(lessonTemplateData.getTemplateName());
+        editLessonTemplatePage.waitForPageLoad();
+        editLessonTemplatePage.fillForm(lessonTemplateDataForEdit);
+        editLessonTemplatePage.submitForm();
     }
 }
