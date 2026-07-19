@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
+import com.prestige.config.TestConfig;
 
 import java.util.List;
 
@@ -313,7 +314,7 @@ public abstract class BasePage {
      */
     public void takeScreenshot(String name) {
         page.screenshot(new Page.ScreenshotOptions()
-                .setPath(java.nio.file.Paths.get("screenshots/" + name + ".png"))
+                .setPath(java.nio.file.Paths.get(TestConfig.getScreenshotDir() + "/" + name + ".png"))
                 .setFullPage(true));
     }
 

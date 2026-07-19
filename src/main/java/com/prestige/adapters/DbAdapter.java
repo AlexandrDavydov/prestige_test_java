@@ -5,16 +5,16 @@ import com.prestige.models.Coach;
 import com.prestige.models.LessonTemplate;
 import com.prestige.models.Student;
 
+import com.prestige.config.TestConfig;
 import java.sql.*;
 
 public class DbAdapter implements AutoCloseable {
     private final Connection connection;
-    private static final String DB_URL = "jdbc:sqlite:C:/Users/ALEKSANDER/PycharmProjects/prestige/instance/db.db"; // путь к вашей БД
 
     public DbAdapter() {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(DB_URL);
+            connection = DriverManager.getConnection(TestConfig.getDbUrl());
             connection.setAutoCommit(false);
             //System.out.println("Подключение к SQLite установлено");
         } catch (ClassNotFoundException | SQLException e) {

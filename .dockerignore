@@ -1,0 +1,13 @@
+# Ignore these files/folders when building Docker image
+target/
+test-results/
+.idea/
+*.iml
+.git/
+.gitignore
+README.md
+config.properties
+.env
+*.db
+screenshots/
+.cache/

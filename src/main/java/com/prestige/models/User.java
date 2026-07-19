@@ -1,5 +1,6 @@
 package com.prestige.models;
 
+import com.prestige.config.TestConfig;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,32 +13,10 @@ public class User {
     private String firstName;
     private String lastName;
 
-    // Статические фабричные методы для тестовых пользователей
     public static User admin() {
         return User.builder()
-                .username("admin")
-                .password("g@z")
-                .build();
-    }
-
-    public static User lockedOutUser() {
-        return User.builder()
-                .username("locked_out_user")
-                .password("secret_sauce")
-                .build();
-    }
-
-    public static User problemUser() {
-        return User.builder()
-                .username("problem_user")
-                .password("secret_sauce")
-                .build();
-    }
-
-    public static User invalidUser() {
-        return User.builder()
-                .username("invalid_user")
-                .password("wrong_password")
+                .username(TestConfig.getAppUsername())
+                .password(TestConfig.getAppPassword())
                 .build();
     }
 }

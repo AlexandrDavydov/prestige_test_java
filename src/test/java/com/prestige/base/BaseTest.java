@@ -1,6 +1,7 @@
 package com.prestige.base;
 
 import com.microsoft.playwright.*;
+import com.prestige.config.TestConfig;
 import com.prestige.models.TestData;
 import com.prestige.tests.UiTestFragments;
 import org.junit.jupiter.api.AfterAll;
@@ -25,19 +26,27 @@ public abstract class BaseTest {
     @BeforeAll
     void setUpPlaywright() {
         playwright = Playwright.create();
-        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"));
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                .setHeadless(isHeadless)
-                .setArgs(java.util.List.of("--disable-blink-features=AutomationControlled"))
-        );
+        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
+                .setHeadless(TestConfig.isHeadless())
+                .setArgs(java.util.List.of("--disable-blink-features=AutomationControlled"));
+        switch (TestConfig.getBrowserType().toLowerCase()) {
+            case "firefox":
+                browser = playwright.firefox().launch(launchOptions);
+                break;
+            case "webkit":
+                browser = playwright.webkit().launch(launchOptions);
+                break;
+            default:
+                browser = playwright.chromium().launch(launchOptions);
+        }
     }
 
     @BeforeEach
     void setUpContext() {
         context = browser.newContext(new Browser.NewContextOptions()
-                .setViewportSize(1024, 768)
-                .setLocale("ru-RU")
-                .setBaseURL(System.getProperty("base.url", "http://127.0.0.1:5000"))
+                .setViewportSize(TestConfig.getViewportWidth(), TestConfig.getViewportHeight())
+                .setLocale(TestConfig.getBrowserLocale())
+                .setBaseURL(TestConfig.getBaseUrl())
         );
         page = context.newPage();
         testData = new TestData();

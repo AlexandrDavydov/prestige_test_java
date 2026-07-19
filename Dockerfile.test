@@ -1,0 +1,95 @@
+# Use Ubuntu 22.04 with Java 17 and Maven
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install Java 17, Maven and dependencies
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    maven \
+    wget \
+    curl \
+    unzip \
+    gnupg \
+    ca-certificates \
+    libnss3 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxi6 \
+    libxtst6 \
+    libxrandr2 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libgbm1 \
+    libxkbcommon0 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libgdk-pixbuf2.0-0 \
+    libatspi2.0-0 \
+    fonts-liberation \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Google Chrome
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
+    && apt-get update && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source code
+COPY src ./src
+
+# Set default environment variables
+ENV APP_URL=http://localhost:8080
+ENV HEADLESS=true
+ENV DB_URL=jdbc:sqlite:prestige/instance/db.db
+ENV APP_USERNAME=admin
+ENV APP_PASSWORD=
+ENV VIEWPORT_WIDTH=1024
+ENV VIEWPORT_HEIGHT=768
+ENV BROWSER_LOCALE=ru-RU
+ENV BROWSER_TYPE=chromium
+ENV SCREENSHOT_DIR=screenshots
+
+# Create test runner script
+RUN echo '#!/bin/bash\n\
+echo "=========================================="\n\
+echo "☕ Java version:"\n\
+java -version\n\
+echo "=========================================="\n\
+echo "🚀 Running tests with parameters:"\n\
+echo "   APP_URL: ${APP_URL}"\n\
+echo "   HEADLESS: ${HEADLESS}"\n\
+echo "   DB_URL: ${DB_URL}"\n\
+echo "   VIEWPORT: ${VIEWPORT_WIDTH}x${VIEWPORT_HEIGHT}"\n\
+echo "=========================================="\n\
+mvn test \\\n\
+  -Dbase.url=${APP_URL} \\\n\
+  -Dheadless=${HEADLESS} \\\n\
+  -Ddb.url="${DB_URL}" \\\n\
+  -Dapp.username="${APP_USERNAME}" \\\n\
+  -Dapp.password="${APP_PASSWORD}" \\\n\
+  -Dviewport.width=${VIEWPORT_WIDTH} \\\n\
+  -Dviewport.height=${VIEWPORT_HEIGHT} \\\n\
+  -Dbrowser.locale=${BROWSER_LOCALE} \\\n\
+  -Dbrowser.type=${BROWSER_TYPE} \\\n\
+  -Dscreenshot.dir=${SCREENSHOT_DIR}\n\
+EXIT_CODE=$?\n\
+echo "=========================================="\n\
+if [ $EXIT_CODE -eq 0 ]; then\n\
+    echo "✅ All tests passed successfully!"\n\
+else\n\
+    echo "❌ Some tests failed (exit code: $EXIT_CODE)"\n\
+fi\n\
+echo "=========================================="\n\
+exit $EXIT_CODE' > /app/run-tests.sh && chmod +x /app/run-tests.sh
+
+ENTRYPOINT ["/app/run-tests.sh"]
