@@ -24,8 +24,8 @@ public abstract class BasePage {
     // Селекторы для модального окна удаления
     private final String deleteModal = "#deleteModal";
     private final String deleteModalContent = ".modal-content";
-    private final String deleteConfirmButton = ".modal-content button:nth-child(1)";
-    private final String deleteCancelButton = ".modal-content button:nth-child(2)";
+    private final String deleteConfirmButton = "#deleteModal button:has-text(\"Да\")";
+    private final String deleteCancelButton = "#deleteModal button:has-text(\"Нет\")";
 
     public BasePage(Page page) {
         this.page = page;
@@ -267,9 +267,7 @@ public abstract class BasePage {
      * Подтвердить удаление через кнопку "Да"
      */
     public void confirmDeleteModal() {
-        page.onDialog(dialog -> {
-            dialog.accept();
-        });
+        page.click(deleteConfirmButton);
         waitForPageLoad();
     }
 

@@ -29,7 +29,7 @@ public class UiTestFragments extends BaseTest {
 
     public void checkLessonTemplateExists(LessonTemplate lessonTemplate, boolean exists) {
         LessonTemplatesPage lessonTemplatesPage =  new LessonTemplatesPage(page);
-        assertEquals(lessonTemplatesPage.isLessonTemplateExists(lessonTemplate), exists);
+        assertEquals(exists, lessonTemplatesPage.isLessonTemplateExists(lessonTemplate));
     }
 
     public void checkCoachExists(Coach coachData, boolean exists) {

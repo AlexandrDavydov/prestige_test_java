@@ -97,7 +97,6 @@ public class LessonTemplatesPage extends BasePage {
             Locator dataRow = page.locator("table tr").nth(rowIndex + 1);
             dataRow.locator(deleteButton).click();
             confirmDeleteModal();
-            waitForPageLoad();
             return this;
         }
         throw new RuntimeException("Шаблон не найден: " + templateName);

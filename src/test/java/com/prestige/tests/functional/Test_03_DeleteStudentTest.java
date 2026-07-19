@@ -24,7 +24,7 @@ class Test_03_DeleteStudentTest extends BaseTest {
     @Tag(STUDENT)
     public void test_03_DeleteStudent() {
         uiTestFragments.login();
-        deleteStudent(createdStudentData);
+        deleteStudentWithUi(createdStudentData);
         uiTestFragments.checkStudentExists(editStudentData, false);
     }
 
@@ -37,7 +37,7 @@ class Test_03_DeleteStudentTest extends BaseTest {
         testData.addStudent(editStudentData);
     }
 
-    public void deleteStudent(Student studentData) {
+    public void deleteStudentWithUi(Student studentData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         StudentsPage studentsPage = dashboardPage.goToStudents();
         studentsPage.waitForPageLoad();

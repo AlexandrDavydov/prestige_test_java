@@ -25,7 +25,7 @@ class Test_06_DeleteCoachTest extends BaseTest {
     @Tag(COACH)
     public void test_06_DeleteCoach() {
         uiTestFragments.login();
-        deleteCoach(createdCoachData);
+        deleteCoachWithUi(createdCoachData);
         uiTestFragments.checkCoachExists(editCoachData, false);
     }
 
@@ -38,7 +38,7 @@ class Test_06_DeleteCoachTest extends BaseTest {
         testData.addCoach(editCoachData);
     }
 
-    public void deleteCoach(Coach coachData) {
+    public void deleteCoachWithUi(Coach coachData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CoachesPage coachesPage = dashboardPage.goToCoaches();
         coachesPage.waitForPageLoad();

@@ -25,7 +25,7 @@ class Test_09_DeleteCardTest extends BaseTest {
     @Tag(CARD)
     public void test_09_DeleteCard() {
         uiTestFragments.login();
-        deleteCard(createdCardData);
+        deleteCardWithUi(createdCardData);
         uiTestFragments.checkCardExists(editCardData, false);
     }
 
@@ -38,7 +38,7 @@ class Test_09_DeleteCardTest extends BaseTest {
         testData.addCard(editCardData);
     }
 
-    public void deleteCard(Card cardData) {
+    public void deleteCardWithUi(Card cardData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CardsPage cardsPage = dashboardPage.goToCards();
         cardsPage.waitForPageLoad();
