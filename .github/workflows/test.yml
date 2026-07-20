@@ -64,6 +64,14 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
+      - name: Prepare allure-history directory
+        if: always()
+        run: |
+          mkdir -p allure-history
+          if [ -d gh-pages/history ]; then
+            cp -r gh-pages/history/* allure-history/ 2>/dev/null || true
+          fi
+
       - name: Build Allure report
         if: always()
         uses: simple-elf/allure-report-action@v1.11
