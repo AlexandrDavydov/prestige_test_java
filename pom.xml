@@ -16,7 +16,20 @@
         <playwright.version>1.48.0</playwright.version>
         <junit.version>5.11.4</junit.version>
         <assertj.version>3.27.3</assertj.version>
+        <allure.version>2.35.3</allure.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-bom</artifactId>
+                <version>${allure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <!-- Playwright -->
@@ -37,6 +50,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Allure (отчёты) -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -115,6 +135,15 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <reportVersion>2.33.0</reportVersion>
                 </configuration>
             </plugin>
         </plugins>

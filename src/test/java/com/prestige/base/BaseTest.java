@@ -4,6 +4,7 @@ import com.microsoft.playwright.*;
 import com.prestige.config.TestConfig;
 import com.prestige.models.TestData;
 import com.prestige.tests.UiTestFragments;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,6 +56,8 @@ public abstract class BaseTest {
 
     @AfterEach
     void tearDownContext() {
+        Allure.addAttachment("Page screenshot", "image/png",
+            page.screenshot(new Page.ScreenshotOptions().setFullPage(true)), "png");
         testData.deleteTestData();
         if (context != null) {
             context.close();
