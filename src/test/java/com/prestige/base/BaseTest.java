@@ -12,6 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class BaseTest {
 
     private static final Logger log = LoggerFactory.getLogger(BaseTest.class);
@@ -57,7 +61,7 @@ public abstract class BaseTest {
     @AfterEach
     void tearDownContext() {
         Allure.addAttachment("Page screenshot", "image/png",
-            page.screenshot(new Page.ScreenshotOptions().setFullPage(true)), "png");
+            new ByteArrayInputStream(page.screenshot(new Page.ScreenshotOptions().setFullPage(true))), "png");
         testData.deleteTestData();
         if (context != null) {
             context.close();
