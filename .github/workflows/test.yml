@@ -64,27 +64,23 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Prepare allure-history directory
+      - name: Prepare Allure history
         if: always()
         run: |
-          mkdir -p allure-history
           if [ -d gh-pages/history ]; then
-            cp -r gh-pages/history/* allure-history/ 2>/dev/null || true
+            cp -r gh-pages/history/* target/allure-results/history/ 2>/dev/null || true
           fi
+          ls -la target/allure-results/ 2>/dev/null || echo "No allure-results yet"
 
-      - name: Build Allure report
+      - name: Generate Allure report
         if: always()
-        uses: simple-elf/allure-report-action@v1.11
-        with:
-          allure_results: target/allure-results
-          allure_history: allure-history
-          gh_pages: gh-pages
-          keep_reports: 20
+        run: mvn allure:report
 
-      - name: Publish to GitHub Pages
+      - name: Deploy Allure report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: target/site/allure-report
+          keep_files: true
