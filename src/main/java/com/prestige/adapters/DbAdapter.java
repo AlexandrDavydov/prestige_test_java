@@ -76,7 +76,7 @@ public class DbAdapter implements AutoCloseable {
 
         } catch (SQLException e) {
             rollback();
-            throw new RuntimeException("Ошибка при добавлении студента", e);
+            throw new RuntimeException("Ошибка при добавлении студента: " + e.getMessage(), e);
         }
         return id;
     }
