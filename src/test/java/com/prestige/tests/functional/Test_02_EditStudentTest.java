@@ -25,7 +25,7 @@ class Test_02_EditStudentTest extends BaseTest {
     @Tag(STUDENT)
     public void test_02_EditStudent() {
         uiTestFragments.login();
-        editStudent(createdStudentData, editStudentData);
+        editStudentWithUi(createdStudentData, editStudentData);
         uiTestFragments.checkStudentExists(editStudentData, true);
     }
 
@@ -38,7 +38,7 @@ class Test_02_EditStudentTest extends BaseTest {
         testData.addStudent(editStudentData);
     }
 
-    public void editStudent(Student studentForEditData, Student newStudentData) {
+    public void editStudentWithUi(Student studentForEditData, Student newStudentData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         StudentsPage studentsPage = dashboardPage.goToStudents();
         studentsPage.waitForPageLoad();

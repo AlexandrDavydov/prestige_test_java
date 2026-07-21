@@ -2,6 +2,7 @@ package com.prestige.adapters;
 
 import com.prestige.models.Card;
 import com.prestige.models.Coach;
+import com.prestige.models.Lesson;
 import com.prestige.models.LessonTemplate;
 import com.prestige.models.Student;
 
@@ -50,6 +51,27 @@ public class DbAdapter implements AutoCloseable {
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении шаблона занятия", e);
+        }
+    }
+
+    public int addLesson(Lesson lesson) {
+        String sql = "INSERT INTO lessons (lesson_name, date, coach_id, student_ids, status) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, lesson.getLessonName());
+            stmt.setString(2, lesson.getDate());
+            stmt.setInt(3, lesson.getCoachId());
+            stmt.setString(4, lesson.getStudentIds());
+            stmt.setString(5, lesson.getStatus());
+
+            stmt.executeUpdate();
+            connection.commit();
+
+            int id = getLastInsertedId();
+            lesson.setId(id);
+            return id;
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при добавлении занятия", e);
         }
     }
 

@@ -26,7 +26,7 @@ class Test_05_EditCoachTest extends BaseTest {
     @Tag(COACH)
     public void test_05_EditCoach() {
         uiTestFragments.login();
-        editCoach(createdCoachData, editCoachData);
+        editCoachWithUi(createdCoachData, editCoachData);
         uiTestFragments.checkCoachExists(editCoachData, true);
     }
 
@@ -39,7 +39,7 @@ class Test_05_EditCoachTest extends BaseTest {
         testData.addCoach(editCoachData);
     }
 
-    public void editCoach(Coach coachForEditData, Coach newCoachData) {
+    public void editCoachWithUi(Coach coachForEditData, Coach newCoachData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CoachesPage coachesPage = dashboardPage.goToCoaches();
         coachesPage.waitForPageLoad();

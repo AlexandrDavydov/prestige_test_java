@@ -343,14 +343,14 @@ public class LessonsPage extends BasePage {
     /**
      * Редактировать занятие
      */
-//    public EditLessonPage editLesson(String lessonName) {
-//        int index = findLessonIndex(lessonName);
-//        if (index >= 0) {
-//            getActionsRowForLesson(index).locator(lessonEditButton).click();
-//            return new EditLessonPage(page);
-//        }
-//        throw new RuntimeException("Занятие не найдено: " + lessonName);
-//    }
+    public EditLessonPage clickEditLesson(String lessonName) {
+        int index = findLessonIndex(lessonName);
+        if (index >= 0) {
+            getActionsRowForLesson(index).locator(lessonEditButton).click();
+            return new EditLessonPage(page);
+        }
+        throw new RuntimeException("Занятие не найдено: " + lessonName);
+    }
 
     /**
      * Редактировать занятие по индексу

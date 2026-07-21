@@ -26,7 +26,7 @@ class Test_08_EditCardTest extends BaseTest {
     @Tag(CARD)
     public void test_08_EditCard() {
         uiTestFragments.login();
-        editCard(createdCardData, editCardData);
+        editCardWithUi(createdCardData, editCardData);
         uiTestFragments.checkCardExists(editCardData, true);
     }
 
@@ -39,7 +39,7 @@ class Test_08_EditCardTest extends BaseTest {
         testData.addCard(editCardData);
     }
 
-    public void editCard(Card cardForEditData, Card newCardData) {
+    public void editCardWithUi(Card cardForEditData, Card newCardData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         CardsPage cardsPage = dashboardPage.goToCards();
         cardsPage.waitForPageLoad();
