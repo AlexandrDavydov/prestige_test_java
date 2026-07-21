@@ -23,9 +23,6 @@ import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
 class Test_12_DeleteLessonTemplateTest extends BaseTest {
     LessonTemplate createdLessonTemplateData;
 
-    Card createdCardData;
-    Card editCardData;
-
     @Test
     @Tag(LESSON_TEMPLATE)
     public void test_12_DeleteLessonTemplateTest() {

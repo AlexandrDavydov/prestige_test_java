@@ -11,17 +11,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
-import static com.prestige.tests.TestGroups.LESSON_TEMPLATE;
-import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
+import static com.prestige.tests.TestGroups.*;
 
-@ResourceLock(LOCK_LESSON_TEMPLATE)
+@ResourceLock(LOCK_LESSON)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_13_CreateLessonTest extends BaseTest {
     Lesson lessonData;
 
 
     @Test
-    @Tag(LESSON_TEMPLATE)
+    @Tag(LESSON)
     public void test_13_CreateLessonTest() {
         uiTestFragments.login();
         createLessonWithUi(lessonData);
