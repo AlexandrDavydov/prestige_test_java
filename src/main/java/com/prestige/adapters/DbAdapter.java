@@ -156,7 +156,6 @@ public class DbAdapter implements AutoCloseable {
             stmt.setLong(1, coachId);
             int deletedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Тренер удален из SQLite по ID: " + coachId);
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении тренера по ID", e);
@@ -171,7 +170,6 @@ public class DbAdapter implements AutoCloseable {
             stmt.setString(3, middleName);
             int deletedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Тренер удален из SQLite.");
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении тренера", e);
@@ -197,7 +195,6 @@ public class DbAdapter implements AutoCloseable {
 
             id = getLastInsertedId();
             card.setId(id);
-            System.out.println("Присвоен ID карте: " + id);
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при добавлении абонемента", e);
@@ -211,7 +208,6 @@ public class DbAdapter implements AutoCloseable {
             stmt.setString(1, name);
             int deletedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Абонемент удален из SQLite.");
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении абонемента", e);

@@ -15,11 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
-import static com.prestige.tests.TestGroups.CARD;
-import static com.prestige.tests.TestGroups.LOCK_CARD;
+import static com.prestige.tests.TestGroups.LESSON_TEMPLATE;
+import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_CARD)
+@ResourceLock(LOCK_LESSON_TEMPLATE)
 class Test_12_DeleteLessonTemplateTest extends BaseTest {
     LessonTemplate createdLessonTemplateData;
 
@@ -27,7 +27,7 @@ class Test_12_DeleteLessonTemplateTest extends BaseTest {
     Card editCardData;
 
     @Test
-    @Tag(CARD)
+    @Tag(LESSON_TEMPLATE)
     public void test_12_DeleteLessonTemplateTest() {
         uiTestFragments.login();
         deleteLessonTemplateWithUi(createdLessonTemplateData);
@@ -38,6 +38,7 @@ class Test_12_DeleteLessonTemplateTest extends BaseTest {
     void beforeTest() {
         createdLessonTemplateData = LessonTemplateFactory.createRandomLessonTemplate();
         createdLessonTemplateData.setId(new DbAdapter().addLessonTemplate(createdLessonTemplateData));
+        testData.addLessonTemplate(createdLessonTemplateData);
     }
 
     public void deleteLessonTemplateWithUi(LessonTemplate LessonTemplateData) {
