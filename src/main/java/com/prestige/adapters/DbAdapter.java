@@ -47,10 +47,21 @@ public class DbAdapter implements AutoCloseable {
             stmt.setString(1, templateName);
             int deletedRows = stmt.executeUpdate();
             connection.commit();
-            System.out.println("Шаблон удален из SQLite.");
         } catch (SQLException e) {
             rollback();
             throw new RuntimeException("Ошибка при удалении шаблона занятия", e);
+        }
+    }
+
+    public void deleteLessonByName(String lessonName) {
+        String sql = "DELETE FROM lessons WHERE lesson_name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, lessonName);
+            int deletedRows = stmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            rollback();
+            throw new RuntimeException("Ошибка при удалении занятия занятия", e);
         }
     }
 

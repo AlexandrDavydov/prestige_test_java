@@ -30,15 +30,15 @@ public class LessonsPage extends BasePage {
     // Таблица занятий
     private final String lessonRows = "table tr.table-title";
     private final String lessonTitleRow = "tr.table-title";
-    private final String lessonInfoRow = "tr:has(td[colspan='6'])";
+    private final String lessonInfoRow = "tr.table-title + tr";
     private final String lessonStudentsRow = "tr:has(th:has-text('Ученики'))";
     private final String lessonActionsRow = "tr:has(td:has(a[title='Состоялось']))";
 
     // Селекторы внутри строки занятия
-    private final String lessonDate = "td[colspan='6'] i";
-    private final String lessonName = "td[colspan='6']";
-    private final String lessonCoach = "tr:has(td[colspan='6']) span:has-text('тренер:') + *";
-    private final String lessonStatus = "tr:has(td[colspan='6']) span:has-text('статус:') + *";
+    private final String lessonDate = "tr.table-title td i";
+    private final String lessonName = "td";
+    private final String lessonCoach = "span:has-text('тренер:') + *";
+    private final String lessonStatus = "span:has-text('статус:') + *";
     private final String lessonStudents = "td:first-child";
     private final String lessonActions = "td:last-child";
 
@@ -78,13 +78,10 @@ public class LessonsPage extends BasePage {
 
     // ============ ДОБАВЛЕНИЕ ЗАНЯТИЯ ============
 
-    /**
-     * Кликнуть на кнопку "Добавить занятие"
-     */
-//    public AddLessonPage clickAddLesson() {
-//        page.click(addLessonButton);
-//        return new AddLessonPage(page);
-//    }
+    public AddLessonPage clickAddLesson() {
+        page.click(addLessonButton);
+        return new AddLessonPage(page);
+    }
 
     /**
      * Проверить, видна ли кнопка добавления
@@ -411,12 +408,12 @@ public class LessonsPage extends BasePage {
     /**
      * Найти индекс занятия по названию
      */
-    private int findLessonIndex(String lessonName) {
+    private int findLessonIndex(String targetLessonName) {
         Locator titleRows = page.locator(lessonRows);
 
         for (int i = 0; i < titleRows.count(); i++) {
-            String name = titleRows.nth(i).locator(lessonName).textContent().trim();
-            if (name.contains(lessonName)) {
+            String name = titleRows.nth(i).textContent().trim();
+            if (name.contains(targetLessonName)) {
                 return i;
             }
         }
@@ -424,11 +421,8 @@ public class LessonsPage extends BasePage {
         return -1;
     }
 
-    /**
-     * Проверить, существует ли занятие
-     */
-    public boolean isLessonExists(String lessonName) {
-        return findLessonIndex(lessonName) >= 0;
+    public boolean isLessonExists(Lesson lesson) {
+        return findLessonIndex(lesson.getLessonName()) >= 0;
     }
 
     /**
@@ -564,38 +558,4 @@ public class LessonsPage extends BasePage {
 //        List<Student> students = getLessonStudents(lessonName);
 //        return students.stream().anyMatch(s -> s.getFullName().equals(studentName));
 //    }
-
-    /**
-     * Ожидать появления занятия
-     */
-    public LessonsPage waitForLessonToAppear(String lessonName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
-
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (isLessonExists(lessonName)) {
-                return this;
-            }
-            page.waitForTimeout(500);
-        }
-
-        throw new RuntimeException("Занятие не появилось за " + timeoutSeconds + " секунд: " + lessonName);
-    }
-
-    /**
-     * Ожидать исчезновения занятия
-     */
-    public LessonsPage waitForLessonToDisappear(String lessonName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
-
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (!isLessonExists(lessonName)) {
-                return this;
-            }
-            page.waitForTimeout(500);
-        }
-
-        throw new RuntimeException("Занятие не исчезло за " + timeoutSeconds + " секунд: " + lessonName);
-    }
 }

@@ -32,6 +32,11 @@ public class UiTestFragments extends BaseTest {
         assertEquals(exists, lessonTemplatesPage.isLessonTemplateExists(lessonTemplate));
     }
 
+    public void checkLessonExists(Lesson lesson, boolean exists) {
+        LessonsPage lessonsPage =  new LessonsPage(page);
+        assertEquals(exists, lessonsPage.isLessonExists(lesson));
+    }
+
     public void checkCoachExists(Coach coachData, boolean exists) {
         CoachesPage coachesPage =  new CoachesPage(page);
         assertEquals(coachesPage.isCoachExists(coachData.getFullName()), exists);

@@ -9,6 +9,7 @@ public class TestData {
     private final ArrayList<Coach> coaches = new ArrayList<>();
     private final ArrayList<Card> cards = new ArrayList<>();
     private final ArrayList<LessonTemplate> lessonTemplates = new ArrayList<>();
+    private final ArrayList<Lesson> lessons = new ArrayList<>();
 
     private final DbAdapter dbAdapter = new DbAdapter();
 
@@ -25,6 +26,10 @@ public class TestData {
 
     public void addLessonTemplate(LessonTemplate lessonTemplate) {
         this.lessonTemplates.add(lessonTemplate);
+    }
+
+    public void addLesson(Lesson lesson) {
+        this.lessons.add(lesson);
     }
 
     public void addCard(Card card) {
@@ -57,6 +62,12 @@ public class TestData {
             dbAdapter.deleteCoachById(lessonTemplate.getCoachId());
             dbAdapter.deleteStudents(lessonTemplate.getStudentsIds());
             dbAdapter.deleteLessonTemplateByName(lessonTemplate.getTemplateName());
+        }
+
+        for (Lesson lesson : lessons) {
+            dbAdapter.deleteCoachById(lesson.getCoachId());
+            dbAdapter.deleteStudents(lesson.getStudentIds());
+            dbAdapter.deleteLessonByName(lesson.getLessonName());
         }
     }
 

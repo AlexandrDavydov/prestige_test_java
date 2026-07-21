@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class LessonTemplateFactory {
+public class LessonTemplateFactory extends BaseLessonFactory {
     private static final Faker faker = new Faker(new Locale("ru", "RU"));
 
     public static LessonTemplate createRandomLessonTemplate() {
@@ -21,24 +21,5 @@ public class LessonTemplateFactory {
                 .studentsIds(getStudents(faker.random().nextInt(4,15)))
                 .coachId(getCoachId())
                 .build();
-    }
-    private static String getStudents(int count){
-        DbAdapter dbAdapter = new DbAdapter();
-        List<Student> students = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            Student student = StudentFactory.createRandomStudent();
-            student.setId(dbAdapter.addStudent(student));
-            students.add(student);
-        }
-        return students.stream()
-                .map(s -> String.valueOf(s.getId()))
-                .collect(Collectors.joining(","));
-    }
-
-    private static int getCoachId(){
-        DbAdapter dbAdapter = new DbAdapter();
-        Coach coach = CoachFactory.createRandomCoach();
-        coach.setId(dbAdapter.addCoach(coach));
-        return coach.getId();
     }
 }
