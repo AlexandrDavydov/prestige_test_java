@@ -3,12 +3,9 @@ package com.prestige.tests.functional;
 import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Lesson;
-import com.prestige.models.LessonTemplate;
 import com.prestige.pages.DashboardPage;
-import com.prestige.pages.LessonTemplatesPage;
 import com.prestige.pages.LessonsPage;
 import com.prestige.utils.LessonFactory;
-import com.prestige.utils.LessonTemplateFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -24,7 +21,7 @@ class Test_15_DeleteLessonTest extends BaseTest {
 
     @Test
     @Tag(LESSON)
-    public void test_15_DeleteLessonTest() {
+    public void test_15_DeleteLesson() {
         uiTestFragments.login();
         deleteLessonWithUi(createdLessonData);
         uiTestFragments.checkLessonExists(createdLessonData, false);

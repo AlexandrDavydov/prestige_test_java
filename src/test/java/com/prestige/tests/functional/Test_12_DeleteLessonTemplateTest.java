@@ -2,12 +2,9 @@ package com.prestige.tests.functional;
 
 import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
-import com.prestige.models.Card;
 import com.prestige.models.LessonTemplate;
-import com.prestige.pages.CardsPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.pages.LessonTemplatesPage;
-import com.prestige.utils.CardFactory;
 import com.prestige.utils.LessonTemplateFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -25,7 +22,7 @@ class Test_12_DeleteLessonTemplateTest extends BaseTest {
 
     @Test
     @Tag(LESSON_TEMPLATE)
-    public void test_12_DeleteLessonTemplateTest() {
+    public void test_12_DeleteLessonTemplate() {
         uiTestFragments.login();
         deleteLessonTemplateWithUi(createdLessonTemplateData);
         uiTestFragments.checkLessonTemplateExists(createdLessonTemplateData, false);

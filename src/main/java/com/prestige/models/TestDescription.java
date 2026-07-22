@@ -12,4 +12,6 @@ public class TestDescription {
     String testName;
     @Builder.Default
     ArrayList<String> testSteps = new ArrayList<>();
+    @Builder.Default
+    ArrayList<String> beforeTestSteps = new ArrayList<>();
 }

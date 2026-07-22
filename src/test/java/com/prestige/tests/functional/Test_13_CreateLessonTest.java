@@ -2,7 +2,6 @@ package com.prestige.tests.functional;
 
 import com.prestige.base.BaseTest;
 import com.prestige.models.Lesson;
-import com.prestige.models.LessonTemplate;
 import com.prestige.pages.*;
 import com.prestige.utils.LessonFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +20,7 @@ class Test_13_CreateLessonTest extends BaseTest {
 
     @Test
     @Tag(LESSON)
-    public void test_13_CreateLessonTest() {
+    public void test_13_CreateLesson() {
         uiTestFragments.login();
         createLessonWithUi(lessonData);
         uiTestFragments.checkLessonExists(lessonData, true);

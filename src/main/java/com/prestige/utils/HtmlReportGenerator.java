@@ -36,7 +36,7 @@ public class HtmlReportGenerator {
 
         // Начало таблицы
         html.append("<table>\n");
-        html.append("<thead>\n<tr><th>ID</th><th>Name</th><th>Steps</th></tr>\n</thead>\n<tbody>\n");
+        html.append("<thead>\n<tr><th>ID</th><th>Name</th><th>Before Steps</th><th>Steps</th></tr>\n</thead>\n<tbody>\n");
 
         for (TestDescription test : tests) {
             html.append("<tr>\n");
@@ -44,6 +44,17 @@ public class HtmlReportGenerator {
             html.append("<td><span class=\"id-badge\">").append(test.getTestId()).append("</span></td>\n");
             // Название теста
             html.append("<td>").append(test.getTestName()).append("</td>\n");
+
+            // Before steps (рендерим как список)
+            html.append("<td><ul class=\"step-list\">");
+            if (test.getBeforeTestSteps() != null && !test.getBeforeTestSteps().isEmpty()) {
+                for (String step : test.getBeforeTestSteps()) {
+                    html.append("<li>").append(step).append("</li>");
+                }
+            } else {
+                html.append("<li>No before steps</li>");
+            }
+            html.append("</ul></td>\n");
 
             // Шаги (рендерим как список)
             html.append("<td><ul class=\"step-list\">");

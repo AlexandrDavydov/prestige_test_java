@@ -3,7 +3,6 @@ package com.prestige.tests.functional;
 import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Lesson;
-import com.prestige.pages.AddLessonPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.pages.EditLessonPage;
 import com.prestige.pages.LessonsPage;
@@ -25,7 +24,7 @@ class Test_14_EditLessonTest extends BaseTest {
 
     @Test
     @Tag(LESSON)
-    public void test_14_EditLessonTest() {
+    public void test_14_EditLesson() {
         uiTestFragments.login();
         EditLessonWithUi(lessonDataForEdit);
         uiTestFragments.checkLessonExists(lessonDataForEdit, true);
