@@ -2,7 +2,7 @@ name: E2E Tests
 
 on:
   push:
-    branches: [main, develop, master, ci_cd_integration]
+    branches: [main, develop, master]
   pull_request:
   workflow_dispatch:
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run E2E tests
         run: |
-          mvn clean test \
+          mvn test \
             -Dbase.url=${{ secrets.APP_URL || 'http://localhost:5000' }} \
             -Dheadless=true \
             -Ddb.url="${{ secrets.DB_URL }}" \
