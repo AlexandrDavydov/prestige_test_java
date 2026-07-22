@@ -7,10 +7,7 @@ import java.util.function.Supplier;
 public class StepHelper {
 
     public static void step(String name, Runnable action) {
-        Allure.step(name, () -> {
-            action.run();
-            return null;
-        });
+        Allure.step(name, () -> action.run());
     }
 
     public static <T> T step(String name, Supplier<T> action) {
