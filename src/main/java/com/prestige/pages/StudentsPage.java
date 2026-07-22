@@ -98,26 +98,26 @@ public class StudentsPage extends BasePage {
         return null;
     }
 
-    public void clickEditStudent(String fullName) {
-        step("Редактировать ученика: {fullName}", () -> {
+    public EditStudentPage clickEditStudent(String fullName) {
+        return step("Редактировать ученика: " + fullName, () -> {
             Locator row = findStudentRow(fullName);
             if (row != null) {
                 row.locator(editButton).click();
-            } else {
-                throw new RuntimeException("Ученик не найден: " + fullName);
+                return new EditStudentPage(page);
             }
+            throw new RuntimeException("Ученик не найден: " + fullName);
         });
     }
 
-    public void deleteStudent(String fullName) {
-        step("Удалить ученика: {fullName}", () -> {
+    public StudentsPage deleteStudent(String fullName) {
+        return step("Удалить ученика: " + fullName, () -> {
             Locator row = findStudentRow(fullName);
             if (row != null) {
                 row.locator(deleteButton).click();
                 confirmDeleteModal();
-            } else {
-                throw new RuntimeException("Ученик не найден: " + fullName);
+                return this;
             }
+            throw new RuntimeException("Ученик не найден: " + fullName);
         });
     }
 
@@ -197,35 +197,31 @@ public class StudentsPage extends BasePage {
         throw new RuntimeException("Ученик не найден: " + fullName);
     }
 
-    public boolean waitForStudentToAppear(String fullName, int timeoutSeconds) {
-        return step("Ожидание появления ученика: {fullName}", () -> {
+    public StudentsPage waitForStudentToAppear(String fullName, int timeoutSeconds) {
+        return step("Ожидание появления ученика: " + fullName, () -> {
             long startTime = System.currentTimeMillis();
             long timeout = timeoutSeconds * 1000L;
-
             while (System.currentTimeMillis() - startTime < timeout) {
                 if (isStudentExists(fullName)) {
-                    return true;
+                    return this;
                 }
                 page.waitForTimeout(500);
             }
-
-            return false;
+            throw new RuntimeException("Ученик не появился в таблице за " + timeoutSeconds + " секунд: " + fullName);
         });
     }
 
-    public boolean waitForStudentToDisappear(String fullName, int timeoutSeconds) {
-        return step("Ожидание удаления ученика: {fullName}", () -> {
+    public StudentsPage waitForStudentToDisappear(String fullName, int timeoutSeconds) {
+        return step("Ожидание удаления ученика: " + fullName, () -> {
             long startTime = System.currentTimeMillis();
             long timeout = timeoutSeconds * 1000L;
-
             while (System.currentTimeMillis() - startTime < timeout) {
                 if (!isStudentExists(fullName)) {
-                    return true;
+                    return this;
                 }
                 page.waitForTimeout(500);
             }
-
-            return false;
+            throw new RuntimeException("Ученик не исчез из таблицы за " + timeoutSeconds + " секунд: " + fullName);
         });
     }
 

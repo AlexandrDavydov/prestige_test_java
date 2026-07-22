@@ -443,12 +443,10 @@ public class EditCoachPage extends BasePage {
     }
 
     public CoachesPage saveAndVerifySuccess() {
-        step("Сохранить тренера и проверить успех", () -> {
+        return step("Сохранить тренера и проверить успех", () -> {
             clickSave();
-
-            assert hasSuccessMessage("Тренер успешно обновлен") :
-                    "Не найдено сообщение об успешном обновлении";
+            assert hasSuccessMessage("Тренер успешно обновлен") : "Не найдено сообщение об успешном обновлении";
+            return new CoachesPage(page);
         });
-        return new CoachesPage(page);
     }
 }
