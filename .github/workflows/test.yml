@@ -43,6 +43,11 @@ jobs:
       - name: Install Playwright system deps
         run: npx playwright install-deps chromium
 
+      - name: Initialize SQLite database
+        run: |
+          mkdir -p prestige/instance
+          sqlite3 prestige/instance/db.db < src/test/resources/schema.sql
+
       - name: Run E2E tests
         run: |
           mvn test \
