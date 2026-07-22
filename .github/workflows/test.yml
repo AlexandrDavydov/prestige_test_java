@@ -59,16 +59,6 @@ jobs:
           name: test-results
           path: target/surefire-reports/
 
-      - name: Debug allure-results
-        if: always()
-        run: |
-          echo "=== Contents of target ==="
-          ls -la target/ 2>/dev/null || echo "target/ not found"
-          echo "=== Looking for allure-results ==="
-          ls -la target/allure-results/ 2>/dev/null || echo "allure-results not found"
-          echo "=== Any allure-result files? ==="
-          find . -name "*-result.json" 2>/dev/null || echo "no json results found"
-
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
@@ -76,7 +66,7 @@ jobs:
           name: allure-results
           path: target/allure-results/
 
-      - name: Load Allure history
+      - name: Load existing reports from gh-pages
         if: always()
         uses: actions/checkout@v4
         continue-on-error: true
@@ -87,9 +77,10 @@ jobs:
       - name: Prepare Allure history
         if: always()
         run: |
-          if [ -d gh-pages/history ]; then
+          LATEST_REPORT=$(ls -d gh-pages/reports/*/ 2>/dev/null | sort -r | head -1)
+          if [ -n "$LATEST_REPORT" ] && [ -d "${LATEST_REPORT}history" ]; then
             mkdir -p target/allure-results/history
-            cp -r gh-pages/history/* target/allure-results/history/ 2>/dev/null || true
+            cp -r "${LATEST_REPORT}history"/* target/allure-results/history/ 2>/dev/null || true
           fi
 
       - name: Install Allure CLI
@@ -98,7 +89,42 @@ jobs:
 
       - name: Generate Allure report
         if: always()
-        run: allure generate target/allure-results -o target/allure-report --clean
+        run: |
+          TIMESTAMP=$(date +'%Y%m%d-%H%M%S')
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+          mkdir -p target/allure-report/reports
+          allure generate target/allure-results -o "target/allure-report/reports/$TIMESTAMP" --clean
+
+      - name: Combine reports and keep last 20
+        if: always()
+        run: |
+          REPORTS_DIR="target/allure-report/reports"
+
+          # Copy existing reports from gh-pages
+          if [ -d gh-pages/reports ]; then
+            cp -r gh-pages/reports/* "$REPORTS_DIR/" 2>/dev/null || true
+          fi
+
+          # Keep only last 20 reports (sorted by name descending = newest first)
+          cd "$REPORTS_DIR"
+          ls -1 | sort -r | tail -n +21 | xargs -r rm -rf
+          cd ../../..
+
+          # Create root index.html redirecting to latest report
+          LATEST_REPORT=$(ls -1 "$REPORTS_DIR" | sort -r | head -1)
+          if [ -n "$LATEST_REPORT" ]; then
+            cat > target/allure-report/index.html << EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta http-equiv="refresh" content="0; url=reports/$LATEST_REPORT/index.html" />
+          </head>
+          <body>
+            <p>Redirecting to <a href="reports/$LATEST_REPORT/index.html">latest Allure report</a></p>
+          </body>
+          </html>
+          EOF
+          fi
 
       - name: Deploy Allure report to GitHub Pages
         if: always()
@@ -107,3 +133,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: target/allure-report
+          force_orphan: false

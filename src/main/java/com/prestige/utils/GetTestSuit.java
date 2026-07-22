@@ -19,7 +19,6 @@ public class GetTestSuit {
         public static void main(String[] args) throws IOException {
             Path testDir = Paths.get("src/test/java/com/prestige");
 
-
             List<MethodDeclaration> methods = findTestMethods(testDir);
             List<TestDescription>  testsDescription = new ArrayList<>();
 
