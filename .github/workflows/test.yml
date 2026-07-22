@@ -50,7 +50,7 @@ jobs:
 
       - name: Run E2E tests
         run: |
-          mvn test \
+          mvn clean test \
             -Dbase.url=${{ secrets.APP_URL || 'http://localhost:5000' }} \
             -Dheadless=true \
             -Ddb.url="${{ secrets.DB_URL }}" \
