@@ -57,7 +57,7 @@ public class GetTestSuit {
                 if (s.endsWith(";")){
                     s=s.substring(0,s.length()-1);
                 }
-                steps.add(removeWords(s).trim());
+                steps.add(capitalize(removeWords(s).trim()));
             }
             return steps;
         }
@@ -71,6 +71,13 @@ public class GetTestSuit {
                 line = line.replaceAll(words_to_remove.get(i), "");
             }
             return line;
+        }
+
+        private static String capitalize(String str) {
+            if (str == null || str.isEmpty()) {
+                return str;
+            }
+            return Character.toUpperCase(str.charAt(0)) + str.substring(1);
         }
     }
 }
