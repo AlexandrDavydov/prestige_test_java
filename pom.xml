@@ -59,6 +59,12 @@
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit5-aspectj</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.22.1</version>
         </dependency>
 
         <!-- AssertJ (красивые проверки) -->
