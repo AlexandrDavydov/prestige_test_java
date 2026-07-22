@@ -2,7 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Card;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 import java.util.List;
 
@@ -29,20 +29,22 @@ public class EditCardPage extends BasePage {
         return page.textContent(pageTitle);
     }
 
-    @Step("Заполнить название абонемента: {name}")
     public EditCardPage fillName(String name) {
-        page.fill(nameInput, name);
-        return this;
+        return step("Заполнить название абонемента: " + name, () -> {
+            page.fill(nameInput, name);
+            return this;
+        });
     }
 
     public String getName() {
         return page.inputValue(nameInput);
     }
 
-    @Step("Заполнить цвет абонемента: {color}")
     public EditCardPage fillColor(String color) {
-        page.fill(colorInput, color.toLowerCase());
-        return this;
+        return step("Заполнить цвет абонемента: " + color, () -> {
+            page.fill(colorInput, color.toLowerCase());
+            return this;
+        });
     }
 
     public String getColor() {
@@ -53,10 +55,11 @@ public class EditCardPage extends BasePage {
         return page.textContent(colorValue);
     }
 
-    @Step("Заполнить цену абонемента: {price}")
     public EditCardPage fillPrice(double price) {
-        page.fill(priceInput, String.valueOf(price));
-        return this;
+        return step("Заполнить цену абонемента: " + price, () -> {
+            page.fill(priceInput, String.valueOf(price));
+            return this;
+        });
     }
 
     public int getPrice() {
@@ -68,10 +71,11 @@ public class EditCardPage extends BasePage {
         }
     }
 
-    @Step("Заполнить количество занятий: {count}")
     public EditCardPage fillLessonsCount(int count) {
-        page.fill(lessonsCountInput, String.valueOf(count));
-        return this;
+        return step("Заполнить количество занятий: " + count, () -> {
+            page.fill(lessonsCountInput, String.valueOf(count));
+            return this;
+        });
     }
 
     public int getLessonsCount() {
@@ -83,45 +87,49 @@ public class EditCardPage extends BasePage {
         }
     }
 
-    @Step("Заполнить срок действия: {duration}")
     public EditCardPage fillDuration(String duration) {
-        page.fill(durationInput, duration);
-        return this;
+        return step("Заполнить срок действия: " + duration, () -> {
+            page.fill(durationInput, duration);
+            return this;
+        });
     }
 
     public String getDuration() {
         return page.inputValue(durationInput);
     }
 
-    @Step("Заполнить форму редактирования абонемента")
     public EditCardPage fillCardForm(Card card) {
-        if (card.getName() != null) {
-            fillName(card.getName());
-        }
-        if (card.getColor() != null) {
-            fillColor(card.getColor());
-        }
-        fillPrice(card.getPrice());
-        fillLessonsCount(card.getLessonsCount());
-        if (card.getDuration() != null) {
-            fillDuration(card.getDuration());
-        }
-        return this;
+        return step("Заполнить форму редактирования абонемента", () -> {
+            if (card.getName() != null) {
+                fillName(card.getName());
+            }
+            if (card.getColor() != null) {
+                fillColor(card.getColor());
+            }
+            fillPrice(card.getPrice());
+            fillLessonsCount(card.getLessonsCount());
+            if (card.getDuration() != null) {
+                fillDuration(card.getDuration());
+            }
+            return this;
+        });
     }
 
-    @Step("Очистить и заполнить форму абонемента")
     public EditCardPage fillCardFormCleared(Card card) {
-        clearAllFields();
-        return fillCardForm(card);
+        return step("Очистить и заполнить форму абонемента", () -> {
+            clearAllFields();
+            return fillCardForm(card);
+        });
     }
 
-    @Step("Заполнить обязательные поля абонемента")
     public EditCardPage fillRequiredFields(Card card) {
-        fillName(card.getName());
-        fillPrice(card.getPrice());
-        fillLessonsCount(card.getLessonsCount());
-        fillDuration(card.getDuration());
-        return this;
+        return step("Заполнить обязательные поля абонемента", () -> {
+            fillName(card.getName());
+            fillPrice(card.getPrice());
+            fillLessonsCount(card.getLessonsCount());
+            fillDuration(card.getDuration());
+            return this;
+        });
     }
 
     public Card getCardFromForm() {
@@ -134,41 +142,46 @@ public class EditCardPage extends BasePage {
         return card;
     }
 
-    @Step("Сохранить изменения абонемента")
     public CardsPage clickSave() {
-        page.click(saveButton);
-        waitForPageLoad();
-        return new CardsPage(page);
+        return step("Сохранить изменения абонемента", () -> {
+            page.click(saveButton);
+            waitForPageLoad();
+            return new CardsPage(page);
+        });
     }
 
-    @Step("Сохранить и остаться на странице")
     public EditCardPage clickSaveAndStay() {
-        page.click(saveButton);
-        waitForPageLoad();
-        return this;
+        return step("Сохранить и остаться на странице", () -> {
+            page.click(saveButton);
+            waitForPageLoad();
+            return this;
+        });
     }
 
-    @Step("Отменить редактирование абонемента")
     public CardsPage clickCancel() {
-        page.click(cancelButton);
-        waitForPageLoad();
-        return new CardsPage(page);
+        return step("Отменить редактирование абонемента", () -> {
+            page.click(cancelButton);
+            waitForPageLoad();
+            return new CardsPage(page);
+        });
     }
 
-    @Step("Очистить все поля абонемента")
     public EditCardPage clearAllFields() {
-        page.fill(nameInput, "");
-        page.fill(colorInput, "");
-        page.fill(priceInput, "");
-        page.fill(lessonsCountInput, "");
-        page.fill(durationInput, "");
-        return this;
+        return step("Очистить все поля абонемента", () -> {
+            page.fill(nameInput, "");
+            page.fill(colorInput, "");
+            page.fill(priceInput, "");
+            page.fill(lessonsCountInput, "");
+            page.fill(durationInput, "");
+            return this;
+        });
     }
 
-    @Step("Очистить поле: {fieldName}")
     public EditCardPage clearField(String fieldName) {
-        page.fill(getFieldSelector(fieldName), "");
-        return this;
+        return step("Очистить поле: " + fieldName, () -> {
+            page.fill(getFieldSelector(fieldName), "");
+            return this;
+        });
     }
 
     public boolean isFormDataCorrect(Card expectedCard) {
@@ -228,12 +241,13 @@ public class EditCardPage extends BasePage {
         return !hasErrorMessages() && areRequiredFieldsFilled();
     }
 
-    @Step("Сохранить абонемент и проверить успех")
     public CardsPage saveAndVerifySuccess() {
-        clickSave();
-        assert hasSuccessMessage("Абонемент успешно обновлен") :
-                "Не найдено сообщение об успешном обновлении";
-        return new CardsPage(page);
+        return step("Сохранить абонемент и проверить успех", () -> {
+            clickSave();
+            assert hasSuccessMessage("Абонемент успешно обновлен") :
+                    "Не найдено сообщение об успешном обновлении";
+            return new CardsPage(page);
+        });
     }
 
     public boolean isUrlCorrect() {

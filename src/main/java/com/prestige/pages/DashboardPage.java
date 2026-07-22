@@ -3,11 +3,11 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Student;
-import io.qameta.allure.Step;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.prestige.utils.StepHelper.step;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DashboardPage extends BasePage {
@@ -38,11 +38,12 @@ public class DashboardPage extends BasePage {
     /**
      * Перейти на главную страницу
      */
-    @Step("Переход на главную страницу")
     public DashboardPage navigateTo() {
-        page.navigate("/");
-        waitForPageLoad();
-        return this;
+        return step("Переход на главную страницу", () -> {
+            page.navigate("/");
+            waitForPageLoad();
+            return this;
+        });
     }
 
     /**
@@ -80,34 +81,37 @@ public class DashboardPage extends BasePage {
         return getStudentNamesFromColumn(birthdayYesterdayColumn);
     }
 
-    @Step("Проверить ученика с ДР вчера: {studentName}")
     public DashboardPage checkStudentWithBirthdayYesterdayPresent(String studentName) {
-        List<Student> studentsWithBdYesterday = getBirthdaysYesterday();
+        return step("Проверить ученика с ДР вчера: " + studentName, () -> {
+            List<Student> studentsWithBdYesterday = getBirthdaysYesterday();
 
-        assertTrue(
-                checkStudentPresent(studentsWithBdYesterday, studentName),
-                "Student with name " + studentName + " not found in birthdays widgets");
-        return this;
+            assertTrue(
+                    checkStudentPresent(studentsWithBdYesterday, studentName),
+                    "Student with name " + studentName + " not found in birthdays widgets");
+            return this;
+        });
     }
 
-    @Step("Проверить ученика с ДР сегодня: {studentName}")
     public DashboardPage checkStudentWithBirthdayTodayPresent(String studentName) {
-        List<Student> studentsWithBdToday = getBirthdaysToday();
+        return step("Проверить ученика с ДР сегодня: " + studentName, () -> {
+            List<Student> studentsWithBdToday = getBirthdaysToday();
 
-        assertTrue(
-                checkStudentPresent(studentsWithBdToday, studentName),
-                "Student with name " + studentName + " not found in birthdays widgets");
-        return this;
+            assertTrue(
+                    checkStudentPresent(studentsWithBdToday, studentName),
+                    "Student with name " + studentName + " not found in birthdays widgets");
+            return this;
+        });
     }
 
-    @Step("Проверить ученика с ДР завтра: {studentName}")
     public DashboardPage checkStudentWithBirthdayTomorrowPresent(String studentName) {
-        List<Student> studentsWithBdTomorrow = getBirthdaysTomorrow();
+        return step("Проверить ученика с ДР завтра: " + studentName, () -> {
+            List<Student> studentsWithBdTomorrow = getBirthdaysTomorrow();
 
-        assertTrue(
-                checkStudentPresent(studentsWithBdTomorrow, studentName),
-                "Student with name " + studentName + " not found in birthdays widgets");
-        return this;
+            assertTrue(
+                    checkStudentPresent(studentsWithBdTomorrow, studentName),
+                    "Student with name " + studentName + " not found in birthdays widgets");
+            return this;
+        });
     }
 
     private boolean checkStudentPresent(List<Student> students, String studentName){
@@ -506,19 +510,20 @@ public class DashboardPage extends BasePage {
     /**
      * Ожидать появления ученика в колонке
      */
-    @Step("Ожидание ученика в колонке {column}: {studentName}")
     public DashboardPage waitForStudentInColumn(String column, String studentName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
+        return step("Ожидание ученика в колонке " + column + ": " + studentName, () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
 
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (isStudentInColumn(column, studentName)) {
-                return this;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (isStudentInColumn(column, studentName)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
 
-        throw new RuntimeException("Ученик не появился в колонке '" + column +
-                "' за " + timeoutSeconds + " секунд: " + studentName);
+            throw new RuntimeException("Ученик не появился в колонке '" + column +
+                    "' за " + timeoutSeconds + " секунд: " + studentName);
+        });
     }
 }

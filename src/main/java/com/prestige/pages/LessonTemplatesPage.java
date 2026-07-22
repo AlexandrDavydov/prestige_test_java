@@ -3,7 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.LessonTemplate;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 public class LessonTemplatesPage extends BasePage {
 
@@ -18,21 +18,23 @@ public class LessonTemplatesPage extends BasePage {
         super(page);
     }
 
-    @Step("Переход на страницу шаблонов занятий")
     public LessonTemplatesPage navigateTo() {
-        page.navigate("/lesson_templates");
-        waitForPageLoad();
-        return this;
+        return step("Переход на страницу шаблонов занятий", () -> {
+            page.navigate("/lesson_templates");
+            waitForPageLoad();
+            return this;
+        });
     }
 
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }
 
-    @Step("Нажать кнопку добавления шаблона")
     public AddLessonTemplatePage clickAddLessonTemplate() {
-        page.click(addTemplateButton);
-        return new AddLessonTemplatePage(page);
+        return step("Нажать кнопку добавления шаблона", () -> {
+            page.click(addTemplateButton);
+            return new AddLessonTemplatePage(page);
+        });
     }
 
     public boolean isAddTemplateButtonVisible() {
@@ -84,27 +86,29 @@ public class LessonTemplatesPage extends BasePage {
         return false;
     }
 
-    @Step("Редактировать шаблон: {templateName}")
     public EditLessonTemplatePage clickEditTemplate(String templateName) {
-        int rowIndex = findTemplateRowIndex(templateName);
-        if (rowIndex != -1) {
-            Locator dataRow = page.locator("table tr").nth(rowIndex + 1);
-            dataRow.locator(editButton).click();
-            return new EditLessonTemplatePage(page);
-        }
-        throw new RuntimeException("Шаблон не найден: " + templateName);
+        return step("Редактировать шаблон: " + templateName, () -> {
+            int rowIndex = findTemplateRowIndex(templateName);
+            if (rowIndex != -1) {
+                Locator dataRow = page.locator("table tr").nth(rowIndex + 1);
+                dataRow.locator(editButton).click();
+                return new EditLessonTemplatePage(page);
+            }
+            throw new RuntimeException("Шаблон не найден: " + templateName);
+        });
     }
 
-    @Step("Удалить шаблон: {templateName}")
     public LessonTemplatesPage deleteTemplate(String templateName) {
-        int rowIndex = findTemplateRowIndex(templateName);
-        if (rowIndex != -1) {
-            Locator dataRow = page.locator("table tr").nth(rowIndex + 1);
-            dataRow.locator(deleteButton).click();
-            confirmDeleteModal();
-            return this;
-        }
-        throw new RuntimeException("Шаблон не найден: " + templateName);
+        return step("Удалить шаблон: " + templateName, () -> {
+            int rowIndex = findTemplateRowIndex(templateName);
+            if (rowIndex != -1) {
+                Locator dataRow = page.locator("table tr").nth(rowIndex + 1);
+                dataRow.locator(deleteButton).click();
+                confirmDeleteModal();
+                return this;
+            }
+            throw new RuntimeException("Шаблон не найден: " + templateName);
+        });
     }
 
     private int findTemplateRowIndex(String templateName) {
@@ -118,29 +122,31 @@ public class LessonTemplatesPage extends BasePage {
         return -1;
     }
 
-    @Step("Ожидание появления шаблона: {templateName}")
     public LessonTemplatesPage waitForTemplateToAppear(String templateName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (isTemplateExists(templateName)) {
-                return this;
+        return step("Ожидание появления шаблона: " + templateName, () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (isTemplateExists(templateName)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
-        throw new RuntimeException("Шаблон не появился за " + timeoutSeconds + " секунд: " + templateName);
+            throw new RuntimeException("Шаблон не появился за " + timeoutSeconds + " секунд: " + templateName);
+        });
     }
 
-    @Step("Ожидание удаления шаблона: {templateName}")
     public LessonTemplatesPage waitForTemplateToDisappear(String templateName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (!isTemplateExists(templateName)) {
-                return this;
+        return step("Ожидание удаления шаблона: " + templateName, () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (!isTemplateExists(templateName)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
-        throw new RuntimeException("Шаблон не исчез за " + timeoutSeconds + " секунд: " + templateName);
+            throw new RuntimeException("Шаблон не исчез за " + timeoutSeconds + " секунд: " + templateName);
+        });
     }
 }

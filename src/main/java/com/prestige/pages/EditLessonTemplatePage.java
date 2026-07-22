@@ -2,7 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.LessonTemplate;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 public class EditLessonTemplatePage extends BaseLessonTemplatePage<EditLessonTemplatePage> {
 
@@ -10,16 +10,18 @@ public class EditLessonTemplatePage extends BaseLessonTemplatePage<EditLessonTem
         super(page);
     }
 
-    @Step("Сохранить изменения шаблона")
     public LessonTemplatesPage submitForm() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return new LessonTemplatesPage(page);
+        return step("Сохранить изменения шаблона", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return new LessonTemplatesPage(page);
+        });
     }
 
-    @Step("Заполнить и сохранить шаблон")
     public LessonTemplatesPage fillAndSubmit(LessonTemplate lessonTemplate) {
-        fillForm(lessonTemplate);
-        return submitForm();
+        return step("Заполнить и сохранить шаблон", () -> {
+            fillForm(lessonTemplate);
+            return submitForm();
+        });
     }
 }

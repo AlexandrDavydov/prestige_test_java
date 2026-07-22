@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import com.prestige.config.TestConfig;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 import java.util.List;
 
@@ -34,46 +34,53 @@ public abstract class BasePage {
     }
 
 
-    @Step("Ожидание загрузки страницы")
     public EditStudentPage waitForPageLoad() {
-        page.waitForLoadState(LoadState.NETWORKIDLE);
+        step("Ожидание загрузки страницы", () -> {
+            page.waitForLoadState(LoadState.NETWORKIDLE);
+        });
         return null;
     }
 
-    @Step("Переход на главную")
     public DashboardPage goToDashboard() {
-        clickNavLink("Главная");
-        return new DashboardPage(page);
+        return step("Переход на главную", () -> {
+            clickNavLink("Главная");
+            return new DashboardPage(page);
+        });
     }
 
-    @Step("Переход к занятиям")
     public LessonsPage goToLessons() {
-        clickNavLink("Занятия");
-        return new LessonsPage(page);
+        return step("Переход к занятиям", () -> {
+            clickNavLink("Занятия");
+            return new LessonsPage(page);
+        });
     }
 
-    @Step("Переход к ученикам")
     public StudentsPage goToStudents() {
-        clickNavLink("Ученики");
-        return new StudentsPage(page);
+        return step("Переход к ученикам", () -> {
+            clickNavLink("Ученики");
+            return new StudentsPage(page);
+        });
     }
 
-    @Step("Переход к тренерам")
     public CoachesPage goToCoaches() {
-        clickNavLink("Тренеры");
-        return new CoachesPage(page);
+        return step("Переход к тренерам", () -> {
+            clickNavLink("Тренеры");
+            return new CoachesPage(page);
+        });
     }
 
-    @Step("Переход к абонементам")
     public CardsPage goToCards() {
-        clickNavLink("Абонементы");
-        return new CardsPage(page);
+        return step("Переход к абонементам", () -> {
+            clickNavLink("Абонементы");
+            return new CardsPage(page);
+        });
     }
 
-    @Step("Переход к шаблонам занятий")
     public LessonTemplatesPage goToLessonTemplates() {
-        clickNavLink("Шаблоны занятий");
-        return new LessonTemplatesPage(page);
+        return step("Переход к шаблонам занятий", () -> {
+            clickNavLink("Шаблоны занятий");
+            return new LessonTemplatesPage(page);
+        });
     }
 
 //    public ReportsPage goToReports() {
@@ -110,11 +117,12 @@ public abstract class BasePage {
     /**
      * Выйти из системы
      */
-    @Step("Выход из системы")
     public PlaywrightLoginPage logout() {
-        page.click(logoutLink);
-        waitForPageLoad();
-        return new PlaywrightLoginPage(page);
+        return step("Выход из системы", () -> {
+            page.click(logoutLink);
+            waitForPageLoad();
+            return new PlaywrightLoginPage(page);
+        });
     }
 
     /**
@@ -276,10 +284,11 @@ public abstract class BasePage {
     /**
      * Подтвердить удаление через кнопку "Да"
      */
-    @Step("Подтверждение удаления")
     public void confirmDeleteModal() {
-        page.click(deleteConfirmButton);
-        waitForPageLoad();
+        step("Подтверждение удаления", () -> {
+            page.click(deleteConfirmButton);
+            waitForPageLoad();
+        });
     }
 
     /**
@@ -331,9 +340,10 @@ public abstract class BasePage {
     /**
      * Обновить страницу
      */
-    @Step("Обновление страницы")
     public void refreshPage() {
-        page.reload();
-        waitForPageLoad();
+        step("Обновление страницы", () -> {
+            page.reload();
+            waitForPageLoad();
+        });
     }
 }

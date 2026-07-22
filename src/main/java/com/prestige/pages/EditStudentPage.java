@@ -5,10 +5,11 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.prestige.models.Student;
 import com.prestige.utils.DataUtils;
-import io.qameta.allure.Step;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.prestige.utils.StepHelper.step;
 
 public class EditStudentPage extends BaseStudentPage<EditStudentPage> {
 
@@ -19,10 +20,11 @@ public class EditStudentPage extends BaseStudentPage<EditStudentPage> {
         this.cancelButton = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("❌ Отмена"));
     }
 
-    @Step("Ожидание страницы редактирования ученика")
     public EditStudentPage waitForPageLoad() {
-        page.waitForSelector("h1:has-text('Редактировать ученика')");
-        return this;
+        return step("Ожидание страницы редактирования ученика", () -> {
+            page.waitForSelector("h1:has-text('Редактировать ученика')");
+            return this;
+        });
     }
 
     public String getLessonsCount() {
@@ -41,37 +43,40 @@ public class EditStudentPage extends BaseStudentPage<EditStudentPage> {
         return data;
     }
 
-    @Step("Заполнить форму редактирования ученика")
     public EditStudentPage fillStudentForm(Student studentData) {
-        if (!studentData.getLastName().isEmpty()) {
-            fillLastName(studentData.getLastName());
-        }
-        if (!studentData.getFirstName().isEmpty()) {
-            fillFirstName(studentData.getFirstName());
-        }
-        if (!studentData.getMiddleName().isEmpty()) {
-            fillMiddleName(studentData.getMiddleName());
-        }
-        if (!studentData.getContacts().isEmpty()) {
-            fillContacts(studentData.getContacts());
-        }
-        if (!studentData.getBirthday().isEmpty()) {
-            fillBirthday(DataUtils.convertDate(studentData.getBirthday(), "dd.MM.yyyy", "yyyy-MM-dd"));
-        }
-        fillLessonsCount(studentData.getLessonsCount());
-        if (studentData.getAdditionalInfo() != null) {
-            fillAdditionalInfo(studentData.getAdditionalInfo());
-        }
-        return this;
+        return step("Заполнить форму редактирования ученика", () -> {
+            if (!studentData.getLastName().isEmpty()) {
+                fillLastName(studentData.getLastName());
+            }
+            if (!studentData.getFirstName().isEmpty()) {
+                fillFirstName(studentData.getFirstName());
+            }
+            if (!studentData.getMiddleName().isEmpty()) {
+                fillMiddleName(studentData.getMiddleName());
+            }
+            if (!studentData.getContacts().isEmpty()) {
+                fillContacts(studentData.getContacts());
+            }
+            if (!studentData.getBirthday().isEmpty()) {
+                fillBirthday(DataUtils.convertDate(studentData.getBirthday(), "dd.MM.yyyy", "yyyy-MM-dd"));
+            }
+            fillLessonsCount(studentData.getLessonsCount());
+            if (studentData.getAdditionalInfo() != null) {
+                fillAdditionalInfo(studentData.getAdditionalInfo());
+            }
+            return this;
+        });
     }
 
-    @Step("Сохранить изменения ученика")
     public void clickSubmit() {
-        page.click(submitButton);
+        step("Сохранить изменения ученика", () -> {
+            page.click(submitButton);
+        });
     }
 
-    @Step("Отменить редактирование ученика")
     public void clickCancel() {
-        cancelButton.click();
+        step("Отменить редактирование ученика", () -> {
+            cancelButton.click();
+        });
     }
 }

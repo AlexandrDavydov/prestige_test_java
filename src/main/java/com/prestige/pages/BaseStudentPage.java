@@ -1,7 +1,8 @@
 package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
-import io.qameta.allure.Step;
+
+import static com.prestige.utils.StepHelper.step;
 
 public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends BasePage {
 
@@ -19,90 +20,94 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         super(page);
     }
 
-    @Step("Заполнить фамилию: {lastName}")
     @SuppressWarnings("unchecked")
     public T fillLastName(String lastName) {
-        page.fill(lastNameInput, lastName);
-        return (T) this;
+        return step("Заполнить фамилию: {lastName}", () -> {
+            page.fill(lastNameInput, lastName);
+            return (T) this;
+        });
     }
 
     public String getLastName() {
         return page.inputValue(lastNameInput);
     }
 
-    @Step("Заполнить имя: {firstName}")
     @SuppressWarnings("unchecked")
     public T fillFirstName(String firstName) {
-        page.fill(firstNameInput, firstName);
-        return (T) this;
+        return step("Заполнить имя: {firstName}", () -> {
+            page.fill(firstNameInput, firstName);
+            return (T) this;
+        });
     }
 
     public String getFirstName() {
         return page.inputValue(firstNameInput);
     }
 
-    @Step("Заполнить отчество: {middleName}")
     @SuppressWarnings("unchecked")
     public T fillMiddleName(String middleName) {
-        page.fill(middleNameInput, middleName);
-        return (T) this;
+        return step("Заполнить отчество: {middleName}", () -> {
+            page.fill(middleNameInput, middleName);
+            return (T) this;
+        });
     }
 
     public String getMiddleName() {
         return page.inputValue(middleNameInput);
     }
 
-    @Step("Заполнить контакты: {contacts}")
     @SuppressWarnings("unchecked")
     public T fillContacts(String contacts) {
-        page.fill(contactsInput, contacts);
-        return (T) this;
+        return step("Заполнить контакты: {contacts}", () -> {
+            page.fill(contactsInput, contacts);
+            return (T) this;
+        });
     }
 
     public String getContacts() {
         return page.inputValue(contactsInput);
     }
 
-    @Step("Заполнить дату рождения: {birthday}")
     @SuppressWarnings("unchecked")
     public T fillBirthday(String birthday) {
-        page.fill(birthdayInput, birthday);
-        return (T) this;
+        return step("Заполнить дату рождения: {birthday}", () -> {
+            page.fill(birthdayInput, birthday);
+            return (T) this;
+        });
     }
 
     public String getBirthday() {
         return page.inputValue(birthdayInput);
     }
 
-    @Step("Заполнить количество занятий: {count}")
-    @SuppressWarnings("unchecked")
-    public T fillLessonsCount(int count) {
-        page.fill(lessonsCountInput, String.valueOf(count));
-        return (T) this;
+    public void fillLessonsCount(int count) {
+        step("Заполнить количество занятий: {count}", () -> {
+            page.fill(lessonsCountInput, String.valueOf(count));
+        });
     }
 
-    @Step("Заполнить доп. информацию")
-    @SuppressWarnings("unchecked")
-    public T fillAdditionalInfo(String info) {
-        page.fill(additionalInfoInput, info);
-        return (T) this;
+    public void fillAdditionalInfo(String info) {
+        step("Заполнить доп. информацию", () -> {
+            page.fill(additionalInfoInput, info);
+        });
     }
 
     public String getAdditionalInfo() {
         return page.inputValue(additionalInfoInput);
     }
 
-    @Step("Очистить все поля")
     @SuppressWarnings("unchecked")
     public T clearAllFields() {
-        page.fill(lastNameInput, "");
-        page.fill(firstNameInput, "");
-        page.fill(middleNameInput, "");
-        page.fill(contactsInput, "");
-        page.fill(birthdayInput, "");
-        page.fill(lessonsCountInput, "");
-        page.fill(additionalInfoInput, "");
-        return (T) this;
+        return step("Очистить все поля", () -> {
+            page.fill(lastNameInput, "");
+            page.fill(firstNameInput, "");
+            page.fill(middleNameInput, "");
+            page.fill(contactsInput, "");
+            page.fill(birthdayInput, "");
+            page.fill(lessonsCountInput, "");
+            page.fill(additionalInfoInput, "");
+            return (T) this;
+        });
     }
 
     protected String getFieldSelector(String fieldName) {

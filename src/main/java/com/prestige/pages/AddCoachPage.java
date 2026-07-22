@@ -2,7 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,58 +20,62 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         super(page);
     }
 
-    @Step("Переход на страницу добавления тренера")
     public AddCoachPage navigateTo() {
-        page.navigate("/add_coach");
-        waitForPageLoad();
-        return this;
+        return step("Переход на страницу добавления тренера", () -> {
+            page.navigate("/add_coach");
+            waitForPageLoad();
+            return this;
+        });
     }
 
-    @Step("Заполнить форму тренера")
     public AddCoachPage fillCoachForm(Coach coach) {
-        if (coach.getLastName() != null) {
-            fillLastName(coach.getLastName());
-        }
-        if (coach.getFirstName() != null) {
-            fillFirstName(coach.getFirstName());
-        }
-        if (coach.getMiddleName() != null) {
-            fillMiddleName(coach.getMiddleName());
-        }
-        if (coach.getContacts() != null) {
-            fillContacts(coach.getContacts());
-        }
-        if (coach.getBirthday() != null) {
-            fillBirthday(coach.getBirthday());
-        }
-        fillLessonsCount(coach.getLessonsCount());
-        fillLessonsPaid(coach.getLessonsPaid());
-        fillStudentPayment(coach.getStudentPayment());
-        if (coach.getAdditionalInfo() != null) {
-            fillAdditionalInfo(coach.getAdditionalInfo());
-        }
-        return this;
+        return step("Заполнить форму тренера", () -> {
+            if (coach.getLastName() != null) {
+                fillLastName(coach.getLastName());
+            }
+            if (coach.getFirstName() != null) {
+                fillFirstName(coach.getFirstName());
+            }
+            if (coach.getMiddleName() != null) {
+                fillMiddleName(coach.getMiddleName());
+            }
+            if (coach.getContacts() != null) {
+                fillContacts(coach.getContacts());
+            }
+            if (coach.getBirthday() != null) {
+                fillBirthday(coach.getBirthday());
+            }
+            fillLessonsCount(coach.getLessonsCount());
+            fillLessonsPaid(coach.getLessonsPaid());
+            fillStudentPayment(coach.getStudentPayment());
+            if (coach.getAdditionalInfo() != null) {
+                fillAdditionalInfo(coach.getAdditionalInfo());
+            }
+            return this;
+        });
     }
 
-    @Step("Заполнить форму тренера с капитализацией")
     public AddCoachPage fillCoachFormWithCapitalization(Coach coach) {
-        fillLastNameWithCapitalize(coach.getLastName());
-        fillFirstNameWithCapitalize(coach.getFirstName());
-        fillMiddleNameWithCapitalize(coach.getMiddleName());
-        fillContacts(coach.getContacts());
-        fillBirthday(coach.getBirthday());
-        fillLessonsCount(coach.getLessonsCount());
-        fillLessonsPaid(coach.getLessonsPaid());
-        fillStudentPayment(coach.getStudentPayment());
-        fillAdditionalInfo(coach.getAdditionalInfo());
-        return this;
+        return step("Заполнить форму тренера с капитализацией", () -> {
+            fillLastNameWithCapitalize(coach.getLastName());
+            fillFirstNameWithCapitalize(coach.getFirstName());
+            fillMiddleNameWithCapitalize(coach.getMiddleName());
+            fillContacts(coach.getContacts());
+            fillBirthday(coach.getBirthday());
+            fillLessonsCount(coach.getLessonsCount());
+            fillLessonsPaid(coach.getLessonsPaid());
+            fillStudentPayment(coach.getStudentPayment());
+            fillAdditionalInfo(coach.getAdditionalInfo());
+            return this;
+        });
     }
 
-    @Step("Заполнить обязательные поля тренера")
     public AddCoachPage fillRequiredFields(Coach coach) {
-        fillLastName(coach.getLastName());
-        fillFirstName(coach.getFirstName());
-        return this;
+        return step("Заполнить обязательные поля тренера", () -> {
+            fillLastName(coach.getLastName());
+            fillFirstName(coach.getFirstName());
+            return this;
+        });
     }
 
     public AddCoachPage fillLastNameWithCapitalize(String lastName) {
@@ -117,52 +121,58 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         return coach;
     }
 
-    @Step("Сохранить тренера")
     public CoachesPage clickSave() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return new CoachesPage(page);
+        return step("Сохранить тренера", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return new CoachesPage(page);
+        });
     }
 
-    @Step("Сохранить и остаться на странице")
     public AddCoachPage clickSaveAndStay() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return this;
+        return step("Сохранить и остаться на странице", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return this;
+        });
     }
 
-    @Step("Отменить добавление тренера")
     public CoachesPage clickCancel() {
-        page.click(cancelButton);
-        waitForPageLoad();
-        return new CoachesPage(page);
+        return step("Отменить добавление тренера", () -> {
+            page.click(cancelButton);
+            waitForPageLoad();
+            return new CoachesPage(page);
+        });
     }
 
-    @Step("Очистить поле тренера: {fieldName}")
     public AddCoachPage clearField(String fieldName) {
-        String selector = getFieldSelector(fieldName);
-        page.fill(selector, "");
-        return this;
+        return step("Очистить поле тренера: {fieldName}", () -> {
+            String selector = getFieldSelector(fieldName);
+            page.fill(selector, "");
+            return this;
+        });
     }
 
-    @Step("Отправить форму тренера")
     public CoachesPage submitCoach(Coach coach) {
-        fillCoachForm(coach);
-        return clickSave();
+        return step("Отправить форму тренера", () -> {
+            fillCoachForm(coach);
+            return clickSave();
+        });
     }
 
-    @Step("Отправить форму тренера и проверить")
     public CoachesPage submitCoachAndVerify(Coach coach) {
-        fillCoachForm(coach);
-        CoachesPage coachesPage = clickSave();
+        return step("Отправить форму тренера и проверить", () -> {
+            fillCoachForm(coach);
+            CoachesPage coachesPage = clickSave();
 
-        String fullName = coach.getFullName();
-        coachesPage.waitForCoachToAppear(fullName, 10);
+            String fullName = coach.getFullName();
+            coachesPage.waitForCoachToAppear(fullName, 10);
 
-        assert coachesPage.hasSuccessMessage("Тренер успешно добавлен") :
-                "Не найдено сообщение об успешном добавлении";
+            assert coachesPage.hasSuccessMessage("Тренер успешно добавлен") :
+                    "Не найдено сообщение об успешном добавлении";
 
-        return coachesPage;
+            return coachesPage;
+        });
     }
 
     public boolean areAllFieldsVisible() {

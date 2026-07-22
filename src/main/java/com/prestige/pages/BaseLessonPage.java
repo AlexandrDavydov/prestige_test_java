@@ -2,7 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Lesson;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 import java.util.List;
 
@@ -28,51 +28,55 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return page.textContent(pageTitle);
     }
 
-    @Step("Заполнить дату занятия: {date}")
     @SuppressWarnings("unchecked")
     public T fillDate(String date) {
-        page.fill(dateInput, date);
-        return (T) this;
+        return step("Заполнить дату занятия: " + date, () -> {
+            page.fill(dateInput, date);
+            return (T) this;
+        });
     }
 
     public String getDate() {
         return page.inputValue(dateInput);
     }
 
-    @Step("Заполнить название занятия: {lessonName}")
     @SuppressWarnings("unchecked")
     public T fillLessonName(String lessonName) {
-        page.fill(lessonNameInput, lessonName);
-        return (T) this;
+        return step("Заполнить название занятия: " + lessonName, () -> {
+            page.fill(lessonNameInput, lessonName);
+            return (T) this;
+        });
     }
 
     public String getLessonName() {
         return page.inputValue(lessonNameInput);
     }
 
-    @Step("Выбрать тренера: {coachId}")
     @SuppressWarnings("unchecked")
     public T selectCoach(int coachId) {
-        page.selectOption(coachSelect, String.valueOf(coachId));
-        return (T) this;
+        return step("Выбрать тренера: " + coachId, () -> {
+            page.selectOption(coachSelect, String.valueOf(coachId));
+            return (T) this;
+        });
     }
 
     public String getSelectedCoachId() {
         return page.locator(coachSelect).getAttribute("value");
     }
 
-    @Step("Выбрать учеников: {studentIds}")
     @SuppressWarnings("unchecked")
     public T selectStudents(String studentIds) {
-        page.locator(studentCheckboxes).evaluateAll(
-                "els => els.forEach(el => el.checked = false)");
-        if (studentIds != null && !studentIds.isEmpty()) {
-            String[] ids = studentIds.split(",");
-            for (String id : ids) {
-                page.locator(studentCheckboxes + "[value='" + id.trim() + "']").check();
+        return step("Выбрать учеников: " + studentIds, () -> {
+            page.locator(studentCheckboxes).evaluateAll(
+                    "els => els.forEach(el => el.checked = false)");
+            if (studentIds != null && !studentIds.isEmpty()) {
+                String[] ids = studentIds.split(",");
+                for (String id : ids) {
+                    page.locator(studentCheckboxes + "[value='" + id.trim() + "']").check();
+                }
             }
-        }
-        return (T) this;
+            return (T) this;
+        });
     }
 
     public List<String> getSelectedStudentIds() {
@@ -81,34 +85,36 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
                 .toList();
     }
 
-    @Step("Выбрать статус: {status}")
     @SuppressWarnings("unchecked")
     public T selectStatus(String status) {
-        page.selectOption(statusSelect, status);
-        return (T) this;
+        return step("Выбрать статус: " + status, () -> {
+            page.selectOption(statusSelect, status);
+            return (T) this;
+        });
     }
 
     public String getSelectedStatus() {
         return page.locator(statusSelect).getAttribute("value");
     }
 
-    @Step("Заполнить форму занятия")
     @SuppressWarnings("unchecked")
     public T fillLessonForm(Lesson lesson) {
-        if (lesson.getDate() != null) {
-            fillDate(lesson.getDate());
-        }
-        if (lesson.getLessonName() != null) {
-            fillLessonName(lesson.getLessonName());
-        }
-        selectCoach(lesson.getCoachId());
-        if (lesson.getStudentIds() != null) {
-            selectStudents(lesson.getStudentIds());
-        }
-        if (lesson.getStatus() != null) {
-            selectStatus(lesson.getStatus());
-        }
-        return (T) this;
+        return step("Заполнить форму занятия", () -> {
+            if (lesson.getDate() != null) {
+                fillDate(lesson.getDate());
+            }
+            if (lesson.getLessonName() != null) {
+                fillLessonName(lesson.getLessonName());
+            }
+            selectCoach(lesson.getCoachId());
+            if (lesson.getStudentIds() != null) {
+                selectStudents(lesson.getStudentIds());
+            }
+            if (lesson.getStatus() != null) {
+                selectStatus(lesson.getStatus());
+            }
+            return (T) this;
+        });
     }
 
     public Lesson getLessonFromForm() {
@@ -124,43 +130,48 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return lesson;
     }
 
-    @Step("Сохранить занятие")
     public LessonsPage clickSave() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return new LessonsPage(page);
+        return step("Сохранить занятие", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return new LessonsPage(page);
+        });
     }
 
-    @Step("Сохранить и остаться на странице")
     @SuppressWarnings("unchecked")
     public T clickSaveAndStay() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return (T) this;
+        return step("Сохранить и остаться на странице", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return (T) this;
+        });
     }
 
-    @Step("Отменить")
     public LessonsPage clickCancel() {
-        page.click(cancelButton);
-        waitForPageLoad();
-        return new LessonsPage(page);
+        return step("Отменить", () -> {
+            page.click(cancelButton);
+            waitForPageLoad();
+            return new LessonsPage(page);
+        });
     }
 
-    @Step("Очистить поле: {fieldName}")
     @SuppressWarnings("unchecked")
     public T clearField(String fieldName) {
-        page.fill(getFieldSelector(fieldName), "");
-        return (T) this;
+        return step("Очистить поле: " + fieldName, () -> {
+            page.fill(getFieldSelector(fieldName), "");
+            return (T) this;
+        });
     }
 
-    @Step("Очистить все поля")
     @SuppressWarnings("unchecked")
     public T clearAllFields() {
-        page.fill(dateInput, "");
-        page.fill(lessonNameInput, "");
-        page.fill(coachSelect, "");
-        page.fill(statusSelect, "");
-        return (T) this;
+        return step("Очистить все поля", () -> {
+            page.fill(dateInput, "");
+            page.fill(lessonNameInput, "");
+            page.fill(coachSelect, "");
+            page.fill(statusSelect, "");
+            return (T) this;
+        });
     }
 
     public boolean isFieldFilled(String fieldName) {

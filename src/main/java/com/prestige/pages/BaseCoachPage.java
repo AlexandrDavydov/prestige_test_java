@@ -1,7 +1,7 @@
 package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage {
 
@@ -23,10 +23,11 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить фамилию тренера: {lastName}")
     public T fillLastName(String lastName) {
-        page.fill(lastNameInput, lastName);
-        return (T) this;
+        return step("Заполнить фамилию тренера: {lastName}", () -> {
+            page.fill(lastNameInput, lastName);
+            return (T) this;
+        });
     }
 
     public String getLastName() {
@@ -34,10 +35,11 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить имя тренера: {firstName}")
     public T fillFirstName(String firstName) {
-        page.fill(firstNameInput, firstName);
-        return (T) this;
+        return step("Заполнить имя тренера: {firstName}", () -> {
+            page.fill(firstNameInput, firstName);
+            return (T) this;
+        });
     }
 
     public String getFirstName() {
@@ -45,10 +47,11 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить отчество тренера: {middleName}")
     public T fillMiddleName(String middleName) {
-        page.fill(middleNameInput, middleName);
-        return (T) this;
+        return step("Заполнить отчество тренера: {middleName}", () -> {
+            page.fill(middleNameInput, middleName);
+            return (T) this;
+        });
     }
 
     public String getMiddleName() {
@@ -56,10 +59,11 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить контакты тренера: {contacts}")
     public T fillContacts(String contacts) {
-        page.fill(contactsInput, contacts);
-        return (T) this;
+        return step("Заполнить контакты тренера: {contacts}", () -> {
+            page.fill(contactsInput, contacts);
+            return (T) this;
+        });
     }
 
     public String getContacts() {
@@ -67,10 +71,11 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить дату рождения тренера: {birthday}")
     public T fillBirthday(String birthday) {
-        page.fill(birthdayInput, birthday);
-        return (T) this;
+        return step("Заполнить дату рождения тренера: {birthday}", () -> {
+            page.fill(birthdayInput, birthday);
+            return (T) this;
+        });
     }
 
     public String getBirthday() {
@@ -78,9 +83,10 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить количество занятий: {count}")
     public T fillLessonsCount(int count) {
-        page.fill(lessonsCountInput, String.valueOf(count));
+        step("Заполнить количество занятий: {count}", () -> {
+            page.fill(lessonsCountInput, String.valueOf(count));
+        });
         return (T) this;
     }
 
@@ -94,9 +100,10 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить оплаченных занятий: {paid}")
     public T fillLessonsPaid(int paid) {
-        page.fill(lessonsPaidInput, String.valueOf(paid));
+        step("Заполнить оплаченных занятий: {paid}", () -> {
+            page.fill(lessonsPaidInput, String.valueOf(paid));
+        });
         return (T) this;
     }
 
@@ -110,9 +117,10 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить оплату за ученика: {payment}")
     public T fillStudentPayment(double payment) {
-        page.fill(studentPaymentInput, String.valueOf(payment));
+        step("Заполнить оплату за ученика: {payment}", () -> {
+            page.fill(studentPaymentInput, String.valueOf(payment));
+        });
         return (T) this;
     }
 
@@ -126,9 +134,10 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Заполнить доп. информацию тренера")
     public T fillAdditionalInfo(String info) {
-        page.fill(additionalInfoInput, info);
+        step("Заполнить доп. информацию тренера", () -> {
+            page.fill(additionalInfoInput, info);
+        });
         return (T) this;
     }
 
@@ -137,18 +146,19 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
     }
 
     @SuppressWarnings("unchecked")
-    @Step("Очистить все поля тренера")
     public T clearAllFields() {
-        page.fill(lastNameInput, "");
-        page.fill(firstNameInput, "");
-        page.fill(middleNameInput, "");
-        page.fill(contactsInput, "");
-        page.fill(birthdayInput, "");
-        page.fill(lessonsCountInput, "");
-        page.fill(lessonsPaidInput, "");
-        page.fill(studentPaymentInput, "");
-        page.fill(additionalInfoInput, "");
-        return (T) this;
+        return step("Очистить все поля тренера", () -> {
+            page.fill(lastNameInput, "");
+            page.fill(firstNameInput, "");
+            page.fill(middleNameInput, "");
+            page.fill(contactsInput, "");
+            page.fill(birthdayInput, "");
+            page.fill(lessonsCountInput, "");
+            page.fill(lessonsPaidInput, "");
+            page.fill(studentPaymentInput, "");
+            page.fill(additionalInfoInput, "");
+            return (T) this;
+        });
     }
 
     protected String getFieldSelector(String fieldName) {

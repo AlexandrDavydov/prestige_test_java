@@ -3,25 +3,21 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CoachesPage extends BasePage {
 
-    // Заголовок страницы
     private final String pageTitle = "h1";
 
-    // Кнопка добавления тренера
     private final String addCoachButton = "a[title='Добавить тренера']";
     private final String addCoachImage = "a[title='Добавить тренера'] img";
 
-    // Таблица тренеров
     private final String tableRows = "table tr:not(.section_sub_title)";
     private final String tableHeader = "table tr.section_sub_title";
 
-    // Селекторы для колонок таблицы
     private final String coachFullName = "td:nth-child(1)";
     private final String coachContacts = "td:nth-child(2)";
     private final String coachBirthday = "td:nth-child(3)";
@@ -32,7 +28,6 @@ public class CoachesPage extends BasePage {
     private final String coachDebt = "td:nth-child(8)";
     private final String coachActions = "td:nth-child(9)";
 
-    // Кнопки действий для тренера
     private final String giveMoneyButton = "a[title='Уплачено']";
     private final String editButton = "a[title='Редактировать']";
     private final String deleteButton = "a.delete-btn";
@@ -41,53 +36,37 @@ public class CoachesPage extends BasePage {
         super(page);
     }
 
-    /**
-     * Перейти на страницу тренеров
-     */
-    @Step("Переход на страницу тренеров")
     public CoachesPage navigateTo() {
-        page.navigate("/coaches");
-        waitForPageLoad();
-        return this;
+        return step("Переход на страницу тренеров", () -> {
+            page.navigate("/coaches");
+            waitForPageLoad();
+            return this;
+        });
     }
 
-    /**
-     * Получить заголовок страницы
-     */
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }
 
     // ============ ДОБАВЛЕНИЕ ТРЕНЕРА ============
 
-    /**
-     * Кликнуть на кнопку "Добавить тренера"
-     */
-    @Step("Нажать кнопку добавления тренера")
     public AddCoachPage clickAddCoach() {
-        page.click(addCoachButton);
-        return new AddCoachPage(page);
+        return step("Нажать кнопку добавления тренера", () -> {
+            page.click(addCoachButton);
+            return new AddCoachPage(page);
+        });
     }
 
-    /**
-     * Проверить, видна ли кнопка добавления
-     */
     public boolean isAddCoachButtonVisible() {
         return page.isVisible(addCoachImage);
     }
 
     // ============ ПОЛУЧЕНИЕ ТРЕНЕРОВ ============
 
-    /**
-     * Получить количество тренеров в таблице
-     */
     public int getCoachesCount() {
         return page.locator(tableRows).count();
     }
 
-    /**
-     * Получить всех тренеров
-     */
     public List<Coach> getAllCoaches() {
         List<Coach> coaches = new ArrayList<>();
         Locator rows = page.locator(tableRows);
@@ -101,9 +80,6 @@ public class CoachesPage extends BasePage {
         return coaches;
     }
 
-    /**
-     * Найти тренера по полному имени
-     */
     public Coach getCoachByFullName(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {
@@ -112,9 +88,6 @@ public class CoachesPage extends BasePage {
         return null;
     }
 
-    /**
-     * Найти строку тренера по полному имени
-     */
     private Locator findCoachRow(String fullName) {
         Locator rows = page.locator(tableRows);
 
@@ -130,9 +103,6 @@ public class CoachesPage extends BasePage {
         return null;
     }
 
-    /**
-     * Найти всех тренеров по имени (частичное совпадение)
-     */
     public List<Coach> findCoachesByName(String namePart) {
         List<Coach> result = new ArrayList<>();
         Locator rows = page.locator(tableRows);
@@ -149,9 +119,6 @@ public class CoachesPage extends BasePage {
         return result;
     }
 
-    /**
-     * Получить всех тренеров с долгами
-     */
     public List<Coach> getCoachesWithDebt() {
         List<Coach> coachesWithDebt = new ArrayList<>();
         List<Coach> allCoaches = getAllCoaches();
@@ -165,9 +132,6 @@ public class CoachesPage extends BasePage {
         return coachesWithDebt;
     }
 
-    /**
-     * Получить тренеров без долгов
-     */
     public List<Coach> getCoachesWithoutDebt() {
         List<Coach> coachesWithoutDebt = new ArrayList<>();
         List<Coach> allCoaches = getAllCoaches();
@@ -181,9 +145,6 @@ public class CoachesPage extends BasePage {
         return coachesWithoutDebt;
     }
 
-    /**
-     * Преобразовать строку таблицы в объект Coach
-     */
     private Coach mapRowToCoach(Locator row) {
         String fullName = row.locator(coachFullName).textContent().trim();
         String contacts = row.locator(coachContacts).textContent().trim();
@@ -194,13 +155,11 @@ public class CoachesPage extends BasePage {
         String additionalInfo = row.locator(coachAdditionalInfo).textContent().trim();
         String debtStr = row.locator(coachDebt).textContent().trim();
 
-        // Парсим ФИО
         String[] nameParts = fullName.split(" ");
         String lastName = nameParts.length > 0 ? nameParts[0] : "";
         String firstName = nameParts.length > 1 ? nameParts[1] : "";
         String middleName = nameParts.length > 2 ? nameParts[2] : "";
 
-        // Парсим числа
         int lessonsCount = parseInteger(lessonsCountStr);
         int lessonsPaid = parseInteger(lessonsPaidStr);
         int studentPayment = parseInteger(studentPaymentStr);
@@ -221,9 +180,6 @@ public class CoachesPage extends BasePage {
         return coach;
     }
 
-    /**
-     * Парсинг целого числа из строки
-     */
     private int parseInteger(String value) {
         try {
             return Integer.parseInt(value.trim());
@@ -232,9 +188,6 @@ public class CoachesPage extends BasePage {
         }
     }
 
-    /**
-     * Парсинг числа с плавающей точкой из строки
-     */
     private double parseDouble(String value) {
         try {
             return Double.parseDouble(value.trim());
@@ -245,77 +198,64 @@ public class CoachesPage extends BasePage {
 
     // ============ ДЕЙСТВИЯ С ТРЕНЕРАМИ ============
 
-    /**
-     * Отметить оплату тренеру
-     */
-    @Step("Отметить оплату тренеру: {fullName}")
     public CoachesPage giveMoneyToCoach(String fullName) {
-        Locator row = findCoachRow(fullName);
-        if (row != null) {
-            row.locator(giveMoneyButton).click();
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Тренер не найден: " + fullName);
+        return step("Отметить оплату тренеру: {fullName}", () -> {
+            Locator row = findCoachRow(fullName);
+            if (row != null) {
+                row.locator(giveMoneyButton).click();
+                waitForPageLoad();
+                return this;
+            }
+            throw new RuntimeException("Тренер не найден: " + fullName);
+        });
     }
 
-    /**
-     * Отметить оплату тренеру по индексу
-     */
-    @Step("Отметить оплату тренеру по индексу: {index}")
     public CoachesPage giveMoneyToCoachAtIndex(int index) {
-        Locator rows = page.locator(tableRows);
-        if (index < rows.count()) {
-            rows.nth(index).locator(giveMoneyButton).click();
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Тренер с индексом " + index + " не найден");
+        return step("Отметить оплату тренеру по индексу: {index}", () -> {
+            Locator rows = page.locator(tableRows);
+            if (index < rows.count()) {
+                rows.nth(index).locator(giveMoneyButton).click();
+                waitForPageLoad();
+                return this;
+            }
+            throw new RuntimeException("Тренер с индексом " + index + " не найден");
+        });
     }
 
-    /**
-     * Редактировать тренера
-     */
-    @Step("Редактировать тренера: {fullName}")
     public EditCoachPage clickEditCoach(String fullName) {
-        Locator row = findCoachRow(fullName);
-        if (row != null) {
-            row.locator(editButton).click();
-            return new EditCoachPage(page);
-        }
-        throw new RuntimeException("Тренер не найден: " + fullName);
+        return step("Редактировать тренера: {fullName}", () -> {
+            Locator row = findCoachRow(fullName);
+            if (row != null) {
+                row.locator(editButton).click();
+                return new EditCoachPage(page);
+            }
+            throw new RuntimeException("Тренер не найден: " + fullName);
+        });
     }
 
-    /**
-     * Редактировать тренера по индексу
-     */
-    @Step("Редактировать тренера по индексу: {index}")
     public EditCoachPage clickEditCoachAtIndex(int index) {
-        Locator rows = page.locator(tableRows);
-        if (index < rows.count()) {
-            rows.nth(index).locator(editButton).click();
-            return new EditCoachPage(page);
-        }
-        throw new RuntimeException("Тренер с индексом " + index + " не найден");
+        return step("Редактировать тренера по индексу: {index}", () -> {
+            Locator rows = page.locator(tableRows);
+            if (index < rows.count()) {
+                rows.nth(index).locator(editButton).click();
+                return new EditCoachPage(page);
+            }
+            throw new RuntimeException("Тренер с индексом " + index + " не найден");
+        });
     }
 
-    /**
-     * Удалить тренера (с подтверждением)
-     */
-    @Step("Удалить тренера: {fullName}")
     public CoachesPage deleteCoach(String fullName) {
-        Locator row = findCoachRow(fullName);
-        if (row != null) {
-            row.locator(deleteButton).click();
-            confirmDeleteModal();
-            return this;
-        }
-        throw new RuntimeException("Тренер не найден: " + fullName);
+        return step("Удалить тренера: {fullName}", () -> {
+            Locator row = findCoachRow(fullName);
+            if (row != null) {
+                row.locator(deleteButton).click();
+                confirmDeleteModal();
+                return this;
+            }
+            throw new RuntimeException("Тренер не найден: " + fullName);
+        });
     }
 
-    /**
-     * Получить количество проведенных занятий тренера
-     */
     public int getCoachLessonsCount(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         if (coach != null) {
@@ -324,9 +264,6 @@ public class CoachesPage extends BasePage {
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
 
-    /**
-     * Получить количество оплаченных занятий тренера
-     */
     public int getCoachLessonsPaid(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         if (coach != null) {
@@ -335,9 +272,6 @@ public class CoachesPage extends BasePage {
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
 
-    /**
-     * Получить сумму оплаты за 1 человека
-     */
     public double getCoachStudentPayment(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         if (coach != null) {
@@ -346,9 +280,6 @@ public class CoachesPage extends BasePage {
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
 
-    /**
-     * Получить долг тренера
-     */
     public double getCoachDebt(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         if (coach != null) {
@@ -357,9 +288,6 @@ public class CoachesPage extends BasePage {
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
 
-    /**
-     * Получить контакты тренера
-     */
     public String getCoachContacts(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         if (coach != null) {
@@ -368,9 +296,6 @@ public class CoachesPage extends BasePage {
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
 
-    /**
-     * Получить дополнительную информацию о тренере
-     */
     public String getCoachAdditionalInfo(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         if (coach != null) {
@@ -381,16 +306,10 @@ public class CoachesPage extends BasePage {
 
     // ============ ВАЛИДАЦИИ ============
 
-    /**
-     * Проверить, существует ли тренер
-     */
     public boolean isCoachExists(String fullName) {
         return findCoachRow(fullName) != null;
     }
 
-    /**
-     * Проверить, существует ли тренер с указанными данными
-     */
     public boolean isCoachExists(Coach coach) {
         String fullName = coach.getFullName();
         Coach found = getCoachByFullName(fullName);
@@ -406,25 +325,16 @@ public class CoachesPage extends BasePage {
                 found.getStudentPayment() == coach.getStudentPayment();
     }
 
-    /**
-     * Проверить, есть ли у тренера долг
-     */
     public boolean hasDebt(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         return coach != null && coach.getDebt() > 0;
     }
 
-    /**
-     * Проверить, оплачены ли все занятия тренера
-     */
     public boolean isFullyPaid(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         return coach != null && coach.getDebt() == 0;
     }
 
-    /**
-     * Проверить, есть ли у тренера проведенные занятия
-     */
     public boolean hasLessons(String fullName) {
         Coach coach = getCoachByFullName(fullName);
         return coach != null && coach.getLessonsCount() > 0;
@@ -432,9 +342,6 @@ public class CoachesPage extends BasePage {
 
     // ============ СТАТИСТИКА ============
 
-    /**
-     * Получить общее количество проведенных занятий
-     */
     public int getTotalLessonsCount() {
         List<Coach> coaches = getAllCoaches();
         int total = 0;
@@ -444,9 +351,6 @@ public class CoachesPage extends BasePage {
         return total;
     }
 
-    /**
-     * Получить общую сумму долгов
-     */
     public double getTotalDebt() {
         List<Coach> coaches = getAllCoaches();
         double total = 0;
@@ -456,9 +360,6 @@ public class CoachesPage extends BasePage {
         return total;
     }
 
-    /**
-     * Получить среднее количество занятий на тренера
-     */
     public double getAverageLessonsPerCoach() {
         List<Coach> coaches = getAllCoaches();
         if (coaches.isEmpty()) {
@@ -468,9 +369,6 @@ public class CoachesPage extends BasePage {
         return (double) total / coaches.size();
     }
 
-    /**
-     * Получить тренера с максимальным долгом
-     */
     public Coach getCoachWithMaxDebt() {
         List<Coach> coaches = getAllCoaches();
         if (coaches.isEmpty()) {
@@ -486,9 +384,6 @@ public class CoachesPage extends BasePage {
         return maxDebtCoach;
     }
 
-    /**
-     * Получить тренера с максимальным количеством занятий
-     */
     public Coach getCoachWithMaxLessons() {
         List<Coach> coaches = getAllCoaches();
         if (coaches.isEmpty()) {
@@ -506,67 +401,58 @@ public class CoachesPage extends BasePage {
 
     // ============ ОЖИДАНИЯ ============
 
-    /**
-     * Ожидать появления тренера в таблице
-     */
-    @Step("Ожидание появления тренера: {fullName}")
     public CoachesPage waitForCoachToAppear(String fullName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
+        return step("Ожидание появления тренера: {fullName}", () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
 
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (isCoachExists(fullName)) {
-                return this;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (isCoachExists(fullName)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
 
-        throw new RuntimeException("Тренер не появился за " + timeoutSeconds + " секунд: " + fullName);
+            throw new RuntimeException("Тренер не появился за " + timeoutSeconds + " секунд: " + fullName);
+        });
     }
 
-    /**
-     * Ожидать исчезновения тренера из таблицы
-     */
-    @Step("Ожидание удаления тренера: {fullName}")
     public CoachesPage waitForCoachToDisappear(String fullName, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
+        return step("Ожидание удаления тренера: {fullName}", () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
 
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (!isCoachExists(fullName)) {
-                return this;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (!isCoachExists(fullName)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
 
-        throw new RuntimeException("Тренер не исчез за " + timeoutSeconds + " секунд: " + fullName);
+            throw new RuntimeException("Тренер не исчез за " + timeoutSeconds + " секунд: " + fullName);
+        });
     }
 
-    /**
-     * Ожидать обновления долга тренера
-     */
-    @Step("Ожидание обновления долга тренера: {fullName}")
     public CoachesPage waitForDebtUpdate(String fullName, double expectedDebt, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
+        return step("Ожидание обновления долга тренера: {fullName}", () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
 
-        while (System.currentTimeMillis() - startTime < timeout) {
-            double currentDebt = getCoachDebt(fullName);
-            if (Math.abs(currentDebt - expectedDebt) < 0.01) {
-                return this;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                double currentDebt = getCoachDebt(fullName);
+                if (Math.abs(currentDebt - expectedDebt) < 0.01) {
+                    return this;
+                }
+                page.waitForTimeout(500);
+                refreshPage();
             }
-            page.waitForTimeout(500);
-            refreshPage();
-        }
 
-        throw new RuntimeException("Долг не обновился до " + expectedDebt + " за " + timeoutSeconds + " секунд");
+            throw new RuntimeException("Долг не обновился до " + expectedDebt + " за " + timeoutSeconds + " секунд");
+        });
     }
 
     // ============ ДОПОЛНИТЕЛЬНЫЕ МЕТОДЫ ============
 
-    /**
-     * Получить все имена тренеров
-     */
     public List<String> getAllCoachNames() {
         List<String> names = new ArrayList<>();
         Locator rows = page.locator(tableRows);
@@ -579,9 +465,6 @@ public class CoachesPage extends BasePage {
         return names;
     }
 
-    /**
-     * Получить URL удаления тренера
-     */
     public String getDeleteUrlForCoach(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {
@@ -590,16 +473,10 @@ public class CoachesPage extends BasePage {
         throw new RuntimeException("Тренер не найден: " + fullName);
     }
 
-    /**
-     * Проверить, что таблица не пуста
-     */
     public boolean isTableNotEmpty() {
         return getCoachesCount() > 0;
     }
 
-    /**
-     * Получить данные тренера в виде строки (для отладки)
-     */
     public String getCoachRowData(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {

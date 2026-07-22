@@ -2,7 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Lesson;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
 
@@ -13,11 +13,12 @@ public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
         super(page);
     }
 
-    @Step("Переход на страницу добавления занятия")
     public AddLessonPage navigateTo() {
-        page.navigate("/add_lesson");
-        waitForPageLoad();
-        return this;
+        return step("Переход на страницу добавления занятия", () -> {
+            page.navigate("/add_lesson");
+            waitForPageLoad();
+            return this;
+        });
     }
 
     public AddLessonPage fillLessonNameWithCapitalize(String lessonName) {
@@ -26,16 +27,18 @@ public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
         return this;
     }
 
-    @Step("Выбрать ученика по ID: {studentId}")
     public AddLessonPage selectStudentById(int studentId) {
-        page.locator(studentCheckboxes + "[value='" + studentId + "']").check();
-        return this;
+        return step("Выбрать ученика по ID: " + studentId, () -> {
+            page.locator(studentCheckboxes + "[value='" + studentId + "']").check();
+            return this;
+        });
     }
 
-    @Step("Отправить форму занятия")
     public LessonsPage submitLesson(Lesson lesson) {
-        fillLessonForm(lesson);
-        return clickSave();
+        return step("Отправить форму занятия", () -> {
+            fillLessonForm(lesson);
+            return clickSave();
+        });
     }
 
     public boolean isFieldRequired(String fieldName) {
@@ -61,7 +64,4 @@ public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
     public boolean isUrlCorrect() {
         return page.url().contains("/add_lesson");
     }
-
-    // make getFieldSelector accessible from this package via the parent
-    // by keeping it package-private in the parent
 }

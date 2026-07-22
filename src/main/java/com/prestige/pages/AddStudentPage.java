@@ -2,79 +2,81 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Student;
-import io.qameta.allure.Step;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.prestige.utils.StepHelper.step;
+
 public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
 
-    // Сообщения об ошибках
     private final String errorMessages = ".error-message";
     private final String fieldErrors = ".field-error";
     private final String flashMessages = ".flash";
 
-    // Атрибуты полей
     private final String requiredAttribute = "required";
     private final String oninputAttribute = "oninput";
 
-    // Кнопка отмены
     private final String cancelButton = "a[href*='students']";
 
     public AddStudentPage(Page page) {
         super(page);
     }
 
-    @Step("Переход на страницу добавления ученика")
     public AddStudentPage navigateTo() {
-        page.navigate("/add_student");
-        waitForPageLoad();
-        return this;
+        return step("Переход на страницу добавления ученика", () -> {
+            page.navigate("/add_student");
+            waitForPageLoad();
+            return this;
+        });
     }
 
-    @Step("Заполнить форму ученика")
     public AddStudentPage fillStudentForm(Student student) {
-        if (student.getLastName() != null) {
-            fillLastName(student.getLastName());
-        }
-        if (student.getFirstName() != null) {
-            fillFirstName(student.getFirstName());
-        }
-        if (student.getMiddleName() != null) {
-            fillMiddleName(student.getMiddleName());
-        }
-        if (student.getContacts() != null) {
-            fillContacts(student.getContacts());
-        }
-        if (student.getBirthday() != null) {
-            fillBirthday(student.getBirthday());
-        }
-        fillLessonsCount(student.getLessonsCount());
-        if (student.getAdditionalInfo() != null) {
-            fillAdditionalInfo(student.getAdditionalInfo());
-        }
-        return this;
+        return step("Заполнить форму ученика", () -> {
+            if (student.getLastName() != null) {
+                fillLastName(student.getLastName());
+            }
+            if (student.getFirstName() != null) {
+                fillFirstName(student.getFirstName());
+            }
+            if (student.getMiddleName() != null) {
+                fillMiddleName(student.getMiddleName());
+            }
+            if (student.getContacts() != null) {
+                fillContacts(student.getContacts());
+            }
+            if (student.getBirthday() != null) {
+                fillBirthday(student.getBirthday());
+            }
+            fillLessonsCount(student.getLessonsCount());
+            if (student.getAdditionalInfo() != null) {
+                fillAdditionalInfo(student.getAdditionalInfo());
+            }
+            return this;
+        });
     }
 
-    @Step("Заполнить форму ученика с капитализацией")
     public AddStudentPage fillStudentFormWithCapitalization(Student student) {
-        fillLastNameWithCapitalize(student.getLastName());
-        fillFirstNameWithCapitalize(student.getFirstName());
-        fillMiddleNameWithCapitalize(student.getMiddleName());
-        fillContacts(student.getContacts());
-        fillBirthday(student.getBirthday());
-        fillLessonsCount(student.getLessonsCount());
-        fillAdditionalInfo(student.getAdditionalInfo());
-        return this;
+        return step("Заполнить форму ученика с капитализацией", () -> {
+            fillLastNameWithCapitalize(student.getLastName());
+            fillFirstNameWithCapitalize(student.getFirstName());
+            fillMiddleNameWithCapitalize(student.getMiddleName());
+            fillContacts(student.getContacts());
+            fillBirthday(student.getBirthday());
+            fillLessonsCount(student.getLessonsCount());
+            fillAdditionalInfo(student.getAdditionalInfo());
+            return this;
+        });
     }
 
-    @Step("Заполнить обязательные поля ученика")
     public AddStudentPage fillRequiredFields(Student student) {
-        fillLastName(student.getLastName());
-        fillFirstName(student.getFirstName());
-        return this;
+        return step("Заполнить обязательные поля ученика", () -> {
+            fillLastName(student.getLastName());
+            fillFirstName(student.getFirstName());
+            return this;
+        });
     }
 
     public AddStudentPage fillLastNameWithCapitalize(String lastName) {
@@ -95,12 +97,13 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
-    @Step("Заполнить дату рождения: {birthday}")
     @Override
     public AddStudentPage fillBirthday(String birthday) {
-        page.evaluate("document.querySelector('input[name=\"birthday\"]').value = '" + birthday + "'");
-        page.evaluate("document.querySelector('input[name=\"birthday\"]').dispatchEvent(new Event('change', { bubbles: true }))");
-        return this;
+        return step("Заполнить дату рождения: {birthday}", () -> {
+            page.evaluate("document.querySelector('input[name=\"birthday\"]').value = '" + birthday + "'");
+            page.evaluate("document.querySelector('input[name=\"birthday\"]').dispatchEvent(new Event('change', { bubbles: true }))");
+            return this;
+        });
     }
 
     public AddStudentPage fillBirthday(LocalDate birthday) {
@@ -109,10 +112,11 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
-    @Step("Заполнить дату рождения")
     public AddStudentPage fillBirthday(int year, int month, int day) {
-        LocalDate date = LocalDate.of(year, month, day);
-        return fillBirthday(date);
+        return step("Заполнить дату рождения", () -> {
+            LocalDate date = LocalDate.of(year, month, day);
+            return fillBirthday(date);
+        });
     }
 
     public int getLessonsCount() {
@@ -136,52 +140,58 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return student;
     }
 
-    @Step("Сохранить ученика")
     public StudentsPage clickSave() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return new StudentsPage(page);
+        return step("Сохранить ученика", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return new StudentsPage(page);
+        });
     }
 
-    @Step("Сохранить и остаться на странице")
     public AddStudentPage clickSaveAndStay() {
-        page.click(submitButton);
-        waitForPageLoad();
-        return this;
+        return step("Сохранить и остаться на странице", () -> {
+            page.click(submitButton);
+            waitForPageLoad();
+            return this;
+        });
     }
 
-    @Step("Отменить добавление ученика")
     public StudentsPage clickCancel() {
-        page.click(cancelButton);
-        waitForPageLoad();
-        return new StudentsPage(page);
+        return step("Отменить добавление ученика", () -> {
+            page.click(cancelButton);
+            waitForPageLoad();
+            return new StudentsPage(page);
+        });
     }
 
-    @Step("Очистить поле: {fieldName}")
     public AddStudentPage clearField(String fieldName) {
-        String selector = getFieldSelector(fieldName);
-        page.fill(selector, "");
-        return this;
+        return step("Очистить поле: {fieldName}", () -> {
+            String selector = getFieldSelector(fieldName);
+            page.fill(selector, "");
+            return this;
+        });
     }
 
-    @Step("Отправить форму ученика")
     public StudentsPage submitStudent(Student student) {
-        fillStudentForm(student);
-        return clickSave();
+        return step("Отправить форму ученика", () -> {
+            fillStudentForm(student);
+            return clickSave();
+        });
     }
 
-    @Step("Отправить форму ученика и проверить")
     public StudentsPage submitStudentAndVerify(Student student) {
-        fillStudentForm(student);
-        StudentsPage studentsPage = clickSave();
+        return step("Отправить форму ученика и проверить", () -> {
+            fillStudentForm(student);
+            StudentsPage studentsPage = clickSave();
 
-        String fullName = student.getFullName();
-        studentsPage.waitForStudentToAppear(fullName, 10);
+            String fullName = student.getFullName();
+            studentsPage.waitForStudentToAppear(fullName, 10);
 
-        assert studentsPage.hasSuccessMessage("Ученик успешно добавлен") :
-                "Не найдено сообщение об успешном добавлении";
+            assert studentsPage.hasSuccessMessage("Ученик успешно добавлен") :
+                    "Не найдено сообщение об успешном добавлении";
 
-        return studentsPage;
+            return studentsPage;
+        });
     }
 
     public boolean areAllFieldsVisible() {

@@ -3,7 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Card;
-import io.qameta.allure.Step;
+import static com.prestige.utils.StepHelper.step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +32,23 @@ public class CardsPage extends BasePage {
         super(page);
     }
 
-    @Step("Переход на страницу абонементов")
     public CardsPage navigateTo() {
-        page.navigate("/cards");
-        waitForPageLoad();
-        return this;
+        return step("Переход на страницу абонементов", () -> {
+            page.navigate("/cards");
+            waitForPageLoad();
+            return this;
+        });
     }
 
     public String getPageHeader() {
         return page.textContent(pageTitle);
     }
 
-    @Step("Нажать кнопку добавления абонемента")
     public AddCardPage clickAddCard() {
-        page.click(addCardButton);
-        return new AddCardPage(page);
+        return step("Нажать кнопку добавления абонемента", () -> {
+            page.click(addCardButton);
+            return new AddCardPage(page);
+        });
     }
 
     public boolean isAddCardButtonVisible() {
@@ -142,62 +144,67 @@ public class CardsPage extends BasePage {
         }
     }
 
-    @Step("Редактировать абонемент: {name}")
     public EditCardPage clickEditCard(String name) {
-        Locator row = findCardRow(name);
-        if (row != null) {
-            row.locator(editButton).click();
-            return new EditCardPage(page);
-        }
-        throw new RuntimeException("Абонемент не найден: " + name);
+        return step("Редактировать абонемент: " + name, () -> {
+            Locator row = findCardRow(name);
+            if (row != null) {
+                row.locator(editButton).click();
+                return new EditCardPage(page);
+            }
+            throw new RuntimeException("Абонемент не найден: " + name);
+        });
     }
 
-    @Step("Редактировать абонемент по индексу: {index}")
     public EditCardPage clickEditCardAtIndex(int index) {
-        Locator rows = page.locator(tableRows);
-        if (index < rows.count()) {
-            rows.nth(index).locator(editButton).click();
-            return new EditCardPage(page);
-        }
-        throw new RuntimeException("Абонемент с индексом " + index + " не найден");
+        return step("Редактировать абонемент по индексу: " + index, () -> {
+            Locator rows = page.locator(tableRows);
+            if (index < rows.count()) {
+                rows.nth(index).locator(editButton).click();
+                return new EditCardPage(page);
+            }
+            throw new RuntimeException("Абонемент с индексом " + index + " не найден");
+        });
     }
 
-    @Step("Удалить абонемент: {name}")
     public CardsPage deleteCard(String name) {
-        Locator row = findCardRow(name);
-        if (row != null) {
-            row.locator(deleteButton).click();
-            confirmDeleteModal();
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Абонемент не найден: " + name);
+        return step("Удалить абонемент: " + name, () -> {
+            Locator row = findCardRow(name);
+            if (row != null) {
+                row.locator(deleteButton).click();
+                confirmDeleteModal();
+                waitForPageLoad();
+                return this;
+            }
+            throw new RuntimeException("Абонемент не найден: " + name);
+        });
     }
 
-    @Step("Удалить абонемент с проверкой модального окна: {name}")
     public CardsPage deleteCardWithModal(String name) {
-        Locator row = findCardRow(name);
-        if (row != null) {
-            String deleteUrl = row.locator(deleteButton).getAttribute("data-url");
-            row.locator(deleteButton).click();
-            assert isDeleteModalVisible() : "Модальное окно не открылось";
-            confirmDeleteModal();
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Абонемент не найден: " + name);
+        return step("Удалить абонемент с проверкой модального окна: " + name, () -> {
+            Locator row = findCardRow(name);
+            if (row != null) {
+                String deleteUrl = row.locator(deleteButton).getAttribute("data-url");
+                row.locator(deleteButton).click();
+                assert isDeleteModalVisible() : "Модальное окно не открылось";
+                confirmDeleteModal();
+                waitForPageLoad();
+                return this;
+            }
+            throw new RuntimeException("Абонемент не найден: " + name);
+        });
     }
 
-    @Step("Удалить абонемент по индексу: {index}")
     public CardsPage deleteCardAtIndex(int index) {
-        Locator rows = page.locator(tableRows);
-        if (index < rows.count()) {
-            rows.nth(index).locator(deleteButton).click();
-            confirmDeleteModal();
-            waitForPageLoad();
-            return this;
-        }
-        throw new RuntimeException("Абонемент с индексом " + index + " не найден");
+        return step("Удалить абонемент по индексу: " + index, () -> {
+            Locator rows = page.locator(tableRows);
+            if (index < rows.count()) {
+                rows.nth(index).locator(deleteButton).click();
+                confirmDeleteModal();
+                waitForPageLoad();
+                return this;
+            }
+            throw new RuntimeException("Абонемент с индексом " + index + " не найден");
+        });
     }
 
     public boolean isCardExists(String name) {
@@ -233,33 +240,35 @@ public class CardsPage extends BasePage {
         return names;
     }
 
-    @Step("Ожидание появления абонемента: {name}")
     public CardsPage waitForCardToAppear(String name, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
+        return step("Ожидание появления абонемента: " + name, () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
 
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (isCardExists(name)) {
-                return this;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (isCardExists(name)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
 
-        throw new RuntimeException("Абонемент не появился за " + timeoutSeconds + " секунд: " + name);
+            throw new RuntimeException("Абонемент не появился за " + timeoutSeconds + " секунд: " + name);
+        });
     }
 
-    @Step("Ожидание удаления абонемента: {name}")
     public CardsPage waitForCardToDisappear(String name, int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        long timeout = timeoutSeconds * 1000L;
+        return step("Ожидание удаления абонемента: " + name, () -> {
+            long startTime = System.currentTimeMillis();
+            long timeout = timeoutSeconds * 1000L;
 
-        while (System.currentTimeMillis() - startTime < timeout) {
-            if (!isCardExists(name)) {
-                return this;
+            while (System.currentTimeMillis() - startTime < timeout) {
+                if (!isCardExists(name)) {
+                    return this;
+                }
+                page.waitForTimeout(500);
             }
-            page.waitForTimeout(500);
-        }
 
-        throw new RuntimeException("Абонемент не исчез за " + timeoutSeconds + " секунд: " + name);
+            throw new RuntimeException("Абонемент не исчез за " + timeoutSeconds + " секунд: " + name);
+        });
     }
 }
