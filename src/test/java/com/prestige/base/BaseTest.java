@@ -6,13 +6,16 @@ import com.prestige.models.TestData;
 import com.prestige.tests.UiTestFragments;
 import com.prestige.utils.AllureAttachments;
 import io.qameta.allure.Step;
+import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@ExtendWith(AllureJunit5.class)
 public abstract class BaseTest {
 
     private static final Logger log = LoggerFactory.getLogger(BaseTest.class);
