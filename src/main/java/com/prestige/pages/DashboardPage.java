@@ -7,6 +7,8 @@ import com.prestige.models.Student;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class DashboardPage extends BasePage {
 
     // Заголовок страницы
@@ -49,24 +51,14 @@ public class DashboardPage extends BasePage {
     }
 
     // ============ ВИДЖЕТ ДНЕЙ РОЖДЕНИЯ ============
-
-    /**
-     * Проверить, что виджет дней рождения отображается
-     */
     public boolean isBirthdayWidgetVisible() {
         return page.isVisible(birthdayWidget);
     }
 
-    /**
-     * Получить заголовок виджета
-     */
     public String getWidgetTitle() {
         return page.textContent(widgetHeader);
     }
 
-    /**
-     * Проверить, что виджет содержит все три колонки
-     */
     public boolean hasAllBirthdayColumns() {
         return page.isVisible(birthdayYesterdayColumn) &&
                 page.isVisible(birthdayTodayColumn) &&
@@ -74,38 +66,59 @@ public class DashboardPage extends BasePage {
     }
 
     // ============ ДНИ РОЖДЕНИЯ ВЧЕРА ============
-
-    /**
-     * Получить заголовок колонки "Вчера"
-     */
     public String getYesterdayColumnTitle() {
         return page.locator(birthdayYesterdayColumn + " " + columnTitle).textContent();
     }
 
-    /**
-     * Получить список учеников с днем рождения вчера
-     */
     public List<Student> getBirthdaysYesterday() {
         return getStudentsFromColumn(birthdayYesterdayColumn);
     }
 
-    /**
-     * Получить имена учеников с днем рождения вчера
-     */
     public List<String> getBirthdayNamesYesterday() {
         return getStudentNamesFromColumn(birthdayYesterdayColumn);
     }
 
-    /**
-     * Проверить, есть ли ученики с днем рождения вчера
-     */
+    public DashboardPage checkStudentWithBirthdayYesterdayPresent(String studentName) {
+        List<Student> studentsWithBdYesterday = getBirthdaysYesterday();
+
+        assertTrue(
+                checkStudentPresent(studentsWithBdYesterday, studentName),
+                "Student with name " + studentName + " not found in birthdays widgets");
+        return this;
+    }
+
+    public DashboardPage checkStudentWithBirthdayTodayPresent(String studentName) {
+        List<Student> studentsWithBdToday = getBirthdaysToday();
+
+        assertTrue(
+                checkStudentPresent(studentsWithBdToday, studentName),
+                "Student with name " + studentName + " not found in birthdays widgets");
+        return this;
+    }
+
+    public DashboardPage checkStudentWithBirthdayTomorrowPresent(String studentName) {
+        List<Student> studentsWithBdTomorrow = getBirthdaysTomorrow();
+
+        assertTrue(
+                checkStudentPresent(studentsWithBdTomorrow, studentName),
+                "Student with name " + studentName + " not found in birthdays widgets");
+        return this;
+    }
+
+    private boolean checkStudentPresent(List<Student> students, String studentName){
+        boolean found = false;
+        for (Student student : students) {
+            if (studentName.equals(student.getFullName())){
+                found = true;
+            }
+        }
+        return found;
+    }
+
     public boolean hasBirthdaysYesterday() {
         return hasStudentsInColumn(birthdayYesterdayColumn);
     }
 
-    /**
-     * Получить количество учеников с днем рождения вчера
-     */
     public int getBirthdaysYesterdayCount() {
         return getStudentCountInColumn(birthdayYesterdayColumn);
     }
@@ -353,10 +366,21 @@ public class DashboardPage extends BasePage {
             this.total = total;
         }
 
-        public int getYesterday() { return yesterday; }
-        public int getToday() { return today; }
-        public int getTomorrow() { return tomorrow; }
-        public int getTotal() { return total; }
+        public int getYesterday() {
+            return yesterday;
+        }
+
+        public int getToday() {
+            return today;
+        }
+
+        public int getTomorrow() {
+            return tomorrow;
+        }
+
+        public int getTotal() {
+            return total;
+        }
 
         @Override
         public String toString() {

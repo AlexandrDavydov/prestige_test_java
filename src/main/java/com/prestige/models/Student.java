@@ -26,6 +26,10 @@ public class Student {
         return lastName + " " + firstName;
     }
 
+    public String getFirstAndLastName() {
+        return lastName + " " + firstName;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
