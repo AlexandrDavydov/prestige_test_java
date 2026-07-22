@@ -2,7 +2,7 @@ name: E2E Tests
 
 on:
   push:
-    branches: [main, develop, master]
+    branches: [main, develop, master, ci_cd_integration]
   pull_request:
   workflow_dispatch:
 
