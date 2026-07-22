@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.LessonTemplate;
+import io.qameta.allure.Step;
 
 public abstract class BaseLessonTemplatePage<T extends BaseLessonTemplatePage<T>> extends BasePage {
 
@@ -17,12 +18,14 @@ public abstract class BaseLessonTemplatePage<T extends BaseLessonTemplatePage<T>
     }
 
     @SuppressWarnings("unchecked")
+    @Step("Выбрать тренера в шаблоне: {coachIndex}")
     public T selectCoach(int coachIndex) {
         page.selectOption(coachSelect, String.valueOf(coachIndex));
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
+    @Step("Выбрать учеников в шаблоне: {studentIds}")
     public T selectStudents(String studentIds) {
         page.locator(studentCheckboxes).evaluateAll(
             "els => els.forEach(el => el.checked = false)");
@@ -34,6 +37,7 @@ public abstract class BaseLessonTemplatePage<T extends BaseLessonTemplatePage<T>
     }
 
     @SuppressWarnings("unchecked")
+    @Step("Заполнить название шаблона: {templateName}")
     public T fillTemplateName(String templateName) {
         page.fill(templateNameInput, templateName);
         return (T) this;
@@ -44,6 +48,7 @@ public abstract class BaseLessonTemplatePage<T extends BaseLessonTemplatePage<T>
     }
 
     @SuppressWarnings("unchecked")
+    @Step("Заполнить форму шаблона занятия")
     public T fillForm(LessonTemplate lessonTemplate) {
         fillTemplateName(lessonTemplate.getTemplateName());
         selectCoach(lessonTemplate.getCoachId());

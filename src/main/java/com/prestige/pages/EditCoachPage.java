@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
+import io.qameta.allure.Step;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +48,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить форму данными тренера
      */
+    @Step("Заполнить форму редактирования тренера")
     public EditCoachPage fillCoachForm(Coach coach) {
         if (coach.getLastName() != null) {
             fillLastName(coach.getLastName());
@@ -75,6 +77,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить форму с очисткой всех полей
      */
+    @Step("Очистить и заполнить форму тренера")
     public EditCoachPage fillCoachFormCleared(Coach coach) {
         clearAllFields();
         return fillCoachForm(coach);
@@ -83,6 +86,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить только обязательные поля
      */
+    @Step("Заполнить обязательные поля тренера")
     public EditCoachPage fillRequiredFields(Coach coach) {
         fillLastName(coach.getLastName());
         fillFirstName(coach.getFirstName());
@@ -94,6 +98,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить фамилию
      */
+    @Step("Заполнить фамилию тренера: {lastName}")
     public EditCoachPage fillLastName(String lastName) {
         page.fill(lastNameInput, lastName);
         return this;
@@ -102,6 +107,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить имя
      */
+    @Step("Заполнить имя тренера: {firstName}")
     public EditCoachPage fillFirstName(String firstName) {
         page.fill(firstNameInput, firstName);
         return this;
@@ -110,6 +116,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить отчество
      */
+    @Step("Заполнить отчество тренера: {middleName}")
     public EditCoachPage fillMiddleName(String middleName) {
         page.fill(middleNameInput, middleName);
         return this;
@@ -118,6 +125,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить контакты
      */
+    @Step("Заполнить контакты тренера: {contacts}")
     public EditCoachPage fillContacts(String contacts) {
         page.fill(contactsInput, contacts);
         return this;
@@ -126,6 +134,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить день рождения
      */
+    @Step("Заполнить дату рождения тренера: {birthday}")
     public EditCoachPage fillBirthday(String birthday) {
         page.fill(birthdayInput, birthday);
         return this;
@@ -134,6 +143,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить день рождения (LocalDate)
      */
+    @Step("Заполнить дату рождения тренера: {birthday}")
     public EditCoachPage fillBirthday(LocalDate birthday) {
         String dateStr = birthday.format(DateTimeFormatter.ISO_LOCAL_DATE);
         page.fill(birthdayInput, dateStr);
@@ -143,6 +153,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить количество проведенных занятий
      */
+    @Step("Заполнить количество занятий: {count}")
     public EditCoachPage fillLessonsCount(int count) {
         page.fill(lessonsCountInput, String.valueOf(count));
         return this;
@@ -151,6 +162,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить количество оплаченных занятий
      */
+    @Step("Заполнить оплаченных занятий: {paid}")
     public EditCoachPage fillLessonsPaid(int paid) {
         page.fill(lessonsPaidInput, String.valueOf(paid));
         return this;
@@ -159,6 +171,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить оплату за одного ученика
      */
+    @Step("Заполнить оплату за ученика: {payment}")
     public EditCoachPage fillStudentPayment(double payment) {
         page.fill(studentPaymentInput, String.valueOf(payment));
         return this;
@@ -167,6 +180,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Заполнить дополнительную информацию
      */
+    @Step("Заполнить доп. информацию тренера")
     public EditCoachPage fillAdditionalInfo(String info) {
         page.fill(additionalInfoInput, info);
         return this;
@@ -274,6 +288,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Сохранить изменения и перейти на страницу тренеров
      */
+    @Step("Сохранить изменения тренера")
     public CoachesPage clickSave() {
         page.click(saveButton);
         waitForPageLoad();
@@ -283,6 +298,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Сохранить изменения (остаться на странице, если есть ошибки)
      */
+    @Step("Сохранить и остаться на странице")
     public EditCoachPage clickSaveAndStay() {
         page.click(saveButton);
         waitForPageLoad();
@@ -292,6 +308,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Отменить редактирование и вернуться на страницу тренеров
      */
+    @Step("Отменить редактирование тренера")
     public CoachesPage clickCancel() {
         page.click(cancelButton);
         waitForPageLoad();
@@ -301,6 +318,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Очистить все поля формы
      */
+    @Step("Очистить все поля тренера")
     public EditCoachPage clearAllFields() {
         page.fill(lastNameInput, "");
         page.fill(firstNameInput, "");
@@ -317,6 +335,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Очистить конкретное поле
      */
+    @Step("Очистить поле тренера: {fieldName}")
     public EditCoachPage clearField(String fieldName) {
         switch (fieldName) {
             case "last_name":
@@ -550,6 +569,7 @@ public class EditCoachPage extends BasePage {
     /**
      * Сохранить форму и проверить успешное сохранение
      */
+    @Step("Сохранить тренера и проверить успех")
     public CoachesPage saveAndVerifySuccess() {
         clickSave();
 

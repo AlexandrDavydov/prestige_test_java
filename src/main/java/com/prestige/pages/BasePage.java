@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import com.prestige.config.TestConfig;
+import io.qameta.allure.Step;
 
 import java.util.List;
 
@@ -33,36 +34,43 @@ public abstract class BasePage {
     }
 
 
+    @Step("Ожидание загрузки страницы")
     public EditStudentPage waitForPageLoad() {
         page.waitForLoadState(LoadState.NETWORKIDLE);
         return null;
     }
 
+    @Step("Переход на главную")
     public DashboardPage goToDashboard() {
         clickNavLink("Главная");
         return new DashboardPage(page);
     }
 
+    @Step("Переход к занятиям")
     public LessonsPage goToLessons() {
         clickNavLink("Занятия");
         return new LessonsPage(page);
     }
 
+    @Step("Переход к ученикам")
     public StudentsPage goToStudents() {
         clickNavLink("Ученики");
         return new StudentsPage(page);
     }
 
+    @Step("Переход к тренерам")
     public CoachesPage goToCoaches() {
         clickNavLink("Тренеры");
         return new CoachesPage(page);
     }
 
+    @Step("Переход к абонементам")
     public CardsPage goToCards() {
         clickNavLink("Абонементы");
         return new CardsPage(page);
     }
 
+    @Step("Переход к шаблонам занятий")
     public LessonTemplatesPage goToLessonTemplates() {
         clickNavLink("Шаблоны занятий");
         return new LessonTemplatesPage(page);
@@ -102,6 +110,7 @@ public abstract class BasePage {
     /**
      * Выйти из системы
      */
+    @Step("Выход из системы")
     public PlaywrightLoginPage logout() {
         page.click(logoutLink);
         waitForPageLoad();
@@ -267,6 +276,7 @@ public abstract class BasePage {
     /**
      * Подтвердить удаление через кнопку "Да"
      */
+    @Step("Подтверждение удаления")
     public void confirmDeleteModal() {
         page.click(deleteConfirmButton);
         waitForPageLoad();
@@ -321,6 +331,7 @@ public abstract class BasePage {
     /**
      * Обновить страницу
      */
+    @Step("Обновление страницы")
     public void refreshPage() {
         page.reload();
         waitForPageLoad();

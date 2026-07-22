@@ -4,15 +4,14 @@ import com.microsoft.playwright.*;
 import com.prestige.config.TestConfig;
 import com.prestige.models.TestData;
 import com.prestige.tests.UiTestFragments;
-import io.qameta.allure.Allure;
+import com.prestige.utils.AllureAttachments;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.ByteArrayInputStream;
 
 public abstract class BaseTest {
 
@@ -27,6 +26,7 @@ public abstract class BaseTest {
     protected UiTestFragments uiTestFragments;
 
     @BeforeAll
+    @Step("Set up Playwright browser")
     void setUpPlaywright() {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
@@ -45,6 +45,7 @@ public abstract class BaseTest {
     }
 
     @BeforeEach
+    @Step("Set up browser context and page")
     void setUpContext() {
         context = browser.newContext(new Browser.NewContextOptions()
                 .setViewportSize(TestConfig.getViewportWidth(), TestConfig.getViewportHeight())
@@ -57,9 +58,10 @@ public abstract class BaseTest {
     }
 
     @AfterEach
+    @Step("Tear down test context")
     void tearDownContext() {
-        Allure.addAttachment("Page screenshot", "image/png",
-            new ByteArrayInputStream(page.screenshot(new Page.ScreenshotOptions().setFullPage(true))), "png");
+        AllureAttachments.takeScreenshot(page);
+        AllureAttachments.pageUrl(page.url());
         testData.deleteTestData();
         if (context != null) {
             context.close();
@@ -67,6 +69,7 @@ public abstract class BaseTest {
     }
 
     @AfterAll
+    @Step("Tear down Playwright")
     void tearDownPlaywright() {
         if (browser != null) {
             browser.close();

@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Student;
+import io.qameta.allure.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class StudentsPage extends BasePage {
     /**
      * Перейти на страницу учеников
      */
+    @Step("Переход на страницу учеников")
     public StudentsPage navigateTo() {
         page.navigate("/students");
         waitForPageLoad();
@@ -46,6 +48,7 @@ public class StudentsPage extends BasePage {
         return page.textContent(pageTitle);
     }
 
+    @Step("Нажать кнопку добавления ученика")
     public AddStudentPage clickAddStudent() {
         page.click(addStudentLink);
         return new AddStudentPage(page);
@@ -110,6 +113,7 @@ public class StudentsPage extends BasePage {
 //        throw new RuntimeException("Ученик не найден: " + fullName);
 //    }
 //
+    @Step("Редактировать ученика: {fullName}")
     public EditStudentPage clickEditStudent(String fullName) {
         Locator row = findStudentRow(fullName);
         if (row != null) {
@@ -119,6 +123,7 @@ public class StudentsPage extends BasePage {
         throw new RuntimeException("Ученик не найден: " + fullName);
     }
 
+    @Step("Удалить ученика: {fullName}")
     public StudentsPage deleteStudent(String fullName) {
         Locator row = findStudentRow(fullName);
         if (row != null) {
@@ -224,6 +229,7 @@ public class StudentsPage extends BasePage {
     /**
      * Ожидать появления ученика в таблице
      */
+    @Step("Ожидание появления ученика: {fullName}")
     public StudentsPage waitForStudentToAppear(String fullName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;
@@ -241,6 +247,7 @@ public class StudentsPage extends BasePage {
     /**
      * Ожидать исчезновения ученика из таблицы
      */
+    @Step("Ожидание удаления ученика: {fullName}")
     public StudentsPage waitForStudentToDisappear(String fullName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;

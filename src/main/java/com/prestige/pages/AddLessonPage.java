@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Lesson;
+import io.qameta.allure.Step;
 
 public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
 
@@ -12,6 +13,7 @@ public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
         super(page);
     }
 
+    @Step("Переход на страницу добавления занятия")
     public AddLessonPage navigateTo() {
         page.navigate("/add_lesson");
         waitForPageLoad();
@@ -24,11 +26,13 @@ public class AddLessonPage extends BaseLessonPage<AddLessonPage> {
         return this;
     }
 
+    @Step("Выбрать ученика по ID: {studentId}")
     public AddLessonPage selectStudentById(int studentId) {
         page.locator(studentCheckboxes + "[value='" + studentId + "']").check();
         return this;
     }
 
+    @Step("Отправить форму занятия")
     public LessonsPage submitLesson(Lesson lesson) {
         fillLessonForm(lesson);
         return clickSave();

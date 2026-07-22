@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import lombok.Getter;
+import io.qameta.allure.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ public class PlaywrightLoginPage {
         this.page = page;
     }
 
+    @Step("Переход на страницу логина")
     public PlaywrightLoginPage navigateTo() {
         page.navigate("/");
         page.waitForLoadState();
@@ -31,30 +33,35 @@ public class PlaywrightLoginPage {
         return this;
     }
 
+    @Step("Ввести имя пользователя: {username}")
     public PlaywrightLoginPage typeUsername(String username) {
         usernameInput.clear();
         usernameInput.fill(username);
         return this;
     }
 
+    @Step("Ввести пароль")
     public PlaywrightLoginPage typePassword(String password) {
         passwordInput.clear();
         passwordInput.fill(password);
         return this;
     }
 
+    @Step("Войти в систему")
     public DashboardPage clickLoginAndGoToDashboard() {
         loginButton.click();
         page.waitForLoadState();
         return new DashboardPage(page);
     }
 
+    @Step("Нажать кнопку входа")
     public PlaywrightLoginPage clickLoginAndStay() {
         loginButton.click();
         page.waitForLoadState();
         return this;
     }
 
+    @Step("Авторизация: {username}")
     public DashboardPage login(String username, String password) {
         return typeUsername(username)
                 .typePassword(password)
@@ -71,6 +78,7 @@ public class PlaywrightLoginPage {
         return pageTitle.textContent();
     }
 
+    @Step("Очистить поля логина")
     public PlaywrightLoginPage clearFields() {
         usernameInput.clear();
         passwordInput.clear();

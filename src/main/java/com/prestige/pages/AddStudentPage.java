@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Student;
+import io.qameta.allure.Step;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,12 +27,14 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         super(page);
     }
 
+    @Step("Переход на страницу добавления ученика")
     public AddStudentPage navigateTo() {
         page.navigate("/add_student");
         waitForPageLoad();
         return this;
     }
 
+    @Step("Заполнить форму ученика")
     public AddStudentPage fillStudentForm(Student student) {
         if (student.getLastName() != null) {
             fillLastName(student.getLastName());
@@ -55,6 +58,7 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
+    @Step("Заполнить форму ученика с капитализацией")
     public AddStudentPage fillStudentFormWithCapitalization(Student student) {
         fillLastNameWithCapitalize(student.getLastName());
         fillFirstNameWithCapitalize(student.getFirstName());
@@ -66,6 +70,7 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
+    @Step("Заполнить обязательные поля ученика")
     public AddStudentPage fillRequiredFields(Student student) {
         fillLastName(student.getLastName());
         fillFirstName(student.getFirstName());
@@ -90,6 +95,7 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
+    @Step("Заполнить дату рождения: {birthday}")
     @Override
     public AddStudentPage fillBirthday(String birthday) {
         page.evaluate("document.querySelector('input[name=\"birthday\"]').value = '" + birthday + "'");
@@ -103,6 +109,7 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return this;
     }
 
+    @Step("Заполнить дату рождения")
     public AddStudentPage fillBirthday(int year, int month, int day) {
         LocalDate date = LocalDate.of(year, month, day);
         return fillBirthday(date);
@@ -129,35 +136,41 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
         return student;
     }
 
+    @Step("Сохранить ученика")
     public StudentsPage clickSave() {
         page.click(submitButton);
         waitForPageLoad();
         return new StudentsPage(page);
     }
 
+    @Step("Сохранить и остаться на странице")
     public AddStudentPage clickSaveAndStay() {
         page.click(submitButton);
         waitForPageLoad();
         return this;
     }
 
+    @Step("Отменить добавление ученика")
     public StudentsPage clickCancel() {
         page.click(cancelButton);
         waitForPageLoad();
         return new StudentsPage(page);
     }
 
+    @Step("Очистить поле: {fieldName}")
     public AddStudentPage clearField(String fieldName) {
         String selector = getFieldSelector(fieldName);
         page.fill(selector, "");
         return this;
     }
 
+    @Step("Отправить форму ученика")
     public StudentsPage submitStudent(Student student) {
         fillStudentForm(student);
         return clickSave();
     }
 
+    @Step("Отправить форму ученика и проверить")
     public StudentsPage submitStudentAndVerify(Student student) {
         fillStudentForm(student);
         StudentsPage studentsPage = clickSave();

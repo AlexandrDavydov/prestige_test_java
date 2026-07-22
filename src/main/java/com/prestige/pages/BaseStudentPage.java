@@ -1,6 +1,7 @@
 package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
+import io.qameta.allure.Step;
 
 public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends BasePage {
 
@@ -18,6 +19,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         super(page);
     }
 
+    @Step("Заполнить фамилию: {lastName}")
     @SuppressWarnings("unchecked")
     public T fillLastName(String lastName) {
         page.fill(lastNameInput, lastName);
@@ -28,6 +30,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         return page.inputValue(lastNameInput);
     }
 
+    @Step("Заполнить имя: {firstName}")
     @SuppressWarnings("unchecked")
     public T fillFirstName(String firstName) {
         page.fill(firstNameInput, firstName);
@@ -38,6 +41,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         return page.inputValue(firstNameInput);
     }
 
+    @Step("Заполнить отчество: {middleName}")
     @SuppressWarnings("unchecked")
     public T fillMiddleName(String middleName) {
         page.fill(middleNameInput, middleName);
@@ -48,6 +52,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         return page.inputValue(middleNameInput);
     }
 
+    @Step("Заполнить контакты: {contacts}")
     @SuppressWarnings("unchecked")
     public T fillContacts(String contacts) {
         page.fill(contactsInput, contacts);
@@ -58,6 +63,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         return page.inputValue(contactsInput);
     }
 
+    @Step("Заполнить дату рождения: {birthday}")
     @SuppressWarnings("unchecked")
     public T fillBirthday(String birthday) {
         page.fill(birthdayInput, birthday);
@@ -68,12 +74,14 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         return page.inputValue(birthdayInput);
     }
 
+    @Step("Заполнить количество занятий: {count}")
     @SuppressWarnings("unchecked")
     public T fillLessonsCount(int count) {
         page.fill(lessonsCountInput, String.valueOf(count));
         return (T) this;
     }
 
+    @Step("Заполнить доп. информацию")
     @SuppressWarnings("unchecked")
     public T fillAdditionalInfo(String info) {
         page.fill(additionalInfoInput, info);
@@ -84,6 +92,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
         return page.inputValue(additionalInfoInput);
     }
 
+    @Step("Очистить все поля")
     @SuppressWarnings("unchecked")
     public T clearAllFields() {
         page.fill(lastNameInput, "");

@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.LessonTemplate;
+import io.qameta.allure.Step;
 
 public class LessonTemplatesPage extends BasePage {
 
@@ -17,6 +18,7 @@ public class LessonTemplatesPage extends BasePage {
         super(page);
     }
 
+    @Step("Переход на страницу шаблонов занятий")
     public LessonTemplatesPage navigateTo() {
         page.navigate("/lesson_templates");
         waitForPageLoad();
@@ -27,6 +29,7 @@ public class LessonTemplatesPage extends BasePage {
         return page.textContent(pageTitle);
     }
 
+    @Step("Нажать кнопку добавления шаблона")
     public AddLessonTemplatePage clickAddLessonTemplate() {
         page.click(addTemplateButton);
         return new AddLessonTemplatePage(page);
@@ -81,6 +84,7 @@ public class LessonTemplatesPage extends BasePage {
         return false;
     }
 
+    @Step("Редактировать шаблон: {templateName}")
     public EditLessonTemplatePage clickEditTemplate(String templateName) {
         int rowIndex = findTemplateRowIndex(templateName);
         if (rowIndex != -1) {
@@ -91,6 +95,7 @@ public class LessonTemplatesPage extends BasePage {
         throw new RuntimeException("Шаблон не найден: " + templateName);
     }
 
+    @Step("Удалить шаблон: {templateName}")
     public LessonTemplatesPage deleteTemplate(String templateName) {
         int rowIndex = findTemplateRowIndex(templateName);
         if (rowIndex != -1) {
@@ -113,6 +118,7 @@ public class LessonTemplatesPage extends BasePage {
         return -1;
     }
 
+    @Step("Ожидание появления шаблона: {templateName}")
     public LessonTemplatesPage waitForTemplateToAppear(String templateName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;
@@ -125,6 +131,7 @@ public class LessonTemplatesPage extends BasePage {
         throw new RuntimeException("Шаблон не появился за " + timeoutSeconds + " секунд: " + templateName);
     }
 
+    @Step("Ожидание удаления шаблона: {templateName}")
     public LessonTemplatesPage waitForTemplateToDisappear(String templateName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;

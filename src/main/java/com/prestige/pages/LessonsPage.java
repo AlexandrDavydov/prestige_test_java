@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Lesson;
+import io.qameta.allure.Step;
 import com.prestige.models.LessonTemplate;
 import com.prestige.models.Student;
 
@@ -63,6 +64,7 @@ public class LessonsPage extends BasePage {
     /**
      * Перейти на страницу занятий
      */
+    @Step("Переход на страницу занятий")
     public LessonsPage navigateTo() {
         page.navigate("/lessons");
         waitForPageLoad();
@@ -78,6 +80,7 @@ public class LessonsPage extends BasePage {
 
     // ============ ДОБАВЛЕНИЕ ЗАНЯТИЯ ============
 
+    @Step("Нажать кнопку добавления занятия")
     public AddLessonPage clickAddLesson() {
         page.click(addLessonButton);
         return new AddLessonPage(page);
@@ -95,6 +98,7 @@ public class LessonsPage extends BasePage {
     /**
      * Фильтровать занятия по статусу
      */
+    @Step("Фильтр по статусу: {status}")
     public LessonsPage filterByStatus(String status) {
         page.selectOption(statusFilter, status);
         page.click(filterForm + " input[type='hidden']"); // Trigger submit
@@ -321,6 +325,7 @@ public class LessonsPage extends BasePage {
     /**
      * Отметить занятие как состоявшееся
      */
+    @Step("Отметить занятие как состоявшееся: {lessonName}")
     public LessonsPage markLessonAsDone(String lessonName) {
         int index = findLessonIndex(lessonName);
         if (index >= 0) {
@@ -334,6 +339,7 @@ public class LessonsPage extends BasePage {
     /**
      * Отметить занятие как состоявшееся по индексу
      */
+    @Step("Отметить занятие как состоявшееся по индексу")
     public LessonsPage markLessonAsDoneAtIndex(int index) {
         getActionsRowForLesson(index).locator(lessonDoneButton).click();
         waitForPageLoad();
@@ -343,6 +349,7 @@ public class LessonsPage extends BasePage {
     /**
      * Редактировать занятие
      */
+    @Step("Редактировать занятие: {lessonName}")
     public EditLessonPage clickEditLesson(String lessonName) {
         int index = findLessonIndex(lessonName);
         if (index >= 0) {
@@ -363,6 +370,7 @@ public class LessonsPage extends BasePage {
     /**
      * Скачать занятие как таблицу (DOCX)
      */
+    @Step("Скачать занятие как DOCX: {lessonName}")
     public void downloadLessonAsDocx(String lessonName) {
         int index = findLessonIndex(lessonName);
         if (index >= 0) {
@@ -377,6 +385,7 @@ public class LessonsPage extends BasePage {
     /**
      * Скачать занятие как картинку (PNG)
      */
+    @Step("Скачать занятие как PNG: {lessonName}")
     public void downloadLessonAsPng(String lessonName) {
         int index = findLessonIndex(lessonName);
         if (index >= 0) {
@@ -390,6 +399,7 @@ public class LessonsPage extends BasePage {
     /**
      * Удалить занятие (с подтверждением)
      */
+    @Step("Удалить занятие: {lessonName}")
     public LessonsPage deleteLesson(String lessonName) {
         int index = findLessonIndex(lessonName);
         if (index >= 0) {
@@ -454,6 +464,7 @@ public class LessonsPage extends BasePage {
     /**
      * Перейти на страницу пагинации
      */
+    @Step("Перейти на страницу пагинации: {pageNumber}")
     public LessonsPage goToPage(int pageNumber) {
         Locator link = page.locator(paginationLinks).filter(new Locator.FilterOptions()
                 .setHasText(String.valueOf(pageNumber)));
@@ -468,6 +479,7 @@ public class LessonsPage extends BasePage {
     /**
      * Перейти на следующую страницу
      */
+    @Step("Следующая страница")
     public LessonsPage goToNextPage() {
         page.locator(paginationNext).click();
         waitForPageLoad();
@@ -477,6 +489,7 @@ public class LessonsPage extends BasePage {
     /**
      * Перейти на предыдущую страницу
      */
+    @Step("Предыдущая страница")
     public LessonsPage goToPrevPage() {
         page.locator(paginationPrev).click();
         waitForPageLoad();

@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
+import io.qameta.allure.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CoachesPage extends BasePage {
     /**
      * Перейти на страницу тренеров
      */
+    @Step("Переход на страницу тренеров")
     public CoachesPage navigateTo() {
         page.navigate("/coaches");
         waitForPageLoad();
@@ -61,6 +63,7 @@ public class CoachesPage extends BasePage {
     /**
      * Кликнуть на кнопку "Добавить тренера"
      */
+    @Step("Нажать кнопку добавления тренера")
     public AddCoachPage clickAddCoach() {
         page.click(addCoachButton);
         return new AddCoachPage(page);
@@ -245,6 +248,7 @@ public class CoachesPage extends BasePage {
     /**
      * Отметить оплату тренеру
      */
+    @Step("Отметить оплату тренеру: {fullName}")
     public CoachesPage giveMoneyToCoach(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {
@@ -258,6 +262,7 @@ public class CoachesPage extends BasePage {
     /**
      * Отметить оплату тренеру по индексу
      */
+    @Step("Отметить оплату тренеру по индексу: {index}")
     public CoachesPage giveMoneyToCoachAtIndex(int index) {
         Locator rows = page.locator(tableRows);
         if (index < rows.count()) {
@@ -271,6 +276,7 @@ public class CoachesPage extends BasePage {
     /**
      * Редактировать тренера
      */
+    @Step("Редактировать тренера: {fullName}")
     public EditCoachPage clickEditCoach(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {
@@ -283,6 +289,7 @@ public class CoachesPage extends BasePage {
     /**
      * Редактировать тренера по индексу
      */
+    @Step("Редактировать тренера по индексу: {index}")
     public EditCoachPage clickEditCoachAtIndex(int index) {
         Locator rows = page.locator(tableRows);
         if (index < rows.count()) {
@@ -295,6 +302,7 @@ public class CoachesPage extends BasePage {
     /**
      * Удалить тренера (с подтверждением)
      */
+    @Step("Удалить тренера: {fullName}")
     public CoachesPage deleteCoach(String fullName) {
         Locator row = findCoachRow(fullName);
         if (row != null) {
@@ -501,6 +509,7 @@ public class CoachesPage extends BasePage {
     /**
      * Ожидать появления тренера в таблице
      */
+    @Step("Ожидание появления тренера: {fullName}")
     public CoachesPage waitForCoachToAppear(String fullName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;
@@ -518,6 +527,7 @@ public class CoachesPage extends BasePage {
     /**
      * Ожидать исчезновения тренера из таблицы
      */
+    @Step("Ожидание удаления тренера: {fullName}")
     public CoachesPage waitForCoachToDisappear(String fullName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;
@@ -535,6 +545,7 @@ public class CoachesPage extends BasePage {
     /**
      * Ожидать обновления долга тренера
      */
+    @Step("Ожидание обновления долга тренера: {fullName}")
     public CoachesPage waitForDebtUpdate(String fullName, double expectedDebt, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;

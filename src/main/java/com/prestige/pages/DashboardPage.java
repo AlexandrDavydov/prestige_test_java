@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Student;
+import io.qameta.allure.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class DashboardPage extends BasePage {
     /**
      * Перейти на главную страницу
      */
+    @Step("Переход на главную страницу")
     public DashboardPage navigateTo() {
         page.navigate("/");
         waitForPageLoad();
@@ -78,6 +80,7 @@ public class DashboardPage extends BasePage {
         return getStudentNamesFromColumn(birthdayYesterdayColumn);
     }
 
+    @Step("Проверить ученика с ДР вчера: {studentName}")
     public DashboardPage checkStudentWithBirthdayYesterdayPresent(String studentName) {
         List<Student> studentsWithBdYesterday = getBirthdaysYesterday();
 
@@ -87,6 +90,7 @@ public class DashboardPage extends BasePage {
         return this;
     }
 
+    @Step("Проверить ученика с ДР сегодня: {studentName}")
     public DashboardPage checkStudentWithBirthdayTodayPresent(String studentName) {
         List<Student> studentsWithBdToday = getBirthdaysToday();
 
@@ -96,6 +100,7 @@ public class DashboardPage extends BasePage {
         return this;
     }
 
+    @Step("Проверить ученика с ДР завтра: {studentName}")
     public DashboardPage checkStudentWithBirthdayTomorrowPresent(String studentName) {
         List<Student> studentsWithBdTomorrow = getBirthdaysTomorrow();
 
@@ -501,6 +506,7 @@ public class DashboardPage extends BasePage {
     /**
      * Ожидать появления ученика в колонке
      */
+    @Step("Ожидание ученика в колонке {column}: {studentName}")
     public DashboardPage waitForStudentInColumn(String column, String studentName, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;

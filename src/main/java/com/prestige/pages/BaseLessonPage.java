@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Lesson;
+import io.qameta.allure.Step;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return page.textContent(pageTitle);
     }
 
+    @Step("Заполнить дату занятия: {date}")
     @SuppressWarnings("unchecked")
     public T fillDate(String date) {
         page.fill(dateInput, date);
@@ -37,6 +39,7 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return page.inputValue(dateInput);
     }
 
+    @Step("Заполнить название занятия: {lessonName}")
     @SuppressWarnings("unchecked")
     public T fillLessonName(String lessonName) {
         page.fill(lessonNameInput, lessonName);
@@ -47,6 +50,7 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return page.inputValue(lessonNameInput);
     }
 
+    @Step("Выбрать тренера: {coachId}")
     @SuppressWarnings("unchecked")
     public T selectCoach(int coachId) {
         page.selectOption(coachSelect, String.valueOf(coachId));
@@ -57,6 +61,7 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return page.locator(coachSelect).getAttribute("value");
     }
 
+    @Step("Выбрать учеников: {studentIds}")
     @SuppressWarnings("unchecked")
     public T selectStudents(String studentIds) {
         page.locator(studentCheckboxes).evaluateAll(
@@ -76,6 +81,7 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
                 .toList();
     }
 
+    @Step("Выбрать статус: {status}")
     @SuppressWarnings("unchecked")
     public T selectStatus(String status) {
         page.selectOption(statusSelect, status);
@@ -86,6 +92,7 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return page.locator(statusSelect).getAttribute("value");
     }
 
+    @Step("Заполнить форму занятия")
     @SuppressWarnings("unchecked")
     public T fillLessonForm(Lesson lesson) {
         if (lesson.getDate() != null) {
@@ -117,12 +124,14 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return lesson;
     }
 
+    @Step("Сохранить занятие")
     public LessonsPage clickSave() {
         page.click(submitButton);
         waitForPageLoad();
         return new LessonsPage(page);
     }
 
+    @Step("Сохранить и остаться на странице")
     @SuppressWarnings("unchecked")
     public T clickSaveAndStay() {
         page.click(submitButton);
@@ -130,18 +139,21 @@ public abstract class BaseLessonPage<T extends BaseLessonPage<T>> extends BasePa
         return (T) this;
     }
 
+    @Step("Отменить")
     public LessonsPage clickCancel() {
         page.click(cancelButton);
         waitForPageLoad();
         return new LessonsPage(page);
     }
 
+    @Step("Очистить поле: {fieldName}")
     @SuppressWarnings("unchecked")
     public T clearField(String fieldName) {
         page.fill(getFieldSelector(fieldName), "");
         return (T) this;
     }
 
+    @Step("Очистить все поля")
     @SuppressWarnings("unchecked")
     public T clearAllFields() {
         page.fill(dateInput, "");

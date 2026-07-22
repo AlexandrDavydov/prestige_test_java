@@ -3,6 +3,7 @@ package com.prestige.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Card;
+import io.qameta.allure.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CardsPage extends BasePage {
         super(page);
     }
 
+    @Step("Переход на страницу абонементов")
     public CardsPage navigateTo() {
         page.navigate("/cards");
         waitForPageLoad();
@@ -41,6 +43,7 @@ public class CardsPage extends BasePage {
         return page.textContent(pageTitle);
     }
 
+    @Step("Нажать кнопку добавления абонемента")
     public AddCardPage clickAddCard() {
         page.click(addCardButton);
         return new AddCardPage(page);
@@ -139,6 +142,7 @@ public class CardsPage extends BasePage {
         }
     }
 
+    @Step("Редактировать абонемент: {name}")
     public EditCardPage clickEditCard(String name) {
         Locator row = findCardRow(name);
         if (row != null) {
@@ -148,6 +152,7 @@ public class CardsPage extends BasePage {
         throw new RuntimeException("Абонемент не найден: " + name);
     }
 
+    @Step("Редактировать абонемент по индексу: {index}")
     public EditCardPage clickEditCardAtIndex(int index) {
         Locator rows = page.locator(tableRows);
         if (index < rows.count()) {
@@ -157,6 +162,7 @@ public class CardsPage extends BasePage {
         throw new RuntimeException("Абонемент с индексом " + index + " не найден");
     }
 
+    @Step("Удалить абонемент: {name}")
     public CardsPage deleteCard(String name) {
         Locator row = findCardRow(name);
         if (row != null) {
@@ -168,6 +174,7 @@ public class CardsPage extends BasePage {
         throw new RuntimeException("Абонемент не найден: " + name);
     }
 
+    @Step("Удалить абонемент с проверкой модального окна: {name}")
     public CardsPage deleteCardWithModal(String name) {
         Locator row = findCardRow(name);
         if (row != null) {
@@ -181,6 +188,7 @@ public class CardsPage extends BasePage {
         throw new RuntimeException("Абонемент не найден: " + name);
     }
 
+    @Step("Удалить абонемент по индексу: {index}")
     public CardsPage deleteCardAtIndex(int index) {
         Locator rows = page.locator(tableRows);
         if (index < rows.count()) {
@@ -225,6 +233,7 @@ public class CardsPage extends BasePage {
         return names;
     }
 
+    @Step("Ожидание появления абонемента: {name}")
     public CardsPage waitForCardToAppear(String name, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;
@@ -239,6 +248,7 @@ public class CardsPage extends BasePage {
         throw new RuntimeException("Абонемент не появился за " + timeoutSeconds + " секунд: " + name);
     }
 
+    @Step("Ожидание удаления абонемента: {name}")
     public CardsPage waitForCardToDisappear(String name, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeout = timeoutSeconds * 1000L;

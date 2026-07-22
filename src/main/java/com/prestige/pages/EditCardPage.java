@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Card;
+import io.qameta.allure.Step;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class EditCardPage extends BasePage {
         return page.textContent(pageTitle);
     }
 
+    @Step("Заполнить название абонемента: {name}")
     public EditCardPage fillName(String name) {
         page.fill(nameInput, name);
         return this;
@@ -37,6 +39,7 @@ public class EditCardPage extends BasePage {
         return page.inputValue(nameInput);
     }
 
+    @Step("Заполнить цвет абонемента: {color}")
     public EditCardPage fillColor(String color) {
         page.fill(colorInput, color.toLowerCase());
         return this;
@@ -50,6 +53,7 @@ public class EditCardPage extends BasePage {
         return page.textContent(colorValue);
     }
 
+    @Step("Заполнить цену абонемента: {price}")
     public EditCardPage fillPrice(double price) {
         page.fill(priceInput, String.valueOf(price));
         return this;
@@ -64,6 +68,7 @@ public class EditCardPage extends BasePage {
         }
     }
 
+    @Step("Заполнить количество занятий: {count}")
     public EditCardPage fillLessonsCount(int count) {
         page.fill(lessonsCountInput, String.valueOf(count));
         return this;
@@ -78,6 +83,7 @@ public class EditCardPage extends BasePage {
         }
     }
 
+    @Step("Заполнить срок действия: {duration}")
     public EditCardPage fillDuration(String duration) {
         page.fill(durationInput, duration);
         return this;
@@ -87,6 +93,7 @@ public class EditCardPage extends BasePage {
         return page.inputValue(durationInput);
     }
 
+    @Step("Заполнить форму редактирования абонемента")
     public EditCardPage fillCardForm(Card card) {
         if (card.getName() != null) {
             fillName(card.getName());
@@ -102,11 +109,13 @@ public class EditCardPage extends BasePage {
         return this;
     }
 
+    @Step("Очистить и заполнить форму абонемента")
     public EditCardPage fillCardFormCleared(Card card) {
         clearAllFields();
         return fillCardForm(card);
     }
 
+    @Step("Заполнить обязательные поля абонемента")
     public EditCardPage fillRequiredFields(Card card) {
         fillName(card.getName());
         fillPrice(card.getPrice());
@@ -125,24 +134,28 @@ public class EditCardPage extends BasePage {
         return card;
     }
 
+    @Step("Сохранить изменения абонемента")
     public CardsPage clickSave() {
         page.click(saveButton);
         waitForPageLoad();
         return new CardsPage(page);
     }
 
+    @Step("Сохранить и остаться на странице")
     public EditCardPage clickSaveAndStay() {
         page.click(saveButton);
         waitForPageLoad();
         return this;
     }
 
+    @Step("Отменить редактирование абонемента")
     public CardsPage clickCancel() {
         page.click(cancelButton);
         waitForPageLoad();
         return new CardsPage(page);
     }
 
+    @Step("Очистить все поля абонемента")
     public EditCardPage clearAllFields() {
         page.fill(nameInput, "");
         page.fill(colorInput, "");
@@ -152,6 +165,7 @@ public class EditCardPage extends BasePage {
         return this;
     }
 
+    @Step("Очистить поле: {fieldName}")
     public EditCardPage clearField(String fieldName) {
         page.fill(getFieldSelector(fieldName), "");
         return this;
@@ -214,6 +228,7 @@ public class EditCardPage extends BasePage {
         return !hasErrorMessages() && areRequiredFieldsFilled();
     }
 
+    @Step("Сохранить абонемент и проверить успех")
     public CardsPage saveAndVerifySuccess() {
         clickSave();
         assert hasSuccessMessage("Абонемент успешно обновлен") :

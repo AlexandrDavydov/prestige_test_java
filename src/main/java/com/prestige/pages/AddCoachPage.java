@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
+import io.qameta.allure.Step;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,12 +20,14 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         super(page);
     }
 
+    @Step("Переход на страницу добавления тренера")
     public AddCoachPage navigateTo() {
         page.navigate("/add_coach");
         waitForPageLoad();
         return this;
     }
 
+    @Step("Заполнить форму тренера")
     public AddCoachPage fillCoachForm(Coach coach) {
         if (coach.getLastName() != null) {
             fillLastName(coach.getLastName());
@@ -50,6 +53,7 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         return this;
     }
 
+    @Step("Заполнить форму тренера с капитализацией")
     public AddCoachPage fillCoachFormWithCapitalization(Coach coach) {
         fillLastNameWithCapitalize(coach.getLastName());
         fillFirstNameWithCapitalize(coach.getFirstName());
@@ -63,6 +67,7 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         return this;
     }
 
+    @Step("Заполнить обязательные поля тренера")
     public AddCoachPage fillRequiredFields(Coach coach) {
         fillLastName(coach.getLastName());
         fillFirstName(coach.getFirstName());
@@ -112,35 +117,41 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
         return coach;
     }
 
+    @Step("Сохранить тренера")
     public CoachesPage clickSave() {
         page.click(submitButton);
         waitForPageLoad();
         return new CoachesPage(page);
     }
 
+    @Step("Сохранить и остаться на странице")
     public AddCoachPage clickSaveAndStay() {
         page.click(submitButton);
         waitForPageLoad();
         return this;
     }
 
+    @Step("Отменить добавление тренера")
     public CoachesPage clickCancel() {
         page.click(cancelButton);
         waitForPageLoad();
         return new CoachesPage(page);
     }
 
+    @Step("Очистить поле тренера: {fieldName}")
     public AddCoachPage clearField(String fieldName) {
         String selector = getFieldSelector(fieldName);
         page.fill(selector, "");
         return this;
     }
 
+    @Step("Отправить форму тренера")
     public CoachesPage submitCoach(Coach coach) {
         fillCoachForm(coach);
         return clickSave();
     }
 
+    @Step("Отправить форму тренера и проверить")
     public CoachesPage submitCoachAndVerify(Coach coach) {
         fillCoachForm(coach);
         CoachesPage coachesPage = clickSave();
