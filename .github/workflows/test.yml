@@ -59,6 +59,16 @@ jobs:
           name: test-results
           path: target/surefire-reports/
 
+      - name: Debug allure-results
+        if: always()
+        run: |
+          echo "=== Contents of target ==="
+          ls -la target/ 2>/dev/null || echo "target/ not found"
+          echo "=== Looking for allure-results ==="
+          ls -la target/allure-results/ 2>/dev/null || echo "allure-results not found"
+          echo "=== Any allure-result files? ==="
+          find . -name "*-result.json" 2>/dev/null || echo "no json results found"
+
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
