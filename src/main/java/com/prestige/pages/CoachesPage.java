@@ -4,6 +4,8 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
 import static com.prestige.utils.StepHelper.step;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +88,13 @@ public class CoachesPage extends BasePage {
             return mapRowToCoach(row);
         }
         return null;
+    }
+
+    public CoachesPage checkPaymentsAreAccrued(String fullName, int studentsCount){
+        Coach coachFromUI = getCoachByFullName(fullName);
+        assertEquals(studentsCount, coachFromUI.getLessonsCount(), "Количество студентов в занятии и в тренере не совпадает");
+        assertEquals(0, coachFromUI.getLessonsPaid());
+        return this;
     }
 
     private Locator findCoachRow(String fullName) {

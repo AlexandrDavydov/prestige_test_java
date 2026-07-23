@@ -33,4 +33,13 @@ public abstract class BaseLessonFactory {
         coach.setId(dbAdapter.addCoach(coach));
         return coach.getId();
     }
+
+    protected static int getClearCoachId() {
+        DbAdapter dbAdapter = createDbAdapter();
+        Coach coach = CoachFactory.createRandomCoach();
+        coach.setLessonsPaid(0);
+        coach.setLessonsCount(0);
+        coach.setId(dbAdapter.addCoach(coach));
+        return coach.getId();
+    }
 }

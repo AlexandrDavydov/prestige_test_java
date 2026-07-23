@@ -15,7 +15,6 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_LESSON)
 class Test_15_DeleteLessonTest extends BaseTest {
     Lesson createdLessonData;
 

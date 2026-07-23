@@ -172,6 +172,31 @@ public class DbAdapter implements AutoCloseable {
         return id;
     }
 
+    public Coach findCoachById(int coachId) {
+        String sql = "SELECT * FROM coaches WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, coachId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Coach coach = new Coach();
+                coach.setId(rs.getInt("id"));
+                coach.setLastName(rs.getString("last_name"));
+                coach.setFirstName(rs.getString("first_name"));
+                coach.setMiddleName(rs.getString("middle_name"));
+                coach.setContacts(rs.getString("contacts"));
+                coach.setBirthday(rs.getString("birthday"));
+                coach.setLessonsCount(rs.getInt("lessons_count"));
+                coach.setLessonsPaid(rs.getInt("lessons_paid"));
+                coach.setStudentPayment(rs.getInt("student_payment"));
+                coach.setAdditionalInfo(rs.getString("additional_info"));
+                return coach;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске тренера по ID: " + coachId, e);
+        }
+    }
+
     public void deleteCoachById(int coachId) {
         String sql = "DELETE FROM coaches WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -296,7 +321,6 @@ public class DbAdapter implements AutoCloseable {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("Соединение с SQLite закрыто");
             }
         } catch (SQLException e) {
             System.err.println("Ошибка при закрытии соединения: " + e.getMessage());

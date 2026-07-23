@@ -12,6 +12,9 @@ public class CoachFactory {
     private static final Faker faker = new Faker(new Locale("ru", "RU"));
 
     public static Coach createRandomCoach() {
+        int lessonsCount = faker.number().numberBetween(1, 30);
+        int lessonsPaid = faker.number().numberBetween(10, lessonsCount);
+
         String[] fio = RussianDataFactory.generateFullName().split(" ");
 
         Coach coach = new Coach();
@@ -20,9 +23,10 @@ public class CoachFactory {
         coach.setMiddleName(fio[2]);
         coach.setContacts(faker.phoneNumber().phoneNumber());
         coach.setBirthday(getFormattedBirthday(faker.date().birthday(6, 50)));
-        coach.setLessonsCount((int) (Math.random() * 30) + 1);
-        coach.setLessonsPaid((int) (Math.random() * 20));
+        coach.setLessonsCount(lessonsCount);
+        coach.setLessonsPaid(lessonsPaid);
         coach.setStudentPayment((int) (Math.random() * 4500 + 500));
+        coach.setAdditionalInfo("Дополнительная информация "+faker.lorem().characters(10));
         return coach;
     }
 

@@ -16,7 +16,6 @@ import static com.prestige.tests.TestGroups.CARD;
 import static com.prestige.tests.TestGroups.LOCK_CARD;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_CARD)
 class Test_09_DeleteCardTest extends BaseTest {
     Card createdCardData;
     Card editCardData;

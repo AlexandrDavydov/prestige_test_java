@@ -15,9 +15,7 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.CARD;
 import static com.prestige.tests.TestGroups.LOCK_CARD;
 
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_CARD)
 class Test_07_CreateCardTest extends BaseTest {
     Card cardData;
 

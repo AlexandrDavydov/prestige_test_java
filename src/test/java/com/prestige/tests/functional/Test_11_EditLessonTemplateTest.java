@@ -17,7 +17,6 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.LESSON_TEMPLATE;
 import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
 
-@ResourceLock(LOCK_LESSON_TEMPLATE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_11_EditLessonTemplateTest extends BaseTest {
     LessonTemplate createdLessonTemplateData;

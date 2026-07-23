@@ -16,7 +16,6 @@ import static com.prestige.tests.TestGroups.LESSON_TEMPLATE;
 import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_LESSON_TEMPLATE)
 class Test_12_DeleteLessonTemplateTest extends BaseTest {
     LessonTemplate createdLessonTemplateData;
 

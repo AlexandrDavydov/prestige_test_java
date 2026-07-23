@@ -18,7 +18,6 @@ import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
 import static com.prestige.utils.StepHelper.step;
 
-@ResourceLock(LOCK_STUDENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_02_EditStudentTest extends BaseTest {
     Student createdStudentData;
@@ -34,8 +33,8 @@ class Test_02_EditStudentTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        createStudentInTheDatabase();
         generateStudentData();
+        createStudentInTheDatabase();
     }
 
     public void editStudentWithUi(Student studentForEditData, Student newStudentData) {
@@ -49,15 +48,15 @@ class Test_02_EditStudentTest extends BaseTest {
     }
 
     public void createStudentInTheDatabase(){
-        step("Создать ученика в базе данных" + editStudentData.getFullName(), () -> {
+        step("Создать ученика в базе данных для редактирования", () -> {
             createdStudentData = StudentFactory.createRandomStudent();
-            createdStudentData.setId(new DbAdapter().addStudent(createdStudentData));
+            createdStudentData.setId(dbAdapter.addStudent(createdStudentData));
             testData.addStudent(createdStudentData);
         });
     }
 
     public void generateStudentData(){
-        step("Сгенерировать данные ученика для редактирования" + editStudentData.getFullName(), () -> {
+        step("Сгенерировать данные ученика для редактирования", () -> {
             editStudentData = StudentFactory.createRandomStudent();
             testData.addStudent(editStudentData);
         });

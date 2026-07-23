@@ -11,9 +11,10 @@ public class TestData {
     private final ArrayList<LessonTemplate> lessonTemplates = new ArrayList<>();
     private final ArrayList<Lesson> lessons = new ArrayList<>();
 
-    private final DbAdapter dbAdapter = new DbAdapter();
+    private final DbAdapter dbAdapter;
 
-    public TestData() {
+    public TestData(DbAdapter dbAdapter) {
+        this.dbAdapter = dbAdapter;
     }
 
     public ArrayList<Student> getStudents() {

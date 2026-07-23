@@ -1,6 +1,7 @@
 package com.prestige.base;
 
 import com.microsoft.playwright.*;
+import com.prestige.adapters.DbAdapter;
 import com.prestige.config.TestConfig;
 import com.prestige.models.TestData;
 import com.prestige.tests.UiTestFragments;
@@ -27,6 +28,7 @@ public abstract class BaseTest {
     protected APIRequestContext request;
     protected TestData testData;
     protected UiTestFragments uiTestFragments;
+    protected DbAdapter dbAdapter;
 
     @BeforeAll
     @Step("Set up Playwright browser")
@@ -56,7 +58,8 @@ public abstract class BaseTest {
                 .setBaseURL(TestConfig.getBaseUrl())
         );
         page = context.newPage();
-        testData = new TestData();
+        dbAdapter = new DbAdapter();
+        testData = new TestData(dbAdapter);
         uiTestFragments = new UiTestFragments(page);
     }
 
@@ -66,6 +69,9 @@ public abstract class BaseTest {
         AllureAttachments.takeScreenshot(page);
         AllureAttachments.pageUrl(page.url());
         testData.deleteTestData();
+        if (dbAdapter != null) {
+            dbAdapter.close();
+        }
         if (context != null) {
             context.close();
         }
