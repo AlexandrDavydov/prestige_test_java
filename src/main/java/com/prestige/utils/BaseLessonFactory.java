@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public abstract class BaseLessonFactory {
 
     protected static DbAdapter createDbAdapter() {
-        return new DbAdapter();
+        return DbAdapter.getInstance();
     }
 
     protected static String getStudents(int count) {

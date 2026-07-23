@@ -8,16 +8,49 @@ import com.prestige.models.Student;
 
 import com.prestige.config.TestConfig;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DbAdapter implements AutoCloseable {
+    private static final AtomicBoolean initialized = new AtomicBoolean(false);
+    private static final ThreadLocal<DbAdapter> threadInstance = ThreadLocal.withInitial(DbAdapter::new);
+
     private final Connection connection;
+
+    public static DbAdapter getInstance() {
+        return threadInstance.get();
+    }
+
+    public static void removeInstance() {
+        DbAdapter adapter = threadInstance.get();
+        if (adapter != null) {
+            adapter.close();
+            threadInstance.remove();
+        }
+    }
+
+    public static synchronized void initDb() {
+        if (initialized.get()) return;
+        try (Connection conn = DriverManager.getConnection(TestConfig.getDbUrl())) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("PRAGMA busy_timeout=5000");
+                stmt.execute("PRAGMA journal_mode=WAL");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Не удалось инициализировать БД", e);
+        }
+        initialized.set(true);
+    }
 
     public DbAdapter() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(TestConfig.getDbUrl());
             connection.setAutoCommit(false);
-            //System.out.println("Подключение к SQLite установлено");
+            try (Statement stmt = connection.createStatement()) {
+                stmt.execute("PRAGMA busy_timeout=5000");
+            }
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException("Не удалось подключиться к SQLite", e);
         }
@@ -172,7 +205,16 @@ public class DbAdapter implements AutoCloseable {
         return id;
     }
 
+    public void resetTransaction() {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при сбросе транзакции", e);
+        }
+    }
+
     public Coach findCoachById(int coachId) {
+        resetTransaction();
         String sql = "SELECT * FROM coaches WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, coachId);
@@ -195,6 +237,43 @@ public class DbAdapter implements AutoCloseable {
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске тренера по ID: " + coachId, e);
         }
+    }
+
+    public Student findStudentById(int studentId) {
+        resetTransaction();
+        String sql = "SELECT * FROM students WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Student student = new Student();
+                student.setId(rs.getInt("id"));
+                student.setLastName(rs.getString("last_name"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setMiddleName(rs.getString("middle_name"));
+                student.setContacts(rs.getString("contacts"));
+                student.setBirthday(rs.getString("birthday"));
+                student.setLessonsCount(rs.getInt("lessons_count"));
+                student.setAdditionalInfo(rs.getString("additional_info"));
+                return student;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске студента по ID: " + studentId, e);
+        }
+    }
+
+    public List<Student> findStudentsByIds(String studentIds) {
+        List<Student> students = new ArrayList<>();
+        if (studentIds == null || studentIds.isBlank()) return students;
+        String[] ids = studentIds.split(",");
+        for (String id : ids) {
+            Student student = findStudentById(Integer.parseInt(id.trim()));
+            if (student != null) {
+                students.add(student);
+            }
+        }
+        return students;
     }
 
     public void deleteCoachById(int coachId) {
@@ -262,6 +341,7 @@ public class DbAdapter implements AutoCloseable {
     }
 
     public Long findStudentId(String lastName, String firstName, String middleName) {
+        resetTransaction();
         String sql = "SELECT id FROM students WHERE last_name = ? AND first_name = ? AND middle_name = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, lastName);
@@ -278,6 +358,7 @@ public class DbAdapter implements AutoCloseable {
     }
 
     public boolean studentExists(String lastName, String firstName, String middleName) {
+        resetTransaction();
         String sql = "SELECT COUNT(*) FROM students WHERE last_name = ? AND first_name = ? AND middle_name = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, lastName);

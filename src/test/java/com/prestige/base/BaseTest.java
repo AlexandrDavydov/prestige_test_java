@@ -33,6 +33,7 @@ public abstract class BaseTest {
     @BeforeAll
     @Step("Set up Playwright browser")
     void setUpPlaywright() {
+        DbAdapter.initDb();
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
                 .setHeadless(TestConfig.isHeadless())
@@ -58,7 +59,7 @@ public abstract class BaseTest {
                 .setBaseURL(TestConfig.getBaseUrl())
         );
         page = context.newPage();
-        dbAdapter = new DbAdapter();
+        dbAdapter = DbAdapter.getInstance();
         testData = new TestData(dbAdapter);
         uiTestFragments = new UiTestFragments(page);
     }
@@ -69,9 +70,7 @@ public abstract class BaseTest {
         AllureAttachments.takeScreenshot(page);
         AllureAttachments.pageUrl(page.url());
         testData.deleteTestData();
-        if (dbAdapter != null) {
-            dbAdapter.close();
-        }
+        DbAdapter.removeInstance();
         if (context != null) {
             context.close();
         }
