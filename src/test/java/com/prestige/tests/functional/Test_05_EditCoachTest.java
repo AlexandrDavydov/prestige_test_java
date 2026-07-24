@@ -1,6 +1,5 @@
 package com.prestige.tests.functional;
 
-import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Coach;
 import com.prestige.pages.CoachesPage;
@@ -11,10 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.COACH;
-import static com.prestige.tests.TestGroups.LOCK_COACH;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_05_EditCoachTest extends BaseTest {
@@ -31,11 +28,8 @@ class Test_05_EditCoachTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        createdCoachData = CoachFactory.createRandomCoach();
-        editCoachData = CoachFactory.createRandomCoach();
-        createdCoachData.setId(new DbAdapter().addCoach(createdCoachData));
-        testData.addCoach(createdCoachData);
-        testData.addCoach(editCoachData);
+        createCoachInDatabase();
+        generateCoachDataForEdit();
     }
 
     public void editCoachWithUi(Coach coachForEditData, Coach newCoachData) {
@@ -46,5 +40,16 @@ class Test_05_EditCoachTest extends BaseTest {
         editCoachPage.waitForPageLoad();
         editCoachPage.fillCoachForm(newCoachData);
         editCoachPage.clickSave();
+    }
+
+    public void generateCoachDataForEdit() {
+        editCoachData = CoachFactory.createRandomCoach();
+        testData.addCoach(editCoachData);
+    }
+
+    public void createCoachInDatabase(){
+        createdCoachData = CoachFactory.createRandomCoach();
+        createdCoachData.setId(dbAdapter.addCoach(createdCoachData));
+        testData.addCoach(createdCoachData);
     }
 }

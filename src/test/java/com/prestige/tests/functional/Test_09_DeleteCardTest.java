@@ -18,23 +18,18 @@ import static com.prestige.tests.TestGroups.LOCK_CARD;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_09_DeleteCardTest extends BaseTest {
     Card createdCardData;
-    Card editCardData;
 
     @Test
     @Tag(CARD)
     public void test_09_DeleteCard() {
         uiTestFragments.login();
         deleteCardWithUi(createdCardData);
-        uiTestFragments.checkCardExists(editCardData, false);
+        uiTestFragments.checkCardExists(createdCardData, false);
     }
 
     @BeforeEach
     void beforeTest() {
-        createdCardData = CardFactory.createRandomCard();
-        editCardData = CardFactory.createRandomCard();
-        createdCardData.setId(new DbAdapter().addCard(createdCardData));
-        testData.addCard(createdCardData);
-        testData.addCard(editCardData);
+        CreateCardInTheDatabase();
     }
 
     public void deleteCardWithUi(Card cardData) {
@@ -42,5 +37,11 @@ class Test_09_DeleteCardTest extends BaseTest {
         CardsPage cardsPage = dashboardPage.goToCards();
         cardsPage.waitForPageLoad();
         cardsPage.deleteCard(cardData.getName());
+    }
+
+    public void CreateCardInTheDatabase() {
+        createdCardData = CardFactory.createRandomCard();
+        createdCardData.setId(dbAdapter.addCard(createdCardData));
+        testData.addCard(createdCardData);
     }
 }

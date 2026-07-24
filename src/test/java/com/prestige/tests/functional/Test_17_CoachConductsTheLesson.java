@@ -29,11 +29,11 @@ class Test_17_CoachConductsTheLesson extends BaseTest {
     @Test
     @Tag(LESSON)
     public void test_17_CoachConductsTheLesson() {
-        expectedStudents = dbAdapter.findStudentsByIds(lessonData.getStudentIds());
+
         uiTestFragments.login();
         conductTheLesson(lessonData);
         uiTestFragments.checkLessonExists(lessonData, false);
-        switchFilterTo(HAPPENED);
+        switchFilterToHappen();
         uiTestFragments.checkLessonExists(lessonData, true);
         checkPaymentToCoach();
         checkLessonsDeductedFromStudents();
@@ -41,9 +41,7 @@ class Test_17_CoachConductsTheLesson extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        lessonData = LessonFactory.createRandomLessonWithClearCoach();
-        lessonData.setId(dbAdapter.addLesson(lessonData));
-        testData.addLesson(lessonData);
+        createLessonInTheDatabase();
     }
 
     public void conductTheLesson(Lesson lessonData) {
@@ -53,9 +51,9 @@ class Test_17_CoachConductsTheLesson extends BaseTest {
         lessonsPage.markLessonAsDone(lessonData.getLessonName());
     }
 
-    public void switchFilterTo(String filterName){
+    public void switchFilterToHappen(){
         LessonsPage lessonsPage = new LessonsPage(page);
-        lessonsPage.filterByStatus(filterName);
+        lessonsPage.filterByStatus(HAPPENED);
     }
     public void checkPaymentToCoach(){
         LessonsPage lessonsPage = new LessonsPage(page);
@@ -71,4 +69,13 @@ class Test_17_CoachConductsTheLesson extends BaseTest {
             assertEquals(expectedStudents.get(i).getLessonsCount() - 1, students.get(i).getLessonsCount());
         }
     }
+
+    public void createLessonInTheDatabase() {
+        lessonData = LessonFactory.createRandomLessonWithClearCoach();
+        lessonData.setId(dbAdapter.addLesson(lessonData));
+        testData.addLesson(lessonData);
+        expectedStudents = dbAdapter.findStudentsByIds(lessonData.getStudentIds());
+    }
+
+
 }

@@ -29,8 +29,7 @@ class Test_07_CreateCardTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        cardData = CardFactory.createRandomCard();
-        testData.addCard(cardData);
+        generateCardData();
     }
 
     public void createCardWithUi(Card cardData) {
@@ -40,5 +39,10 @@ class Test_07_CreateCardTest extends BaseTest {
         AddCardPage addCardPage = cardsPage.clickAddCard();
         addCardPage.waitForPageLoad();
         addCardPage.submitCard(cardData);
+    }
+
+    public void generateCardData(){
+        cardData = CardFactory.createRandomCard();
+        testData.addCard(cardData);
     }
 }

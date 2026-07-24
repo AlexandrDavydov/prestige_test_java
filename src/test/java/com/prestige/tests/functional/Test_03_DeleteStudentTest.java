@@ -1,6 +1,5 @@
 package com.prestige.tests.functional;
 
-import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Student;
 import com.prestige.pages.DashboardPage;
@@ -10,36 +9,35 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.parallel.ResourceLock;
 
-import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_03_DeleteStudentTest extends BaseTest {
     Student createdStudentData;
-    Student editStudentData;
 
     @Test
     @Tag(STUDENT)
     public void test_03_DeleteStudent() {
         uiTestFragments.login();
-        deleteStudentWithUi(createdStudentData);
-        uiTestFragments.checkStudentExists(editStudentData, false);
+        deleteCreatedStudentWithUi(createdStudentData);
+        uiTestFragments.checkStudentExists(createdStudentData, false);
     }
 
     @BeforeEach
     void beforeTest() {
-        createdStudentData = StudentFactory.createRandomStudent();
-        editStudentData = StudentFactory.createRandomStudent();
-        createdStudentData.setId(new DbAdapter().addStudent(createdStudentData));
-        testData.addStudent(createdStudentData);
-        testData.addStudent(editStudentData);
+        createStudentInTheDatabase();
     }
 
-    public void deleteStudentWithUi(Student studentData) {
+    public void deleteCreatedStudentWithUi(Student studentData) {
         DashboardPage dashboardPage = new DashboardPage(page);
         StudentsPage studentsPage = dashboardPage.goToStudents();
         studentsPage.waitForPageLoad();
         studentsPage.deleteStudent(studentData.getFullName());
+    }
+
+    public void createStudentInTheDatabase() {
+        createdStudentData = StudentFactory.createRandomStudent();
+        createdStudentData.setId(dbAdapter.addStudent(createdStudentData));
+        testData.addStudent(createdStudentData);
     }
 }

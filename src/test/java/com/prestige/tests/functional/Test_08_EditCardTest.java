@@ -1,6 +1,5 @@
 package com.prestige.tests.functional;
 
-import com.prestige.adapters.DbAdapter;
 import com.prestige.base.BaseTest;
 import com.prestige.models.Card;
 import com.prestige.pages.CardsPage;
@@ -11,10 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.CARD;
-import static com.prestige.tests.TestGroups.LOCK_CARD;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_08_EditCardTest extends BaseTest {
@@ -31,11 +28,8 @@ class Test_08_EditCardTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        createdCardData = CardFactory.createRandomCard();
-        editCardData = CardFactory.createRandomCard();
-        createdCardData.setId(new DbAdapter().addCard(createdCardData));
-        testData.addCard(createdCardData);
-        testData.addCard(editCardData);
+        greateCardInTheDatabase();
+        generateCardDataForEdit();
     }
 
     public void editCardWithUi(Card cardForEditData, Card newCardData) {
@@ -46,5 +40,16 @@ class Test_08_EditCardTest extends BaseTest {
         editCardPage.waitForPageLoad();
         editCardPage.fillCardForm(newCardData);
         editCardPage.clickSave();
+    }
+
+    public void generateCardDataForEdit(){
+        editCardData = CardFactory.createRandomCard();
+        testData.addCard(editCardData);
+    }
+
+    public void greateCardInTheDatabase(){
+        createdCardData = CardFactory.createRandomCard();
+        createdCardData.setId(dbAdapter.addCard(createdCardData));
+        testData.addCard(createdCardData);
     }
 }

@@ -18,23 +18,18 @@ import static com.prestige.tests.TestGroups.LOCK_COACH;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_06_DeleteCoachTest extends BaseTest {
     Coach createdCoachData;
-    Coach editCoachData;
 
     @Test
     @Tag(COACH)
     public void test_06_DeleteCoach() {
         uiTestFragments.login();
         deleteCoachWithUi(createdCoachData);
-        uiTestFragments.checkCoachExists(editCoachData, false);
+        uiTestFragments.checkCoachExists(createdCoachData, false);
     }
 
     @BeforeEach
     void beforeTest() {
-        createdCoachData = CoachFactory.createRandomCoach();
-        editCoachData = CoachFactory.createRandomCoach();
-        createdCoachData.setId(new DbAdapter().addCoach(createdCoachData));
-        testData.addCoach(createdCoachData);
-        testData.addCoach(editCoachData);
+        createCoachInDatabase();
     }
 
     public void deleteCoachWithUi(Coach coachData) {
@@ -42,5 +37,11 @@ class Test_06_DeleteCoachTest extends BaseTest {
         CoachesPage coachesPage = dashboardPage.goToCoaches();
         coachesPage.waitForPageLoad();
         coachesPage.deleteCoach(coachData.getFullName());
+    }
+
+    public void createCoachInDatabase(){
+        createdCoachData = CoachFactory.createRandomCoach();
+        createdCoachData.setId(dbAdapter.addCoach(createdCoachData));
+        testData.addCoach(createdCoachData);
     }
 }

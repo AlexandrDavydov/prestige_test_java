@@ -28,8 +28,7 @@ class Test_04_CreateCoachTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        coachData = CoachFactory.createRandomCoach();
-        testData.addCoach(coachData);
+        generateCoachData();
     }
 
     public void createCoachWithUi(Coach coachData) {
@@ -39,5 +38,10 @@ class Test_04_CreateCoachTest extends BaseTest {
         AddCoachPage addCoachPage = coachesPage.clickAddCoach();
         addCoachPage.waitForPageLoad();
         addCoachPage.submitCoach(coachData);
+    }
+
+    public void generateCoachData() {
+        coachData = CoachFactory.createRandomCoach();
+        testData.addCoach(coachData);
     }
 }
