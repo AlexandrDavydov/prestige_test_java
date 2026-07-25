@@ -2,6 +2,7 @@ package com.prestige.pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
 import com.prestige.models.Lesson;
 import static com.prestige.utils.StepHelper.step;
 import com.prestige.models.LessonTemplate;
@@ -83,7 +84,6 @@ public class LessonsPage extends BasePage {
     public LessonsPage filterByStatus(String status) {
         return step("Фильтр по статусу: " + status, () -> {
             page.selectOption(statusFilter, status);
-            page.click(filterForm + " input[type='hidden']");
             waitForPageLoad();
             return this;
         });
@@ -257,7 +257,18 @@ public class LessonsPage extends BasePage {
     }
 
     public boolean isLessonExists(Lesson lesson) {
-        return findLessonIndex(lesson.getLessonName()) >= 0;
+        return step("Проверить существование занятия: " + lesson.getLessonName(), () -> {
+            long deadline = System.currentTimeMillis() + 5000;
+            while (System.currentTimeMillis() < deadline) {
+                try {
+                    if (findLessonIndex(lesson.getLessonName()) >= 0) return true;
+                } catch (PlaywrightException e) {
+                    // игнорируем — страница в процессе навигации
+                }
+                page.waitForTimeout(300);
+            }
+            return false;
+        });
     }
 
     // ============ ПАГИНАЦИЯ ============

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public abstract class BaseLessonFactory {
 
     protected static DbAdapter createDbAdapter() {
-        return new DbAdapter();
+        return DbAdapter.getInstance();
     }
 
     protected static String getStudents(int count) {
@@ -30,6 +30,15 @@ public abstract class BaseLessonFactory {
     protected static int getCoachId() {
         DbAdapter dbAdapter = createDbAdapter();
         Coach coach = CoachFactory.createRandomCoach();
+        coach.setId(dbAdapter.addCoach(coach));
+        return coach.getId();
+    }
+
+    protected static int getClearCoachId() {
+        DbAdapter dbAdapter = createDbAdapter();
+        Coach coach = CoachFactory.createRandomCoach();
+        coach.setLessonsPaid(0);
+        coach.setLessonsCount(0);
         coach.setId(dbAdapter.addCoach(coach));
         return coach.getId();
     }

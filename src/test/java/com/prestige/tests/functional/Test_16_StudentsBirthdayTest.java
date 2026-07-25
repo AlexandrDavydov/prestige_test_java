@@ -17,7 +17,6 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
 
-@ResourceLock(LOCK_STUDENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_16_StudentsBirthdayTest extends BaseTest {
     Student studentBirthdayYesterdayData;

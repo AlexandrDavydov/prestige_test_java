@@ -24,7 +24,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillLastName(String lastName) {
-        return step("Заполнить фамилию тренера: {lastName}", () -> {
+        return step("Заполнить фамилию тренера: " + lastName, () -> {
             page.fill(lastNameInput, lastName);
             return (T) this;
         });
@@ -36,7 +36,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillFirstName(String firstName) {
-        return step("Заполнить имя тренера: {firstName}", () -> {
+        return step("Заполнить имя тренера: " + firstName, () -> {
             page.fill(firstNameInput, firstName);
             return (T) this;
         });
@@ -48,7 +48,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillMiddleName(String middleName) {
-        return step("Заполнить отчество тренера: {middleName}", () -> {
+        return step("Заполнить отчество тренера: " + middleName, () -> {
             page.fill(middleNameInput, middleName);
             return (T) this;
         });
@@ -60,7 +60,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillContacts(String contacts) {
-        return step("Заполнить контакты тренера: {contacts}", () -> {
+        return step("Заполнить контакты тренера: " + contacts, () -> {
             page.fill(contactsInput, contacts);
             return (T) this;
         });
@@ -72,7 +72,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillBirthday(String birthday) {
-        return step("Заполнить дату рождения тренера: {birthday}", () -> {
+        return step("Заполнить дату рождения тренера: " + birthday, () -> {
             page.fill(birthdayInput, birthday);
             return (T) this;
         });
@@ -84,7 +84,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillLessonsCount(int count) {
-        step("Заполнить количество занятий: {count}", () -> {
+        step("Заполнить количество занятий: " + count, () -> {
             page.fill(lessonsCountInput, String.valueOf(count));
         });
         return (T) this;
@@ -101,7 +101,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillLessonsPaid(int paid) {
-        step("Заполнить оплаченных занятий: {paid}", () -> {
+        step("Заполнить оплаченных занятий: " + paid, () -> {
             page.fill(lessonsPaidInput, String.valueOf(paid));
         });
         return (T) this;
@@ -118,7 +118,7 @@ public abstract class BaseCoachPage<T extends BaseCoachPage<T>> extends BasePage
 
     @SuppressWarnings("unchecked")
     public T fillStudentPayment(double payment) {
-        step("Заполнить оплату за ученика: {payment}", () -> {
+        step("Заполнить оплату за ученика: " + payment, () -> {
             page.fill(studentPaymentInput, String.valueOf(payment));
         });
         return (T) this;

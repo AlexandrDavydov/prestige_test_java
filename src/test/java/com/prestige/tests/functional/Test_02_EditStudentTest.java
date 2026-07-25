@@ -7,6 +7,7 @@ import com.prestige.pages.DashboardPage;
 import com.prestige.pages.EditStudentPage;
 import com.prestige.pages.StudentsPage;
 import com.prestige.utils.StudentFactory;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,8 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
-@ResourceLock(LOCK_STUDENT)
+import static com.prestige.utils.StepHelper.step;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_02_EditStudentTest extends BaseTest {
     Student createdStudentData;
@@ -31,11 +33,8 @@ class Test_02_EditStudentTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        createdStudentData = StudentFactory.createRandomStudent();
-        editStudentData = StudentFactory.createRandomStudent();
-        createdStudentData.setId(new DbAdapter().addStudent(createdStudentData));
-        testData.addStudent(createdStudentData);
-        testData.addStudent(editStudentData);
+        generateStudentData();
+        createStudentInTheDatabase();
     }
 
     public void editStudentWithUi(Student studentForEditData, Student newStudentData) {
@@ -46,5 +45,20 @@ class Test_02_EditStudentTest extends BaseTest {
         editStudentPage.waitForPageLoad();
         editStudentPage.fillStudentForm(newStudentData);
         editStudentPage.clickSubmit();
+    }
+
+    public void createStudentInTheDatabase(){
+        step("Создать ученика в базе данных для редактирования", () -> {
+            createdStudentData = StudentFactory.createRandomStudent();
+            createdStudentData.setId(dbAdapter.addStudent(createdStudentData));
+            testData.addStudent(createdStudentData);
+        });
+    }
+
+    public void generateStudentData(){
+        step("Сгенерировать данные ученика для редактирования", () -> {
+            editStudentData = StudentFactory.createRandomStudent();
+            testData.addStudent(editStudentData);
+        });
     }
 }

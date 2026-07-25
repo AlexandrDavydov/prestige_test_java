@@ -16,7 +16,6 @@ import static com.prestige.tests.TestGroups.LESSON_TEMPLATE;
 import static com.prestige.tests.TestGroups.LOCK_LESSON_TEMPLATE;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_LESSON_TEMPLATE)
 class Test_12_DeleteLessonTemplateTest extends BaseTest {
     LessonTemplate createdLessonTemplateData;
 
@@ -30,9 +29,7 @@ class Test_12_DeleteLessonTemplateTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        createdLessonTemplateData = LessonTemplateFactory.createRandomLessonTemplate();
-        createdLessonTemplateData.setId(new DbAdapter().addLessonTemplate(createdLessonTemplateData));
-        testData.addLessonTemplate(createdLessonTemplateData);
+        generateLessonTemplateData();
     }
 
     public void deleteLessonTemplateWithUi(LessonTemplate LessonTemplateData) {
@@ -40,5 +37,11 @@ class Test_12_DeleteLessonTemplateTest extends BaseTest {
         LessonTemplatesPage lessonTemplatePage = dashboardPage.goToLessonTemplates();
         lessonTemplatePage.waitForPageLoad();
         lessonTemplatePage.deleteTemplate(LessonTemplateData.getTemplateName());
+    }
+
+    public void generateLessonTemplateData() {
+        createdLessonTemplateData = LessonTemplateFactory.createRandomLessonTemplate();
+        createdLessonTemplateData.setId(dbAdapter.addLessonTemplate(createdLessonTemplateData));
+        testData.addLessonTemplate(createdLessonTemplateData);
     }
 }

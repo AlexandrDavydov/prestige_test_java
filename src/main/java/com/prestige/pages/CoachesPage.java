@@ -4,6 +4,8 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.prestige.models.Coach;
 import static com.prestige.utils.StepHelper.step;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +88,13 @@ public class CoachesPage extends BasePage {
             return mapRowToCoach(row);
         }
         return null;
+    }
+
+    public CoachesPage checkPaymentsAreAccrued(String fullName, int studentsCount){
+        Coach coachFromUI = getCoachByFullName(fullName);
+        assertEquals(studentsCount, coachFromUI.getLessonsCount(), "Количество студентов в занятии и в тренере не совпадает");
+        assertEquals(0, coachFromUI.getLessonsPaid());
+        return this;
     }
 
     private Locator findCoachRow(String fullName) {
@@ -199,7 +208,7 @@ public class CoachesPage extends BasePage {
     // ============ ДЕЙСТВИЯ С ТРЕНЕРАМИ ============
 
     public CoachesPage giveMoneyToCoach(String fullName) {
-        return step("Отметить оплату тренеру: {fullName}", () -> {
+        return step("Отметить оплату тренеру: " + fullName, () -> {
             Locator row = findCoachRow(fullName);
             if (row != null) {
                 row.locator(giveMoneyButton).click();
@@ -211,7 +220,7 @@ public class CoachesPage extends BasePage {
     }
 
     public CoachesPage giveMoneyToCoachAtIndex(int index) {
-        return step("Отметить оплату тренеру по индексу: {index}", () -> {
+        return step("Отметить оплату тренеру по индексу: " + index, () -> {
             Locator rows = page.locator(tableRows);
             if (index < rows.count()) {
                 rows.nth(index).locator(giveMoneyButton).click();
@@ -223,7 +232,7 @@ public class CoachesPage extends BasePage {
     }
 
     public EditCoachPage clickEditCoach(String fullName) {
-        return step("Редактировать тренера: {fullName}", () -> {
+        return step("Редактировать тренера: " + fullName, () -> {
             Locator row = findCoachRow(fullName);
             if (row != null) {
                 row.locator(editButton).click();
@@ -234,7 +243,7 @@ public class CoachesPage extends BasePage {
     }
 
     public EditCoachPage clickEditCoachAtIndex(int index) {
-        return step("Редактировать тренера по индексу: {index}", () -> {
+        return step("Редактировать тренера по индексу: " + index, () -> {
             Locator rows = page.locator(tableRows);
             if (index < rows.count()) {
                 rows.nth(index).locator(editButton).click();
@@ -245,7 +254,7 @@ public class CoachesPage extends BasePage {
     }
 
     public CoachesPage deleteCoach(String fullName) {
-        return step("Удалить тренера: {fullName}", () -> {
+        return step("Удалить тренера: " + fullName, () -> {
             Locator row = findCoachRow(fullName);
             if (row != null) {
                 row.locator(deleteButton).click();
@@ -402,7 +411,7 @@ public class CoachesPage extends BasePage {
     // ============ ОЖИДАНИЯ ============
 
     public CoachesPage waitForCoachToAppear(String fullName, int timeoutSeconds) {
-        return step("Ожидание появления тренера: {fullName}", () -> {
+        return step("Ожидание появления тренера: " + fullName, () -> {
             long startTime = System.currentTimeMillis();
             long timeout = timeoutSeconds * 1000L;
 
@@ -418,7 +427,7 @@ public class CoachesPage extends BasePage {
     }
 
     public CoachesPage waitForCoachToDisappear(String fullName, int timeoutSeconds) {
-        return step("Ожидание удаления тренера: {fullName}", () -> {
+        return step("Ожидание удаления тренера: " + fullName, () -> {
             long startTime = System.currentTimeMillis();
             long timeout = timeoutSeconds * 1000L;
 
@@ -434,7 +443,7 @@ public class CoachesPage extends BasePage {
     }
 
     public CoachesPage waitForDebtUpdate(String fullName, double expectedDebt, int timeoutSeconds) {
-        return step("Ожидание обновления долга тренера: {fullName}", () -> {
+        return step("Ожидание обновления долга тренера: " + fullName, () -> {
             long startTime = System.currentTimeMillis();
             long timeout = timeoutSeconds * 1000L;
 

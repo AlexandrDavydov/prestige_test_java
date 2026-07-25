@@ -22,6 +22,18 @@ public class LessonFactory extends BaseLessonFactory {
                 .build();
     }
 
+    public static Lesson createRandomLessonWithClearCoach() {
+        String templateName = TestingUtils.capitalizeFirst(faker.lorem().characters(10));
+        return Lesson.builder()
+                .lessonName(templateName)
+                .date(getFormattedDate(faker.date().birthday(0, 1)))
+                .coachId(getClearCoachId())
+                .status(LessonStatus.PLANNED)
+                .studentIds(getStudents(faker.random().nextInt(4, 15)))
+                .build();
+    }
+
+
     private static String getFormattedDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);

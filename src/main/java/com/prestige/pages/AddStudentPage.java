@@ -99,7 +99,7 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
 
     @Override
     public AddStudentPage fillBirthday(String birthday) {
-        return step("Заполнить дату рождения: {birthday}", () -> {
+        return step("Заполнить дату рождения: " + birthday, () -> {
             page.evaluate("document.querySelector('input[name=\"birthday\"]').value = '" + birthday + "'");
             page.evaluate("document.querySelector('input[name=\"birthday\"]').dispatchEvent(new Event('change', { bubbles: true }))");
             return this;
@@ -165,7 +165,7 @@ public class AddStudentPage extends BaseStudentPage<AddStudentPage> {
     }
 
     public AddStudentPage clearField(String fieldName) {
-        return step("Очистить поле: {fieldName}", () -> {
+        return step("Очистить поле: " + fieldName, () -> {
             String selector = getFieldSelector(fieldName);
             page.fill(selector, "");
             return this;

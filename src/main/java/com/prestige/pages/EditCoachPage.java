@@ -83,42 +83,42 @@ public class EditCoachPage extends BasePage {
     // ============ МЕТОДЫ ДЛЯ ОТДЕЛЬНЫХ ПОЛЕЙ ============
 
     public EditCoachPage fillLastName(String lastName) {
-        return step("Заполнить фамилию тренера: {lastName}", () -> {
+        return step("Заполнить фамилию тренера: " + lastName, () -> {
             page.fill(lastNameInput, lastName);
             return this;
         });
     }
 
     public EditCoachPage fillFirstName(String firstName) {
-        return step("Заполнить имя тренера: {firstName}", () -> {
+        return step("Заполнить имя тренера: " + firstName, () -> {
             page.fill(firstNameInput, firstName);
             return this;
         });
     }
 
     public EditCoachPage fillMiddleName(String middleName) {
-        return step("Заполнить отчество тренера: {middleName}", () -> {
+        return step("Заполнить отчество тренера: " + middleName, () -> {
             page.fill(middleNameInput, middleName);
             return this;
         });
     }
 
     public EditCoachPage fillContacts(String contacts) {
-        return step("Заполнить контакты тренера: {contacts}", () -> {
+        return step("Заполнить контакты тренера: " + contacts, () -> {
             page.fill(contactsInput, contacts);
             return this;
         });
     }
 
     public EditCoachPage fillBirthday(String birthday) {
-        return step("Заполнить дату рождения тренера: {birthday}", () -> {
+        return step("Заполнить дату рождения тренера: " + birthday, () -> {
             page.fill(birthdayInput, birthday);
             return this;
         });
     }
 
     public EditCoachPage fillBirthday(LocalDate birthday) {
-        return step("Заполнить дату рождения тренера: {birthday}", () -> {
+        return step("Заполнить дату рождения тренера: " + birthday, () -> {
             String dateStr = birthday.format(DateTimeFormatter.ISO_LOCAL_DATE);
             page.fill(birthdayInput, dateStr);
             return this;
@@ -126,21 +126,21 @@ public class EditCoachPage extends BasePage {
     }
 
     public EditCoachPage fillLessonsCount(int count) {
-        return step("Заполнить количество занятий: {count}", () -> {
+        return step("Заполнить количество занятий: " + count, () -> {
             page.fill(lessonsCountInput, String.valueOf(count));
             return this;
         });
     }
 
     public EditCoachPage fillLessonsPaid(int paid) {
-        return step("Заполнить оплаченных занятий: {paid}", () -> {
+        return step("Заполнить оплаченных занятий: " + paid, () -> {
             page.fill(lessonsPaidInput, String.valueOf(paid));
             return this;
         });
     }
 
     public EditCoachPage fillStudentPayment(double payment) {
-        return step("Заполнить оплату за ученика: {payment}", () -> {
+        return step("Заполнить оплату за ученика: " + payment, () -> {
             page.fill(studentPaymentInput, String.valueOf(payment));
             return this;
         });
@@ -262,7 +262,7 @@ public class EditCoachPage extends BasePage {
     }
 
     public EditCoachPage clearField(String fieldName) {
-        return step("Очистить поле тренера: {fieldName}", () -> {
+        return step("Очистить поле тренера: " + fieldName, () -> {
             switch (fieldName) {
                 case "last_name":
                     page.fill(lastNameInput, "");

@@ -146,7 +146,7 @@ public class AddCoachPage extends BaseCoachPage<AddCoachPage> {
     }
 
     public AddCoachPage clearField(String fieldName) {
-        return step("Очистить поле тренера: {fieldName}", () -> {
+        return step("Очистить поле тренера: " + fieldName, () -> {
             String selector = getFieldSelector(fieldName);
             page.fill(selector, "");
             return this;

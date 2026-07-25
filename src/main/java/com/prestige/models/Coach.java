@@ -29,6 +29,10 @@ public class Coach {
         return lastName + " " + firstName;
     }
 
+    public String getFirstAndLastName() {
+        return lastName + " " + firstName;
+    }
+
     public double calculateDebt() {
         return (lessonsCount - lessonsPaid) * studentPayment;
     }

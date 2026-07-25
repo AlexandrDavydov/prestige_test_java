@@ -13,4 +13,5 @@ public class TestGroups {
     public static final String LOCK_CARD = "group-card";
     public static final String LOCK_LESSON_TEMPLATE = "group-lesson-template";
     public static final String LOCK_LESSON = "group-lesson";
+    public static final String LOCK_LESSON_COACH = "group-lesson-coach";
 }

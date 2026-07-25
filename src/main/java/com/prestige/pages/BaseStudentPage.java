@@ -22,7 +22,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
 
     @SuppressWarnings("unchecked")
     public T fillLastName(String lastName) {
-        return step("Заполнить фамилию: {lastName}", () -> {
+        return step("Заполнить фамилию: " + lastName, () -> {
             page.fill(lastNameInput, lastName);
             return (T) this;
         });
@@ -34,7 +34,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
 
     @SuppressWarnings("unchecked")
     public T fillFirstName(String firstName) {
-        return step("Заполнить имя: {firstName}", () -> {
+        return step("Заполнить имя: " + firstName, () -> {
             page.fill(firstNameInput, firstName);
             return (T) this;
         });
@@ -46,7 +46,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
 
     @SuppressWarnings("unchecked")
     public T fillMiddleName(String middleName) {
-        return step("Заполнить отчество: {middleName}", () -> {
+        return step("Заполнить отчество: " + middleName, () -> {
             page.fill(middleNameInput, middleName);
             return (T) this;
         });
@@ -58,7 +58,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
 
     @SuppressWarnings("unchecked")
     public T fillContacts(String contacts) {
-        return step("Заполнить контакты: {contacts}", () -> {
+        return step("Заполнить контакты: " + contacts, () -> {
             page.fill(contactsInput, contacts);
             return (T) this;
         });
@@ -70,7 +70,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
 
     @SuppressWarnings("unchecked")
     public T fillBirthday(String birthday) {
-        return step("Заполнить дату рождения: {birthday}", () -> {
+        return step("Заполнить дату рождения: " + birthday, () -> {
             page.fill(birthdayInput, birthday);
             return (T) this;
         });
@@ -81,7 +81,7 @@ public abstract class BaseStudentPage<T extends BaseStudentPage<T>> extends Base
     }
 
     public void fillLessonsCount(int count) {
-        step("Заполнить количество занятий: {count}", () -> {
+        step("Заполнить количество занятий: " + count, () -> {
             page.fill(lessonsCountInput, String.valueOf(count));
         });
     }

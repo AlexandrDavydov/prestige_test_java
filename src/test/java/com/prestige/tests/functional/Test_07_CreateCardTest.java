@@ -15,9 +15,7 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.CARD;
 import static com.prestige.tests.TestGroups.LOCK_CARD;
 
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_CARD)
 class Test_07_CreateCardTest extends BaseTest {
     Card cardData;
 
@@ -31,8 +29,7 @@ class Test_07_CreateCardTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        cardData = CardFactory.createRandomCard();
-        testData.addCard(cardData);
+        generateCardData();
     }
 
     public void createCardWithUi(Card cardData) {
@@ -42,5 +39,10 @@ class Test_07_CreateCardTest extends BaseTest {
         AddCardPage addCardPage = cardsPage.clickAddCard();
         addCardPage.waitForPageLoad();
         addCardPage.submitCard(cardData);
+    }
+
+    public void generateCardData(){
+        cardData = CardFactory.createRandomCard();
+        testData.addCard(cardData);
     }
 }

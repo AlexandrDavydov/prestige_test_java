@@ -12,7 +12,6 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.*;
 
-@ResourceLock(LOCK_LESSON)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_13_CreateLessonTest extends BaseTest {
     Lesson lessonData;
@@ -28,8 +27,7 @@ class Test_13_CreateLessonTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        lessonData = LessonFactory.createRandomLesson();
-        testData.addLesson(lessonData);
+        generateLessonData();
     }
 
     public void createLessonWithUi(Lesson lessonData) {
@@ -40,5 +38,10 @@ class Test_13_CreateLessonTest extends BaseTest {
         addLessonPage.waitForPageLoad();
         addLessonPage.fillLessonForm(lessonData);
         addLessonPage.clickSave();
+    }
+
+    public void generateLessonData(){
+        lessonData = LessonFactory.createRandomLesson();
+        testData.addLesson(lessonData);
     }
 }

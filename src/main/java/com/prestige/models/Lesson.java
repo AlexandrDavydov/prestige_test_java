@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,4 +16,9 @@ public class Lesson {
     private int coachId;
     private String status;
     private String studentIds;
+
+    public int getStudentsCount() {
+        if (studentIds == null || studentIds.isBlank()) return 0;
+        return studentIds.split(",").length;
+    }
 }

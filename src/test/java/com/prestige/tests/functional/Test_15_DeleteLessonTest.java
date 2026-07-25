@@ -15,7 +15,6 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 import static com.prestige.tests.TestGroups.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ResourceLock(LOCK_LESSON)
 class Test_15_DeleteLessonTest extends BaseTest {
     Lesson createdLessonData;
 
@@ -29,9 +28,7 @@ class Test_15_DeleteLessonTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        createdLessonData = LessonFactory.createRandomLesson();
-        createdLessonData.setId(new DbAdapter().addLesson(createdLessonData));
-        testData.addLesson(createdLessonData);
+        createLessonInTheDatabase();
     }
 
     public void deleteLessonWithUi(Lesson LessonData) {
@@ -39,5 +36,11 @@ class Test_15_DeleteLessonTest extends BaseTest {
         LessonsPage lessonsPage = dashboardPage.goToLessons();
         lessonsPage.waitForPageLoad();
         lessonsPage.deleteLesson(LessonData.getLessonName());
+    }
+
+    public void createLessonInTheDatabase() {
+        createdLessonData = LessonFactory.createRandomLesson();
+        createdLessonData.setId(dbAdapter.addLesson(createdLessonData));
+        testData.addLesson(createdLessonData);
     }
 }

@@ -6,6 +6,7 @@ import com.prestige.pages.AddStudentPage;
 import com.prestige.pages.DashboardPage;
 import com.prestige.pages.StudentsPage;
 import com.prestige.utils.StudentFactory;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.parallel.ResourceLock;
 
 import static com.prestige.tests.TestGroups.LOCK_STUDENT;
 import static com.prestige.tests.TestGroups.STUDENT;
-@ResourceLock(LOCK_STUDENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Test_01_CreateStudentTest extends BaseTest {
     Student studentData;
@@ -29,8 +29,7 @@ class Test_01_CreateStudentTest extends BaseTest {
 
     @BeforeEach
     void beforeTest() {
-        studentData = StudentFactory.createRandomStudent();
-        testData.addStudent(studentData);
+        generateStudentData();
     }
 
     public void createStudentWithUi(Student studentData) {
@@ -40,5 +39,10 @@ class Test_01_CreateStudentTest extends BaseTest {
         AddStudentPage addStudentPage = studentsPage.clickAddStudent();
         addStudentPage.waitForPageLoad();
         addStudentPage.submitStudent(studentData);
+    }
+    @Step("Сгенерировать данные ученика")
+    public void generateStudentData(){
+        studentData = StudentFactory.createRandomStudent();
+        testData.addStudent(studentData);
     }
 }
