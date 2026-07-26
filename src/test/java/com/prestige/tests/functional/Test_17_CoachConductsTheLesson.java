@@ -15,6 +15,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.ResourceLock;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.prestige.models.LessonStatus.HAPPENED;
 import static com.prestige.tests.TestGroups.*;
@@ -29,7 +30,7 @@ class Test_17_CoachConductsTheLesson extends BaseTest {
     @Test
     @Tag(LESSON)
     public void test_17_CoachConductsTheLesson() {
-
+        UUID.randomUUID();
         uiTestFragments.login();
         conductTheLesson(lessonData);
         uiTestFragments.checkLessonExists(lessonData, false);
